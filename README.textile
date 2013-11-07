@@ -21,7 +21,7 @@ Run the following in your console to install with Bundler:
 Add a config block to your environment.rb:
 
 <pre>
-  Twinfield::Config.setup do |config|
+  Twinfield.configure do |config|
     config.username = ""
     config.password = ""
     config.organisation = ""
