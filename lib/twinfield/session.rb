@@ -5,9 +5,7 @@ module Twinfield
 
     # sets up a new savon client which will be used for current Session
     def initialize
-      @client = Savon::Client.new do
-        wsdl.document = Twinfield::WSDLS[:session]
-      end
+      @client = Savon.client(wsdl: Twinfield::WSDLS[:session])
     end
 
     # retrieve a session_id and cluster from twinfield
@@ -17,14 +15,13 @@ module Twinfield
       if connected? && (relog == false)
         "already connected"
       else
-        response = @client.request :logon do
-          soap.input = ["Logon", {"xmlns" => "http://www.twinfield.com/"}]
-          soap.body = Twinfield.configuration.to_hash
-        end
+        response = @client.call(:logon, message: Twinfield.configuration.to_hash)
+
         if response.body[:logon_response][:logon_result] == "Ok"
           @session_id = response.header[:header][:session_id]
           @cluster = response.body[:logon_response][:cluster]
         end
+
         @message = response.body[:logon_response][:logon_result]
       end
     end

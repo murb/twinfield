@@ -5,34 +5,28 @@ module Twinfield
     def session
       @session = Twinfield::Session.new
       @session.logon
-      return @session
+       return @session
     end
 
     def client
-      @client ||= Savon::Client.new do
-        wsdl.document = "#{session.cluster}#{Twinfield::WSDLS[:process]}"
-      end
+      @client ||= Savon.client(wsdl: "#{session.cluster}#{Twinfield::WSDLS[:process]}",
+                               env_namespace: :soap,
+                               encoding: "UTF-8",
+                               namespace_identifier: nil)
     end
 
     def request(action, &block)
       if actions.include?(action)
-
-        client.request(action, :xmlns => "http://www.twinfield.com/") do
-          soap.header = {
-            "Header" => {"SessionID" => session.session_id},
-            :attributes! => {
-              "Header" => {:xmlns => "http://www.twinfield.com/"}
-            }
-          }
-          soap.body = "<xmlRequest><![CDATA[#{block.call}]]></xmlRequest>"
-        end
+        header = { "Header" => { "SessionID" => session.session_id }, attributes!: { "Header" => { "xmlns" => "http://www.twinfield.com/"} } }
+        message = "<xmlRequest><![CDATA[#{block.try(:call)}]]></xmlRequest>"
+        client.call(action, attributes: { xmlns: "http://www.twinfield.com/" }, soap_header: header, message: message)
       else
         "action not found"
       end
     end
 
     def self.actions
-      @actions ||= client.wsdl.soap_actions.map{|k| k.to_s}
+      @actions ||= client.operations
     end
   end
 end
