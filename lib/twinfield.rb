@@ -38,3 +38,9 @@ require "twinfield/session"
 require "twinfield/process"
 require "twinfield/finder"
 require "twinfield/version"
+
+
+# Request interface
+require "twinfield/request/find"
+require "twinfield/request/list"
+require "twinfield/request/read"

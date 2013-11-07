@@ -46,17 +46,10 @@ module Twinfield
     # Abandons the session.
     def abandon
       if session_id
-        response = @client.request :abandon do
-          soap.header = {
-            "Header" => {
-              "SessionID" => session_id
-            },
-            :attributes! => {
-              "Header" => {:xmlns => "http://www.twinfield.com/"}
-            }
-          }
-          soap.body = "<Abandon xmlns='http://www.twinfield.com/' />"
-        end
+        header = { "Header" => { "SessionID" => session_id }, attributes!: { "Header" => { "xmlns" => "http://www.twinfield.com/"} } }
+        message = "<Abandon xmlns='http://www.twinfield.com/' />"
+        response = @client.call(:Abandon, attributes: { xmlns: "http://www.twinfield.com/" }, soap_header: header, message: message)
+
         # TODO: Return real status
         # There is no message from twinfield if the action succeeded
         return "Ok"
