@@ -15,40 +15,23 @@ module Twinfield
                                namespace_identifier: nil)
     end
 
-    def list(element, options = {})
-      Twinfield::Process.request(:process_xml_string) do
-        %Q(
-          <list>
-            <type>#{element.to_s}</type>
-            #{"<dimtype>#{options[:dimtype]}</dimtype>" if options[:dimtype]}
-          </list>
-        )
-      end
-    end
-
-    def read(element, options = {})
-      Twinfield::Process.request(:process_xml_string) do
-        %Q(
-          <read>
-            <type>#{element.to_s}</type>
-            #{"<code>#{options[:code]}</code>" if options[:code]}
-          </read>
-        )
-      end
-    end
-
     def actions
       @actions ||= client.operations
     end
 
-    def request(action, &block)
+    def request(action="process_xml_string", &block)
       if actions.include?(action)
         header = { "Header" => { "SessionID" => session.session_id }, attributes!: { "Header" => { "xmlns" => "http://www.twinfield.com/"} } }
         message = "<xmlRequest><![CDATA[#{block.try(:call)}]]></xmlRequest>"
-        response = client.call(action, attributes: { xmlns: "http://www.twinfield.com/" }, soap_header: header, message: message)
+
+        client.call(action, attributes: { xmlns: "http://www.twinfield.com/" }, soap_header: header, message: message)
       else
         "action not found"
       end
+    end
+
+    def options_to_xml(options)
+      options.map {|k,v| "<#{k}>#{v}</#{k}>" }.join("\n")
     end
   end
 end

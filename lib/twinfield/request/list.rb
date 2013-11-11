@@ -4,7 +4,7 @@ module Twinfield
 	    extend self
 
 			def browsefields
-				xml_doc = xml_wrap(Twinfield::Process.list(:browsefields))
+				xml_doc = xml_wrap(list(:browsefields))
 
 				array = []
 				xml_doc.css("browsefield").each do |xml|
@@ -29,7 +29,7 @@ module Twinfield
 			end
 
 			def offices
-				xml_doc = xml_wrap(Twinfield::Process.list(:offices))
+				xml_doc = xml_wrap(list(:offices))
 
 				array = []
 				xml_doc.css("office").each do |xml|
@@ -44,6 +44,17 @@ module Twinfield
 			end
 
 			protected
+
+	    def list(element, options = {})
+	      Twinfield::Process.request(:process_xml_string) do
+	        %Q(
+	          <list>
+	            <type>#{element.to_s}</type>
+	            #{ Twinfield::Process.options_to_xml(options) }
+	          </list>
+	        )
+	      end
+	    end
 
 			def xml_wrap(response)
 				Nokogiri::XML(response.body[:process_xml_string_response][:process_xml_string_result])

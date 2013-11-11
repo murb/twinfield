@@ -40,7 +40,7 @@ require "twinfield/finder"
 require "twinfield/version"
 
 
-# Request interface
+# Requests interfaces
 require "twinfield/request/find"
 require "twinfield/request/list"
 require "twinfield/request/read"
