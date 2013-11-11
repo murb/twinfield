@@ -40,7 +40,11 @@ require "twinfield/finder"
 require "twinfield/version"
 
 
-# Requests interfaces
+# Requests services
 require "twinfield/request/find"
 require "twinfield/request/list"
 require "twinfield/request/read"
+
+# Create services
+require "twinfield/create/customer"
+require "twinfield/create/transaction"

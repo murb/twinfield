@@ -19,7 +19,7 @@ module Twinfield
       @actions ||= client.operations
     end
 
-    def request(action="process_xml_string", &block)
+    def request(action=:process_xml_string, &block)
       if actions.include?(action)
         header = { "Header" => { "SessionID" => session.session_id }, attributes!: { "Header" => { "xmlns" => "http://www.twinfield.com/"} } }
         message = "<xmlRequest><![CDATA[#{block.try(:call)}]]></xmlRequest>"
