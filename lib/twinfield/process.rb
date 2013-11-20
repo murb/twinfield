@@ -5,7 +5,7 @@ module Twinfield
     def session
       @session ||= Twinfield::Session.new
       @session.logon
-       return @session
+      return @session
     end
 
     def client
