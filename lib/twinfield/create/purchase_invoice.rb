@@ -1,7 +1,7 @@
 module Twinfield
 	module Create
-		class SalesInvoice
-			attr_accessor	:twinfield_number, :code, :currency, :date, :invoicenumber, :office, :invoice_lines
+		class PurchaseInvoice
+			attr_accessor	:twinfield_number, :code, :currency, :date, :period, :invoicenumber, :office, :invoice_lines
 
 			def initialize(hash={})
 				# Escape all the things.
@@ -40,10 +40,11 @@ module Twinfield
 					%Q(
 						<transaction destiny="temporary" raisewarning="false" autobalancevat="true">
 							<header>
-								<code>VRK</code>
+								<code>INK</code>
 								#{ "<number>#{twinfield_number}</number>" if twinfield_number.present? }
 								<currency>#{currency}</currency>
 								<date>#{date.strftime("%Y%m%d")}</date>
+								<period>#{period}</period>
 								<invoicenumber>#{invoicenumber}</invoicenumber>
 							<office>#{office}</office>
 							</header>

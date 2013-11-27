@@ -117,6 +117,38 @@ module Twinfield
 
 				return array
 			end
+
+			def cost_centers(office_code=nil)
+				options = { dimtype: "KPL" }
+				options.merge!(office: office_code) if office_code
+
+				response = Twinfield::Finder.request("DIM", options)
+
+				array = response.body[:search_response][:data][:items][:array_of_string].map do |item|
+					{
+						code: item[:string][0],
+						name: item[:string][1]
+					}
+				end
+
+				return array
+			end
+
+			def general_ledgers(office_code=nil)
+				options = { dimtype: "PNL" }
+				options.merge!(office: office_code) if office_code
+
+				response = Twinfield::Finder.request("DIM", options)
+
+				array = response.body[:search_response][:data][:items][:array_of_string].map do |item|
+					{
+						code: item[:string][0],
+						name: item[:string][1]
+					}
+				end
+
+				return array
+			end
 		end
 	end
 end
