@@ -146,21 +146,18 @@ module Twinfield
     end
 
     # Selects a company.
-    def select_company
-      # <?xml version="1.0" encoding="utf-8"?>
-      # <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-      #   <soap:Header>
-      #     <Header xmlns="http://www.twinfield.com/">
-      #       <SessionID>string</SessionID>
-      #     </Header>
-      #   </soap:Header>
-      #   <soap:Body>
-      #     <SelectCompany xmlns="http://www.twinfield.com/">
-      #       <company>string</company>
-      #     </SelectCompany>
-      #   </soap:Body>
-      # </soap:Envelope>
-      raise NotImplementedError
+    def select_company(code)
+    	logon
+
+			header = { "Header" => { "SessionID" => session_id }, attributes!: { "Header" => { "xmlns" => "http://www.twinfield.com/"} } }
+			message = "<company>#{code}</company>"
+
+			response = Savon.client(wsdl: "#{@cluster}/webservices/session.asmx?wsdl",
+                               env_namespace: :soap,
+                               encoding: "UTF-8",
+                               namespace_identifier: nil).call(:select_company, attributes: { xmlns: "http://www.twinfield.com/" }, soap_header: header, message: message)
+
+			return "Ok"
     end
   end
 end

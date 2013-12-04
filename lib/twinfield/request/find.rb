@@ -104,7 +104,7 @@ module Twinfield
 
 			def debtors(office_code=nil)
 				options = { dimtype: "DEB" }
-				options.merge(office: office_code) if office_code
+				options.merge!(office: office_code) if office_code
 
 				response = Twinfield::Finder.request("DIM", options)
 

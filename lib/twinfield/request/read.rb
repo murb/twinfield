@@ -9,6 +9,23 @@ module Twinfield
 				xml_doc
 	    end
 
+	    def debtor(options)
+				xml_doc = xml_wrap(read(:dimensions, options.merge(dimtype: "DEB")))
+
+				if xml_doc.at_css("dimension").attributes["result"].value == "1"
+					{
+						country: xml_doc.at_css("country").content,
+						city: xml_doc.at_css("city").content,
+						postcode: xml_doc.at_css("postcode").content,
+						address: xml_doc.at_css("field2").content,
+						duedays: xml_doc.at_css("duedays").content
+					}
+				else
+					# TODO: Handle errors.
+					false
+				end
+	    end
+
 	    def transaction(options)
 	    	return Twinfield::Process.read(:transaction, options)
 				xml_doc = xml_wrap(Twinfield::Process.read(:transaction, options))
