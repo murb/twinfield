@@ -99,7 +99,7 @@ module Twinfield
 						value = line[:value] / month_count.to_f
 
 						(1..month_count).each do |i|
-							period = line[:start_period] + i - 1
+							period = line[:start_period] + (i - 1).month
 
 							xml += %Q(
 								<transaction destiny='temporary' raisewarning='false'>
