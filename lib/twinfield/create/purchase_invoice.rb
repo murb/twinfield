@@ -96,7 +96,7 @@ module Twinfield
 					if is_transitorial?(line)
 						month_count = 1 + (line[:end_period].month - line[:start_period].month + 12 * (line[:end_period].year - line[:start_period].year))
 
-						value = line[:value] / month_count
+						value = line[:value] / month_count.to_f
 
 						(1..month_count).each do |i|
 							period = line[:start_period] + i - 1
