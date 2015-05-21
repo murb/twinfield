@@ -5,9 +5,9 @@ require "twinfield/version"
 Gem::Specification.new do |s|
   s.name        = "twinfield"
   s.version     = Twinfield::VERSION
-  s.authors     = ["Ernst Rijsdijk", "Stephan van Diepen"]
-  s.email       = ["ernst.rijsdijk@holder.nl", "s.vandiepen@noxa.nl"]
-  s.homepage    = "https://github.com/stephanvd/twinfield"
+  s.authors     = ["Ernst Rijsdijk", "Stephan van Diepen", "Joris Reijrink"]
+  s.email       = ["ernst.rijsdijk@holder.nl", "s.vandiepen@noxa.nl", "joris@sprintict.nl"]
+  s.homepage    = "https://github.com/spictjoris/twinfield"
   s.summary     = "A simple client for the Twinfield SOAP-based API"
   s.description = "Twinfield is an international Web service for collaborative online accounting. The Twinfield gem is a simple client for their SOAP-based API."
 
@@ -19,6 +19,6 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_runtime_dependency "savon", '~> 2.3.0'
-  s.add_runtime_dependency "nokogiri", '~> 1.5.10'
+  s.add_runtime_dependency "nokogiri", '~> 1.6.0'
   s.add_development_dependency 'rspec'
 end
