@@ -20,7 +20,7 @@ module Twinfield
     end
 
     def request(action=:process_xml_string, options={}, &block)
-			session.select_company(options[:select_company]) if options[:select_company].present?
+			#session.select_company(options[:select_company]) if options[:select_company].present?
 
       if actions.include?(action)
         header = { "Header" => { "SessionID" => session.session_id }, attributes!: { "Header" => { "xmlns" => "http://www.twinfield.com/"} } }

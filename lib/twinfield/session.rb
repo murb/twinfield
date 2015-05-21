@@ -15,11 +15,13 @@ module Twinfield
       if connected? && (relog == false)
         "already connected"
       else
-        response = @client.call(:logon, message: Twinfield.configuration.to_hash)
+        response = @client.call(:logon, message: Twinfield.configuration.to_logon_hash)
 
         if response.body[:logon_response][:logon_result] == "Ok"
           @session_id = response.header[:header][:session_id]
           @cluster = response.body[:logon_response][:cluster]
+
+          select_company(Twinfield.configuration.company)
         end
 
         @message = response.body[:logon_response][:logon_result]
@@ -147,7 +149,7 @@ module Twinfield
 
     # Selects a company.
     def select_company(code)
-    	logon
+    	#logon
 
 			header = { "Header" => { "SessionID" => session_id }, attributes!: { "Header" => { "xmlns" => "http://www.twinfield.com/"} } }
 			message = "<company>#{code}</company>"

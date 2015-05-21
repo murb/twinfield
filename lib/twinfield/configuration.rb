@@ -7,8 +7,9 @@ module Twinfield
     attr_accessor :username
     attr_accessor :password
     attr_accessor :organisation
+    attr_accessor :company
 
-    def to_hash
+    def to_logon_hash
       {
         "user" => @username,
         "password" => @password,
