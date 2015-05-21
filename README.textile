@@ -25,6 +25,6 @@ Add a config block to your environment.rb:
     config.username = ""
     config.password = ""
     config.organisation = ""
-  	config.company = ""
+    config.company = ""
   end
 </pre>
