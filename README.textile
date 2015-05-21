@@ -9,7 +9,7 @@ h3. Using Twinfield
 Add Twinfield in @Gemfile@ as a gem dependency:
 
 <pre>
-  gem "twinfield", github: "stephanvd/twinfield"
+  gem "twinfield", github: "spictjoris/twinfield"
 </pre>
 
 Run the following in your console to install with Bundler:
