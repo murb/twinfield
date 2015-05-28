@@ -149,17 +149,15 @@ module Twinfield
 
     # Selects a company.
     def select_company(code)
-    	#logon
+      header = { "Header" => { "SessionID" => session_id }, attributes!: { "Header" => { "xmlns" => "http://www.twinfield.com/"} } }
+      message = "<company>#{code}</company>"
 
-			header = { "Header" => { "SessionID" => session_id }, attributes!: { "Header" => { "xmlns" => "http://www.twinfield.com/"} } }
-			message = "<company>#{code}</company>"
-
-			response = Savon.client(wsdl: "#{@cluster}/webservices/session.asmx?wsdl",
+      response = Savon.client(wsdl: "#{@cluster}/webservices/session.asmx?wsdl",
                                env_namespace: :soap,
                                encoding: "UTF-8",
                                namespace_identifier: nil).call(:select_company, attributes: { xmlns: "http://www.twinfield.com/" }, soap_header: header, message: message)
 
-			return "Ok"
+      return "Ok"
     end
   end
 end
