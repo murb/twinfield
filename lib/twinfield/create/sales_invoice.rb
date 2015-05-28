@@ -26,6 +26,7 @@ module Twinfield
               <dim2>#{line[:dim2]}</dim2>
               <dim3>#{line[:dim3]}</dim3>
               <value>#{line[:value]}</value>
+              #{ "<vatvalue>#{line[:vatvalue]}</vatvalue>" if line[:vatvalue] }
               <debitcredit>#{line[:debitcredit]}</debitcredit>
               <description>#{CGI.escapeHTML(line[:description]) if line[:description]}</description>
               #{ "<vatcode>#{line[:vatcode]}</vatcode>" if line[:vatcode] }
