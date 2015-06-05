@@ -1,8 +1,20 @@
 module Twinfield
   module Create
-    class SalesInvoice
-      attr_accessor  :code, :number, :currency, :date, :duedate, :invoicenumber, :invoice_lines
+    class Invoice
+      attr_accessor  :code, :number, :currency, :date, :duedate, :invoicenumber, :invoice_lines, :destiny, :raisewarning, :autobalancevat
 
+      def destiny
+        @destiny || 'temporary'
+      end
+  
+      def raisewarning
+        @raisewarning || false
+      end
+  
+      def autobalancevat
+        @autobalancevat || true
+      end
+  
       def initialize(hash={})
         # Escape all the things.
         hash.each do |k,v|
@@ -40,7 +52,7 @@ module Twinfield
       def save
         response = Twinfield::Process.request do
           %Q(
-            <transaction destiny="temporary" raisewarning="false" autobalancevat="true">
+            <transaction destiny="#{destiny}" raisewarning="#{raisewarning}" autobalancevat="#{autobalancevat}">
               <header>
                 <code>#{code}</code>
                 #{"<number>#{number}</number>" if number }
