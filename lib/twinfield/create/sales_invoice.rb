@@ -1,7 +1,7 @@
 module Twinfield
   module Create
     class SalesInvoice
-      attr_accessor  :code, :number, :currency, :date, :invoicenumber, :invoice_lines
+      attr_accessor  :code, :number, :currency, :date, :duedate, :invoicenumber, :invoice_lines
 
       def initialize(hash={})
         # Escape all the things.
@@ -46,6 +46,7 @@ module Twinfield
                 #{"<number>#{number}</number>" if number }
                 <currency>#{currency}</currency>
                 <date>#{date.strftime("%Y%m%d")}</date>
+                <duedate>#{duedate.strftime("%Y%m%d")}</duedate>
                 <invoicenumber>#{invoicenumber}</invoicenumber>
                 <office>#{Twinfield.configuration.company}</office>
               </header>
