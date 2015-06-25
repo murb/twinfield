@@ -21,10 +21,12 @@ module Twinfield
       end
 
       def budgets(options)
-        raise NotImplementedError
+        xml_doc = xml_wrap(list(:budgets, options))
       end
 
+      # Twinfield::Request::List.dimensions({ dimtype: "DEB" })
       def dimensions(options)
+        options = options.merge(office: Twinfield.configuration.company)
         xml_doc = xml_wrap(list(:dimensions, options))
       end
 

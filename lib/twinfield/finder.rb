@@ -23,14 +23,14 @@ module Twinfield
       header = {
         "Header" => { "SessionID" => session.session_id },
         "attributes!" => { "Header" => { "xmlns" => "http://www.twinfield.com/" } }
-      }
+      } 
 
       message = {
         "type" => type,
         "pattern" => "*",
         "field" => "0",
         "firstRow" => "1",
-        "maxRows" => "0",
+        "maxRows" => "100",
         "options" => {
           "ArrayOfString" => options.map {|k, v| { "string" => [k, v] } }
         }

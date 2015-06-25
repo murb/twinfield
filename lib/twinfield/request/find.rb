@@ -133,15 +133,31 @@ module Twinfield
 
         return array
       end
-
-      def general_ledgers()
-        options = { dimtype: "PNL" }
-        options.merge(office: Twinfield.configuration.company)
+        
+      def general_ledgers(options)
+        options = options.merge(office: Twinfield.configuration.company)
 
         response = Twinfield::Finder.request("DIM", options)
 
         array = response.body[:search_response][:data][:items][:array_of_string].map do |item|
           {
+            code: item[:string][0],
+            name: item[:string][1]
+          }
+        end
+
+        return array
+      end
+      
+      #Twinfield::Request::Find.test
+      def test()
+        options = { office: Twinfield.configuration.company, dimtype: "CRD" }
+
+        response = Twinfield::Finder.request("DIM", options)
+
+        array = response.body[:search_response][:data][:items][:array_of_string].map do |item|
+          {
+            
             code: item[:string][0],
             name: item[:string][1]
           }

@@ -33,7 +33,18 @@ module Twinfield
 
         xml_doc
       end
+      
+      #Twinfield::Request::Read.browse( options: { code: "000" })
+      def browse(options)
+        options = options.merge(office: Twinfield.configuration.company)
+        
+        xml = xml_wrap(read(:browse, options))
 
+        return {
+          status: 0
+        }
+      end
+      
       protected
 
       def read(element, options = {})

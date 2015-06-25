@@ -54,6 +54,6 @@ require File.expand_path("../config", __FILE__)
                               vatcode: "VL"
                             }
                           ]
-@result = @invoice.save
-puts @result
+#@result = @invoice.save
+#puts @result
 
