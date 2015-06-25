@@ -42,7 +42,8 @@ Request a list of all debtors:
 Create a new debtor, if the debtor alreay exsist it is overwritten:
 
 <pre>
-  debtor = Twinfield::Create::Debtor.new    
+  debtor = Twinfield::Create::Debtor.new
+   
   debtor.code = ""
   debtor.name = ""
   debtor.shortname = ""
@@ -59,14 +60,16 @@ Create a new debtor, if the debtor alreay exsist it is overwritten:
   debtor.invoice_city = ""
   debtor.invoice_country = "NL"  
   debtor.financials_duedays = 30
-  debtor.vatcode = <vatcode>  
+  debtor.vatcode = ""
+  
   debtor.save
 </pre>
 
 Create a new invoice:
 
 <pre>
-  invoice = Twinfield::Create::Invoice.new  
+  invoice = Twinfield::Create::Invoice.new
+  
   invoice.code = ""
   invoice.currency = "EUR"
   invoice.date = "01-01-2000"
