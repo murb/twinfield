@@ -28,3 +28,87 @@ Add a config block to your environment.rb:
     config.company = ""
   end
 </pre>
+
+h2. Examples
+
+Here are some examples that may be useful when using this GEM for the first time.
+
+Request a list of all debtors:
+<pre>
+  Twinfield::Request::List.dimensions({ dimtype: "DEB" })
+</pre>
+
+Create a new debtor, if the debtor alreay exsist it is overwritten:
+<pre>
+    @debtor = Twinfield::Create::Debtor.new
+    
+    @debtor.code = <code>
+    @debtor.name = <name>
+    @debtor.shortname = <shortname>
+    @debtor.country = <country>
+    
+    @debtor.bank_description = <bank_description>
+    @debtor.iban = <iban>
+    @debtor.bank_iban = <bank_iban>
+    @debtor.bank_country = <bank_country>
+    @debtor.bank_biccode = <bank_biccode>
+
+    @debtor.invoice_contact_name = <invoice_contact_name>
+    @debtor.invoice_name = <invoice_name>
+    @debtor.invoice_address = <invoice_address>
+    @debtor.invoice_zipcode = <invoice_zipcode>
+    @debtor.invoice_city = <invoice_city>
+    @debtor.invoice_country = <invoice_country>
+    
+    @debtor.financials_duedays = <financials_duedays> 
+    @debtor.vatcode = <vatcode>
+
+  @debtor.save
+</pre>
+
+Create a new invoice:
+<pre>
+  @invoice = Twinfield::Create::Invoice.new
+  
+    @invoice.code = <code>
+    @invoice.currency = "EUR"
+    @invoice.date = <date>
+    @invoice.duedate = <due_date>
+    @invoice.invoicenumber = <invoice_number>
+      
+    @invoice.destiny = "final"
+    @invoice.raisewarning = true
+    @invoice.autobalancevat = true
+    
+    @invoice.invoice_lines = 
+    [
+      {
+        type: 'total',
+        id: 1,
+        dim1: <dim1>,                 # 1300 or 1600
+        dim2: <dim2>,                 # DEB/CRD number
+        value: <value,                # Total inc vat
+        vatvalue: <vatvalue>,
+        debitcredit: <debitcredit>,   #'credit' or 'debit'
+        description: <description>
+      }
+    ]
+
+    invoice_lines.each_with_index do |invoice_line, index|
+      @invoice.invoice_lines <<
+        {
+          type: 'detail',
+          id: index + 2,
+          dim1: <dim1>,                 # Ledger account code
+          dim2: <dim2>,                 # Activity code
+          dim3: <dim3>,                 # Machine code
+          value: <value>,               # Value line excl vat
+          vatvalue: <vatvalue>,
+          vatcode: <vatcode>,           # Options IPC, IH, IL, VH, VL en VV
+          debitcredit: <debitcredit>,   #'credit' or 'debit'
+          description: <description>
+        }
+    end
+    
+    @invoice.save
+</pre>
