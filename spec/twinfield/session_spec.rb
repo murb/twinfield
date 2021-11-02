@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Twinfield::Session do
+  include SessionStubs
+
   after do
     reset_config
   end
@@ -8,40 +10,51 @@ describe Twinfield::Session do
   describe "successful logon" do
 
     before(:all) do
+      stub_session_wsdl
+      stub_create_session
+      stub_cluster_session_wsdl
+      stub_select_company
       @session = Twinfield::Session.new
       @session.logon
     end
 
     it "should return successful message" do
-      @session.status.should == "Ok"
+      expect(@session.status).to eq "Ok"
     end
 
     it "should return that the current session already is connected" do
-      @session.logon.should == "already connected"
+      expect(@session.logon).to eq "already connected"
     end
 
     it "should return that the current session already is connected" do
-      @session.relog.should == "Ok"
+      stub_create_session
+      stub_cluster_session_wsdl
+      stub_select_company
+      expect(@session.relog).to eq "Ok"
     end
 
     it "should have a session_id after successful logon" do
-      @session.session_id.should_not == nil
+      expect(@session.session_id).not_to eq nil
     end
 
     it "should have a cluster after successful logon" do
-      @session.cluster.should_not == nil
+      expect(@session.cluster).not_to eq nil
     end
 
     it "should return true for connected" do
-      @session.connected?.should == true
+      expect(@session.connected?).to eq true
     end
   end
 
   describe "invalid logon" do
 
     before(:all) do
+      username = "not_valid_username"
+      stub_session_wsdl
+      stub_create_session username: username, response: "Invalid"
+
       Twinfield.configure do |config|
-        config.username = "not_valid_username"
+        config.username = username
       end
 
       @session = Twinfield::Session.new
@@ -49,19 +62,19 @@ describe Twinfield::Session do
     end
 
     it "should return invalid message" do
-      @session.status.should == "Invalid"
+      expect(@session.status).to eq "Invalid"
     end
 
     it "should not have a session_id" do
-      @session.session_id.should == nil
+      expect(@session.session_id).to eq nil
     end
 
     it "should not have a cluster" do
-      @session.cluster.should == nil
+      expect(@session.cluster).to eq nil
     end
 
     it "should return false for connected" do
-      @session.connected?.should == false
+      expect(@session.connected?).to eq false
     end
   end
 end

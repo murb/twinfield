@@ -9,20 +9,20 @@ describe Twinfield::Configuration do
     Twinfield.configure do |config|
       config.username = "my_username"
     end
-    Twinfield.configuration.username.should == "my_username"
+    expect(Twinfield.configuration.username).to eq "my_username"
   end
 
   it "configures password" do
     Twinfield.configure do |config|
       config.password = "my_password"
     end
-    Twinfield.configuration.password.should == "my_password"
+    expect(Twinfield.configuration.password).to eq "my_password"
   end
 
   it "configures organisation" do
     Twinfield.configure do |config|
       config.organisation = "my_organisation"
     end
-    Twinfield.configuration.organisation.should == "my_organisation"
+    expect(Twinfield.configuration.organisation).to eq "my_organisation"
   end
 end
