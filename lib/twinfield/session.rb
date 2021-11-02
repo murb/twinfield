@@ -1,7 +1,13 @@
 module Twinfield
   class Session
+    HEADER_TEMPLATE = {
+      Header: {},
+      attributes!: {
+        Header: {xmlns: "http://www.twinfield.com/"}
+      }
+    }
 
-    attr_accessor :session_id, :cluster
+    attr_accessor :session_id, :cluster, :authorization_header
 
     # sets up a new savon client which will be used for current Session
     def initialize
@@ -48,7 +54,6 @@ module Twinfield
     # Abandons the session.
     def abandon
       if session_id
-        header = { "Header" => { "SessionID" => session_id }, attributes!: { "Header" => { "xmlns" => "http://www.twinfield.com/"} } }
         message = "<Abandon xmlns='http://www.twinfield.com/' />"
         response = @client.call(:Abandon, attributes: { xmlns: "http://www.twinfield.com/" }, soap_header: header, message: message)
 
@@ -63,19 +68,18 @@ module Twinfield
     # Keep the session alive, to prevent session time out. A session time out will occur after 20 minutes.
     def keep_alive
       response = @client.request :keep_alive do
-        soap.header = {
-          "Header" => {
-            "SessionID" => session_id
-          },
-          :attributes! => {
-            "Header" => {:xmlns => "http://www.twinfield.com/"}
-          }
-        }
+        soap.header = header
         soap.body = "<KeepAliveResponse xmlns='http://www.twinfield.com/' />"
       end
       # TODO: Return real status
       # There is no message from twinfield if the action succeeded
       return "Ok"
+    end
+
+    def header
+      soap_header = HEADER_TEMPLATE
+      soap_header = soap_header.merge({"Header": {"SessionID" => session_id}}) if session_id
+      soap_header
     end
 
     # Gets the session's user role.
