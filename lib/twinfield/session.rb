@@ -1,13 +1,13 @@
 module Twinfield
   class Session
     HEADER_TEMPLATE = {
-      Header: {},
+      "Header" => {},
       attributes!: {
-        Header: {xmlns: "http://www.twinfield.com/"}
+        "Header" => {xmlns: "http://www.twinfield.com/"}
       }
     }
 
-    attr_accessor :session_id, :cluster, :authorization_header
+    attr_accessor :session_id, :cluster
 
     # sets up a new savon client which will be used for current Session
     def initialize
@@ -78,7 +78,7 @@ module Twinfield
 
     def header
       soap_header = HEADER_TEMPLATE
-      soap_header = soap_header.merge({"Header": {"SessionID" => session_id}}) if session_id
+      soap_header = soap_header.merge({"Header"=> {"SessionID"=>session_id}}) if session_id
       soap_header
     end
 
@@ -153,7 +153,6 @@ module Twinfield
 
     # Selects a company.
     def select_company(code)
-      header = { "Header" => { "SessionID" => session_id }, attributes!: { "Header" => { "xmlns" => "http://www.twinfield.com/"} } }
       message = "<company>#{code}</company>"
 
       response = Savon.client(wsdl: "#{@cluster}/webservices/session.asmx?wsdl",

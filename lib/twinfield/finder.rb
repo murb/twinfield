@@ -20,11 +20,6 @@ module Twinfield
     end
 
     def request(type, options={})
-      header = {
-        "Header" => { "SessionID" => session.session_id },
-        "attributes!" => { "Header" => { "xmlns" => "http://www.twinfield.com/" } }
-      } 
-
       message = {
         "type" => type,
         "pattern" => "*",
@@ -36,7 +31,7 @@ module Twinfield
         }
       }
 
-      client.call(:search, attributes: { xmlns: "http://www.twinfield.com/" }, soap_header: header, message: message)
+      client.call(:search, attributes: { xmlns: "http://www.twinfield.com/" }, soap_header: session.header, message: message)
     end
   end
 end

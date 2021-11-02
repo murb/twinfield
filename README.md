@@ -8,7 +8,7 @@ Twinfield is an international Web service for collaborative online accounting. T
 
 Add Twinfield in @Gemfile@ as a gem dependency:
 
-    gem "twinfield", github: "spictjoris/twinfield"
+    gem "twinfield", github: "murb/twinfield"
 
 Run the following in your console to install with Bundler:
 
