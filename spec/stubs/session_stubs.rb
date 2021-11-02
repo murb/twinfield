@@ -1,13 +1,12 @@
 module SessionStubs
   def stub_session_wsdl
     stub_request(:get, "https://login.twinfield.com/webservices/session.asmx?wsdl").
-      to_return(status: 200, body: File.read(File.expand_path('../../fixtures/session/wsdl.xml', __FILE__)) )
+      to_return(status: 200, body: File.read(File.expand_path('../../fixtures/login/session/wsdl.xml', __FILE__)) )
   end
 
   def stub_create_session username: "username" , password: "password" , organisation: "organisation", response: "Ok"
     stub_request(:post, "https://login.twinfield.com/webservices/session.asmx").
       with(
-                          # <?xml version="1.0" encoding="UTF-8"?><env:Envelope xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tns="http://www.twinfield.com/" xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"><env:Body><tns:Logon><tns:user>username</tns:user><tns:password>password</tns:password><tns:organisation>organisation</tns:organisation></tns:Logon></env:Body></env:Envelope
         body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?><env:Envelope xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:tns=\"http://www.twinfield.com/\" xmlns:env=\"http://schemas.xmlsoap.org/soap/envelope/\"><env:Body><tns:Logon><tns:user>#{username}</tns:user><tns:password>#{password}</tns:password><tns:organisation>#{organisation}</tns:organisation></tns:Logon></env:Body></env:Envelope>",
         headers: {
           Soapaction: '"http://www.twinfield.com/Logon"',
@@ -19,7 +18,7 @@ module SessionStubs
 
   def stub_cluster_session_wsdl
     stub_request(:get, "https://accounting.twinfield.com/webservices/session.asmx?wsdl").
-      to_return(status: 200, body: File.read(File.expand_path('../../fixtures/session/cluster_wsdl.xml', __FILE__)))
+      to_return(status: 200, body: File.read(File.expand_path('../../fixtures/cluster/session/wsdl.xml', __FILE__)))
   end
 
   def stub_select_company company: "company"
