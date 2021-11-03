@@ -3,9 +3,13 @@ module Twinfield
     extend self
 
     def session
-      @session ||= Twinfield::Session.new
+      @session ||= Twinfield.configuration.session_class.new
       @session.logon
       return @session
+    end
+
+    def session= session
+      @session = session
     end
 
     def client

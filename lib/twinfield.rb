@@ -34,6 +34,7 @@ module Twinfield
 end
 
 require "twinfield/configuration"
+require "twinfield/oauth_session"
 require "twinfield/session"
 require "twinfield/process"
 require "twinfield/finder"

@@ -25,4 +25,20 @@ describe Twinfield::Configuration do
     end
     expect(Twinfield.configuration.organisation).to eq "my_organisation"
   end
+
+  describe "#session_class" do
+    it "returns a session class" do
+      expect(Twinfield.configuration.session_class).to eq(Twinfield::Session)
+    end
+
+    it "returns a oauth session class when configured" do
+      Twinfield.configure do |config|
+        config.session_type = "Twinfield::OAuthSession"
+      end
+      expect(Twinfield.configuration.session_class).to eq(Twinfield::OAuthSession)
+      Twinfield.configure do |config|
+        config.session_type = nil
+      end
+    end
+  end
 end
