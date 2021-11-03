@@ -45,7 +45,13 @@ module Twinfield
 
     def header
       soap_header = HEADER_TEMPLATE
-      soap_header = soap_header.merge({"Header" => {"AccessToken" => access_token}}) if access_token
+
+      header_contents = {}
+      header_contents["AccessToken"] = access_token if access_token
+      header_contents["CompanyCode"] = Twinfield.configuration.company if Twinfield.configuration.company
+
+      soap_header = soap_header.merge({"Header" => header_contents})
+
       soap_header
     end
 

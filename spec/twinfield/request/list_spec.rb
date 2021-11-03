@@ -15,7 +15,7 @@ describe Twinfield::Request::List do
 
     describe "#dimensions" do
       it "lists debtors" do
-        stub_processxml_list_dimensions(dimension_type: 'DEB')
+        stub_processxml_list_dimensions(dimension_type: 'DEB', company: 'company')
         expect(subject.dimensions({ dimtype: "DEB" })).to be_a Nokogiri::XML::Document
       end
     end
