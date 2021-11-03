@@ -31,6 +31,7 @@ describe Twinfield::Request::List do
         config.session_type = "Twinfield::OAuthSession"
         config.cluster = "https://accounting.twinfield.com"
         config.access_token = "2b128baa05dd3cabc61e534435884961"
+        # config.log_level = :debug
       end
 
       Twinfield::Process.session= nil
@@ -42,6 +43,7 @@ describe Twinfield::Request::List do
         config.session_type = nil
         config.cluster = nil
         config.access_token = nil
+        config.log_level = nil
       end
     end
 
@@ -49,6 +51,15 @@ describe Twinfield::Request::List do
       it "lists debtors" do
         stub_processxml_list_dimensions(dimension_type: 'DEB', oauth: true)
         expect(subject.dimensions({ dimtype: "DEB" })).to be_a Nokogiri::XML::Document
+      end
+    end
+
+
+    describe "#offices" do
+      it "lists offices" do
+        stub_processxml_list_offices(oauth: true)
+        # expect(subject.offices).to be_a Nokogiri::XML::Document
+
       end
     end
 

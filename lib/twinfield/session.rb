@@ -11,7 +11,9 @@ module Twinfield
 
     # sets up a new savon client which will be used for current Session
     def initialize
-      @client = Savon.client(wsdl: Twinfield::WSDLS[:session])
+      @client = Savon.client(wsdl: Twinfield::WSDLS[:session],
+                             log: !!Twinfield.configuration.log_level,
+                             log_level: Twinfield.configuration.log_level || :info)
     end
 
     # retrieve a session_id and cluster from twinfield

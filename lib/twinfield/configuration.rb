@@ -15,6 +15,9 @@ module Twinfield
     attr_accessor :cluster
     attr_accessor :access_token
 
+    # Log level, e.g. :info, :debug; currently only forwarded to Savon
+    attr_accessor :log_level
+
 
     def to_logon_hash
       {

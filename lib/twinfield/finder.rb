@@ -9,6 +9,7 @@ module Twinfield
     end
 
     def session= session
+      @client = nil
       @session = session
     end
 
@@ -16,7 +17,9 @@ module Twinfield
       @client ||= Savon.client(wsdl: "#{session.cluster}#{Twinfield::WSDLS[:finder]}",
                                env_namespace: :soap,
                                encoding: "UTF-8",
-                               namespace_identifier: nil)
+                               namespace_identifier: nil,
+                               log: !!Twinfield.configuration.log_level,
+                               log_level: Twinfield.configuration.log_level || :info)
     end
 
     def actions

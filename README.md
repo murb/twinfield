@@ -6,9 +6,9 @@ Twinfield is an international Web service for collaborative online accounting. T
 
 ### Using Twinfield
 
-Add Twinfield in @Gemfile@ as a gem dependency:
+Add Twinfield in `Gemfile` as a gem dependency:
 
-    gem "twinfield", github: "murb/twinfield"
+    gem "twinfield", git: "https://github.com/murb/twinfield.git"
 
 Run the following in your console to install with Bundler:
 
@@ -22,6 +22,18 @@ Add a config block to your environment.rb:
       config.organisation = ""
       config.company = ""
     end
+
+In OAuth settings initializization typically occurs later, but configuration is no different. Cluster and access token are retrieved in the OAuth flow.
+
+
+    Twinfield.configure do |config|
+      config.session_type = "Twinfield::OAuthSession"
+      config.cluster = OAuthClient.last.token_data["twf.clusterUrl"]
+      config.access_token = OAuthClient.first.access_token
+      config.log_level = :debug
+    end
+
+    Twinfield::Request::List.offices
 
 ## Examples
 

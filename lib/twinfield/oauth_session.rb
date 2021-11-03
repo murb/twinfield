@@ -13,7 +13,6 @@ module Twinfield
     def initialize
       @cluster = Twinfield.configuration.cluster
       @access_token = Twinfield.configuration.access_token
-      @client = Savon.client(wsdl: Twinfield::WSDLS[:session])
     end
 
     # retrieve a session_id and cluster from twinfield
