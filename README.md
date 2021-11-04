@@ -14,6 +14,8 @@ Run the following in your console to install with Bundler:
 
     bundle install
 
+## Configuration
+
 Add a config block to your environment.rb:
 
     Twinfield.configure do |config|
@@ -25,7 +27,6 @@ Add a config block to your environment.rb:
 
 In OAuth settings initializization typically occurs later, but configuration is no different. Cluster and access token are retrieved in the OAuth flow.
 
-
     Twinfield.configure do |config|
       config.session_type = "Twinfield::OAuthSession"
       config.cluster = OAuthClient.last.token_data["twf.clusterUrl"]
@@ -34,6 +35,10 @@ In OAuth settings initializization typically occurs later, but configuration is 
     end
 
     Twinfield::Request::List.offices
+
+    Now configure the company you're looking for:
+
+    Twinfield.configuration.company="NL123"
 
 ## Examples
 
@@ -109,3 +114,8 @@ Create a new invoice:
     end
 
     invoice.save
+
+## Known issues
+
+* The way configuration works may not work well in concurrent environments with multiple clients
+* The latest development and use in practice has been using the OAuth-based approach; the old Twinfield::Session may not even work anymore
