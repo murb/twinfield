@@ -10,9 +10,6 @@ describe Twinfield::OAuthSession do
         config.cluster = "https://accounting.twinfield.com"
         config.access_token = "2b128baa05dd3cabc61e534435884961"
       end
-
-      Twinfield::Process.session= nil
-      Twinfield::Finder.session= nil
     end
 
     after do

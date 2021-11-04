@@ -28,7 +28,13 @@ module Twinfield
     # Configures gem options
     def configure
       self.configuration ||= Twinfield::Configuration.new
+      reset_sessions!
       yield(configuration)
+    end
+
+    def reset_sessions!
+      Twinfield::Process.session=nil
+      Twinfield::Finder.session=nil
     end
   end
 end

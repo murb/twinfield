@@ -33,9 +33,6 @@ describe Twinfield::Request::List do
         config.access_token = "2b128baa05dd3cabc61e534435884961"
         # config.log_level = :debug
       end
-
-      Twinfield::Process.session= nil
-      Twinfield::Finder.session= nil
     end
 
     after do
