@@ -4,10 +4,10 @@ require "twinfield/version"
 
 Gem::Specification.new do |s|
   s.name        = "twinfield"
-  s.version     = Twinfield::VERSION
-  s.authors     = ["Ernst Rijsdijk", "Stephan van Diepen", "Joris Reijrink"]
-  s.email       = ["ernst.rijsdijk@holder.nl", "s.vandiepen@noxa.nl", "joris@sprintict.nl"]
-  s.homepage    = "https://github.com/spictjoris/twinfield"
+  s.version     = Twinfield::Version::VERSION
+  s.authors     = ["Ernst Rijsdijk", "Stephan van Diepen", "Joris Reijrink", "Maarten Brouwers"]
+  s.email       = ["ernst.rijsdijk@holder.nl", "s.vandiepen@noxa.nl", "joris@sprintict.nl", "maarten@murb.nl"]
+  s.homepage    = "https://github.com/murb/twinfield"
   s.summary     = "A simple client for the Twinfield SOAP-based API"
   s.description = "Twinfield is an international Web service for collaborative online accounting. The Twinfield gem is a simple client for their SOAP-based API."
 

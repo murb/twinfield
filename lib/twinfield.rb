@@ -40,7 +40,7 @@ module Twinfield
 end
 
 require "twinfield/configuration"
-require "twinfield/oauth_session"
+require "twinfield/o_auth_session"
 require "twinfield/session"
 require "twinfield/process"
 require "twinfield/finder"
@@ -52,6 +52,8 @@ require "twinfield/create/general_ledger"
 require "twinfield/create/debtor"
 require "twinfield/create/creditor"
 require "twinfield/create/invoice"
+require "twinfield/create/error"
+require "twinfield/create/transaction"
 
 # Requests services
 require "twinfield/request/find"

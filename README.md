@@ -44,11 +44,13 @@ In OAuth settings initializization typically occurs later, but configuration is 
 
 Here are some examples that may be useful when using this GEM for the first time.
 
-Request a list of all debtors:
+### List of all debtors
 
     Twinfield::Request::List.dimensions({ dimtype: "DEB" })
 
-Create a new debtor, if the debtor alreay exsist it is overwritten:
+### Create a new debtor
+
+(if the debtor alreay exsist it is overwritten)
 
     debtor = Twinfield::Create::Debtor.new
 
@@ -72,48 +74,18 @@ Create a new debtor, if the debtor alreay exsist it is overwritten:
 
     debtor.save
 
-Create a new invoice:
+### Create a new invoice:
 
-    invoice = Twinfield::Create::Invoice.new
-
-    invoice.code = ""
-    invoice.currency = "EUR"
-    invoice.date = "01-01-2000"
-    invoice.duedate = "01-01-2000"
-    invoice.invoicenumber = 1
-    invoice.destiny = "final"
-    invoice.raisewarning = true
-    invoice.autobalancevat = true
-
-    invoice.invoice_lines =
-    [{
-      type: 'total',
-      id: 1,
-      dim1: 1300,
-      dim2: "D100000",
-      value: 0,
-      vatvalue: 0,
-      debitcredit: "debit",
-      description: ""
-    }]
-
-    invoice_lines.each_with_index do |invoice_line, index|
-     invoice.invoice_lines <<
-     {
-        type: 'detail',
-        id: index + 2,
-        dim1: 0001,
-        dim2: 0001,
-        dim3: 0001,
-        value: 0,
-        vatvalue: 0,
-        vatcode: "VL",
-        debitcredit: "credit",
-        description: ""
-      }
-    end
+    invoice = Twinfield::Create::Invoice.new(customer: 1003, invoicetype: "FACTUUR", currency: "EUR", invoicedate: Time.now, duedate: Time.now+1.month)
+    invoice.invoice_lines << Twinfield::Create::Invoice::Line.new(article: "A", unitspriceexcl: 100, allowdiscountorpremium: true, vatcode: "VH")
+    invoice.invoice_lines << Twinfield::Create::Invoice::Line.new(article: 0, unitspriceexcl: 100, description: "Spaartegoed", allowdiscountorpremium: true, vatcode: "VN")
+    invoice.invoice_lines << Twinfield::Create::Invoice::Line.new(article: 0, unitspriceexcl: 0, quantity: 0, description: "Custom article", allowdiscountorpremium: true, vatcode: "VH")
 
     invoice.save
+
+### List office
+
+    Twinfield::Request::Read.office
 
 ## Known issues
 

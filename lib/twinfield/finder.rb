@@ -26,19 +26,32 @@ module Twinfield
       @actions ||= client.operations
     end
 
+    # request
+    # see: https://accounting.twinfield.com/webservices/documentation/#/ApiReference/Transactions/SalesInvoices
     def request(type, options={})
+      first_row = options.delete(:first_row) || options.delete("firstRow") || 1
+      pattern = options.delete(:pattern) || options.delete("pattern") || "*"
+
       message = {
         "type" => type,
         "pattern" => "*",
         "field" => "0",
-        "firstRow" => "1",
+        "firstRow" => first_row,
         "maxRows" => "100",
         "options" => {
           "ArrayOfString" => options.map {|k, v| { "string" => [k, v] } }
         }
       }
 
-      client.call(:search, attributes: { xmlns: "http://www.twinfield.com/" }, soap_header: session.header, message: message)
+      xml = client.operation(:search).build(attributes: { xmlns: "http://www.twinfield.com/" }, soap_header: session.header, message: message).build_document
+
+      client.call(:search, xml: strip_global_namespace_from_xml(xml))
     end
+
+    def strip_global_namespace_from_xml xml
+      # ugly enough xmlns is prefixed even though it suggests an element in the global document's namespace
+      xml.gsub("<xmlns:", "<").gsub("</xmlns:", "</")
+    end
+
   end
 end

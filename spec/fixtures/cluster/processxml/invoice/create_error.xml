@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <soap:Body>
+    <ProcessXmlStringResponse xmlns="http://www.twinfield.com/">
+      <ProcessXmlStringResult>&lt;salesinvoice raisewarning="false" autobalancevat="true" result="0"&gt;&lt;header result="0" msgtype="error" msg="Er zijn fouten opgetreden bij de koptekst: kan geen totalen berekenen."&gt;&lt;office&gt;NLA002058&lt;/office&gt;&lt;invoicetype msgtype="error" msg="Het factuurtype bestaat niet" result="0"&gt;VERKOOP&lt;/invoicetype&gt;&lt;invoicedate&gt;20211105&lt;/invoicedate&gt;&lt;duedate&gt;20211205&lt;/duedate&gt;&lt;bank /&gt;&lt;customer&gt;1002&lt;/customer&gt;&lt;currency&gt;EUR&lt;/currency&gt;&lt;status&gt;concept&lt;/status&gt;&lt;paymentmethod /&gt;&lt;headertext /&gt;&lt;footertext /&gt;&lt;/header&gt;&lt;lines&gt;&lt;line id="1"&gt;&lt;article&gt;A&lt;/article&gt;&lt;quantity&gt;1&lt;/quantity&gt;&lt;units /&gt;&lt;allowdiscountorpremium /&gt;&lt;description /&gt;&lt;unitspriceexcl&gt;100.0&lt;/unitspriceexcl&gt;&lt;dim1 /&gt;&lt;vatcode&gt;VH&lt;/vatcode&gt;&lt;/line&gt;&lt;/lines&gt;&lt;/salesinvoice&gt;</ProcessXmlStringResult>
+    </ProcessXmlStringResponse>
+  </soap:Body>
+</soap:Envelope>

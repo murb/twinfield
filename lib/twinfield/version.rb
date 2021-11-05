@@ -1,3 +1,5 @@
 module Twinfield
-  VERSION = "0.0.9"
+  module Version
+    VERSION = "0.1.0b"
+  end
 end

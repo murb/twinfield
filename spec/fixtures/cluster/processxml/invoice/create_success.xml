@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <soap:Body>
+    <ProcessXmlStringResponse xmlns="http://www.twinfield.com/">
+      <ProcessXmlStringResult>
+      <![CDATA[
+        <salesinvoice raisewarning="false" autobalancevat="true" result="1">
+          <header>
+            <office>NLA002058</office>
+            <invoicetype>FACTUUR</invoicetype>
+            <invoicedate>20211105</invoicedate>
+            <duedate>20211205</duedate>
+            <bank>BNK</bank>
+            <customer>1002</customer>
+            <currency>EUR</currency>
+            <status>concept</status>
+            <paymentmethod>bank</paymentmethod>
+            <headertext/>
+            <footertext/>
+            <period>2021/11</period>
+            <invoiceaddressnumber>1</invoiceaddressnumber>
+            <deliveraddressnumber>1</deliveraddressnumber>
+            <invoicenumber>3</invoicenumber>
+          </header>
+          <lines>
+            <line id="1">
+              <article>A</article>
+              <quantity>1</quantity>
+              <units>1</units>
+              <allowdiscountorpremium>true</allowdiscountorpremium>
+              <description>REGULIER KUNSTWERK</description>
+              <dim1 name="Omzet diversen" shortname="">8020</dim1>
+              <vatcode name="BTW 21%" shortname="V 21%">VH</vatcode>
+              <subarticle>A0</subarticle>
+              <unitspriceexcl>1000.00</unitspriceexcl>
+              <performancedate/>
+              <performancetype/>
+              <freetext1/>
+              <freetext2/>
+              <freetext3/>
+              <dim2 name="1" shortname="">00000</dim2>
+              <valueexcl>1000.00</valueexcl>
+              <vatvalue>210.00</vatvalue>
+              <valueinc>1210.00</valueinc>
+            </line>
+          </lines>
+          <totals>
+            <valueexcl>1000.00</valueexcl>
+            <valueinc>1210.00</valueinc>
+          </totals>
+          <vatlines>
+            <vatline>
+              <vatcode name="BTW 21%" shortname="V 21%" percentage="21.000000000">VH</vatcode>
+              <vatvalue>210.00</vatvalue>
+              <performancetype/>
+              <performancedate/>
+            </vatline>
+          </vatlines>
+        </salesinvoice>
+]]>
+      </ProcessXmlStringResult>
+    </ProcessXmlStringResponse>
+  </soap:Body>
+</soap:Envelope>
