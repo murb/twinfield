@@ -29,12 +29,13 @@ module Twinfield
         end
       end
 
-      def sales_invoice(options)
-        xml = xml_wrap(read(:dimensions, options.merge(dimtype: "IVT")))
+      # Twinfield::Request::Read.sales_invoice({})
+      def sales_invoice(invoicenumber, invoicetype: "FACTUUR")
+        options = {office: Twinfield.configuration.company, code: "FACTUUR", invoicenumber: invoicenumber}
 
-        if xml.at_css("dimensions").attributes["result"]&.value == "1"
-          []
-        elsif xml.at_css("dimension").attributes["result"].value == "1"
+        xml = xml_wrap(read(:salesinvoice, options))
+
+        if xml.at_css("dimension").attributes["result"].value == "1"
           return {
             status: 1,
             country: xml.at_css("country").content,
@@ -93,11 +94,11 @@ module Twinfield
       protected
 
       def read(element, options = {})
-        Twinfield::Process.request(:process_xml_string) do
+        Twinfield::Api::Process.request(:process_xml_string) do
           %Q(
             <read>
               <type>#{element.to_s}</type>
-              #{ Twinfield::Process.options_to_xml(options) }
+              #{ Twinfield::Api::Process.options_to_xml(options) }
             </read>
           )
         end

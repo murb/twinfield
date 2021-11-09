@@ -4,7 +4,7 @@ describe Twinfield::Request::Read do
   include SessionStubs
   include ProcessxmlStubs
 
-  context "Twinfield::Session" do
+  context "Twinfield::Api::Session" do
     before do
       stub_session_wsdl
       stub_create_session

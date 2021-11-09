@@ -48,11 +48,11 @@ module Twinfield
       protected
 
       def list(element, options = {})
-        Twinfield::Process.request(:process_xml_string) do
+        Twinfield::Api::Process.request(:process_xml_string) do
           %Q(
             <list>
               <type>#{element.to_s}</type>
-              #{ Twinfield::Process.options_to_xml(options) }
+              #{ Twinfield::Api::Process.options_to_xml(options) }
             </list>
           )
         end

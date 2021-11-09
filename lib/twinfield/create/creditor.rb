@@ -22,7 +22,7 @@ module Twinfield
       end
 
       def save
-        response = Twinfield::Process.request do
+        response = Twinfield::Api::Process.request do
           %Q(
             <dimension>
               <office>#{Twinfield.configuration.company}</office>

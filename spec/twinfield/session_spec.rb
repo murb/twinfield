@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Twinfield::Session do
+describe Twinfield::Api::Session do
   include SessionStubs
 
   after do
@@ -14,7 +14,7 @@ describe Twinfield::Session do
       stub_create_session
       stub_cluster_session_wsdl
       stub_select_company
-      @session = Twinfield::Session.new
+      @session = Twinfield::Api::Session.new
       @session.logon
     end
 
@@ -57,7 +57,7 @@ describe Twinfield::Session do
         config.username = username
       end
 
-      @session = Twinfield::Session.new
+      @session = Twinfield::Api::Session.new
       @session.logon
     end
 

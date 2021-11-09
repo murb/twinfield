@@ -5,7 +5,7 @@ module Twinfield
     # In Twinfield there is a clear distinction between sales invoices and sales transactions. Sales invoices are the invoices, which will be sent to customers. Sales transactions are the related financial transactions that will be posted in the accounting part of Twinfield.
     #
     class Transaction
-      attr_accessor  :code, :number, :currency, :date, :duedate, :invoicenumber, :invoice_lines, :destiny, :raisewarning, :autobalancevat
+      attr_accessor  :code, :number, :currency, :date, :duedate, :invoicenumber, :lines, :destiny, :raisewarning, :autobalancevat
 
       def destiny
         @destiny || 'temporary'
@@ -35,7 +35,7 @@ module Twinfield
       end
 
       def generate_lines
-        xml_lines = invoice_lines.map do |line|
+        xml_lines = lines.map do |line|
           %Q(
             <line type="#{line[:type]}" id="#{line[:id]}" >
               <dim1>#{line[:dim1]}</dim1>
@@ -54,7 +54,7 @@ module Twinfield
       end
 
       def save
-        response = Twinfield::Process.request do
+        response = Twinfield::Api::Process.request do
           %Q(
             <transaction destiny="#{destiny}" raisewarning="#{raisewarning}" autobalancevat="#{autobalancevat}">
               <header>

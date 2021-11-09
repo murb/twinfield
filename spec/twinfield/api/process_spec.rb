@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Twinfield::Process do
+describe Twinfield::Api::Process do
 
   it "...." do
     # TODO

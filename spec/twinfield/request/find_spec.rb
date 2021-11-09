@@ -4,7 +4,7 @@ describe Twinfield::Request::Find do
   include SessionStubs
   include FinderStubs
 
-  context "Twinfield::Session" do
+  context "Twinfield::Api::Session" do
     before do
       stub_session_wsdl
       stub_create_session

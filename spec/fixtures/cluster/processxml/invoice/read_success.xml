@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <soap:Body>
+    <ProcessXmlStringResponse xmlns="http://www.twinfield.com/">
+      <ProcessXmlStringResult>
+        <![CDATA[
+        <salesinvoice result="1">
+          <header>
+            <office>NLA002058</office>
+            <invoicetype>VERKOOP</invoicetype>
+            <invoicenumber>13</invoicenumber>
+            <invoicedate>20211109</invoicedate>
+            <duedate>20211209</duedate>
+            <bank>BNK</bank>
+            <invoiceaddressnumber>1</invoiceaddressnumber>
+            <deliveraddressnumber>1</deliveraddressnumber>
+            <customer>1003</customer>
+            <period>2021/11</period>
+            <currency>EUR</currency>
+            <status>final</status>
+            <paymentmethod>bank</paymentmethod>
+            <headertext/>
+            <footertext/>
+          </header>
+          <financials>
+            <code>VRK</code>
+            <number>202100006</number>
+          </financials>
+          <lines>
+            <line id="1">
+              <article>A</article>
+              <subarticle>A0</subarticle>
+              <quantity>1</quantity>
+              <units>1</units>
+              <allowdiscountorpremium>true</allowdiscountorpremium>
+              <description>REGULIER KUNSTWERK</description>
+              <valueexcl>100.00</valueexcl>
+              <vatvalue>21.00</vatvalue>
+              <valueinc>121.00</valueinc>
+              <unitspriceexcl>100.00</unitspriceexcl>
+              <freetext1/>
+              <freetext2/>
+              <freetext3/>
+              <dim1>8020</dim1>
+              <dim2>00000</dim2>
+              <vatcode name="BTW Hoog" shortname="Hoog" type="sales">VH</vatcode>
+            </line>
+            <line id="2">
+              <article>0</article>
+              <subarticle/>
+              <quantity>1</quantity>
+              <units>1</units>
+              <allowdiscountorpremium>true</allowdiscountorpremium>
+              <description>Spaartegoed</description>
+              <valueexcl>100.00</valueexcl>
+              <vatvalue>0.00</vatvalue>
+              <valueinc>100.00</valueinc>
+              <unitspriceexcl>100.00</unitspriceexcl>
+              <freetext1/>
+              <freetext2/>
+              <freetext3/>
+              <dim1>8020</dim1>
+              <vatcode name="BTW 0%" shortname="V 0%" type="sales">VN</vatcode>
+            </line>
+            <line id="3">
+              <article>0</article>
+              <subarticle/>
+              <quantity>0</quantity>
+              <units>1</units>
+              <allowdiscountorpremium>true</allowdiscountorpremium>
+              <description>Custom article</description>
+              <valueexcl>0.00</valueexcl>
+              <vatvalue>0.00</vatvalue>
+              <valueinc>0.00</valueinc>
+              <unitspriceexcl>0.00</unitspriceexcl>
+              <freetext1/>
+              <freetext2/>
+              <freetext3/>
+              <dim1>8020</dim1>
+              <vatcode name="BTW Hoog" shortname="Hoog" type="sales">VH</vatcode>
+            </line>
+          </lines>
+          <vatlines>
+            <vatline>
+              <vatcode name="BTW 21%">VH</vatcode>
+              <vatvalue>21.00</vatvalue>
+              <performancetype/>
+              <performancedate/>
+            </vatline>
+            <vatline>
+              <vatcode name="BTW 0%">VN</vatcode>
+              <vatvalue>0.00</vatvalue>
+              <performancetype/>
+              <performancedate/>
+            </vatline>
+          </vatlines>
+          <totals>
+            <valueinc>221.00</valueinc>
+            <valueexcl>200.00</valueexcl>
+          </totals>
+        </salesinvoice>
+        ]]>
+      </ProcessXmlStringResult>
+    </ProcessXmlStringResponse>
+  </soap:Body>
+</soap:Envelope>

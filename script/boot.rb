@@ -4,16 +4,16 @@ require "rubygems"
 require "twinfield"
 require File.expand_path("../config", __FILE__)
 #
-#@session = Twinfield::Session.new
+#@session = Twinfield::Api::Session.new
 #@session.logon
 #
-# @process = Twinfield::Process.new(@session.session_id, @session.cluster)
+# @process = Twinfield::Api::Process.new(@session.session_id, @session.cluster)
 #
 #Twinfield::Request::List.browsefields
 #
 #@dimensions = Twinfield::Request::List.dimensions( { dimtype: "DEB", office: Twinfield.configuration.company } )
 #
-@invoice = Twinfield::Create::Invoice.new
+@invoice = Twinfield::SalesInvoice.new
 
 # Mandatory parameters:
 @invoice.code = "VRK"
@@ -28,7 +28,7 @@ require File.expand_path("../config", __FILE__)
 @invoice.raisewarning = false
 @invoice.autobalancevat = true
 
-@invoice.invoice_lines =  [
+@invoice.lines =  [
                             {
                               type: 'total',
                               id: 1,
@@ -48,7 +48,7 @@ require File.expand_path("../config", __FILE__)
                               value: 1000000,
                               debitcredit: "credit",
                               description: "Rekening betaald",
-                              
+
                               # Obligatory parameters:
                               vatvalue: "0",
                               vatcode: "VL"

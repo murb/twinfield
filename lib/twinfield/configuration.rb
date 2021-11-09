@@ -3,15 +3,15 @@ module Twinfield
   # Used for configuration of the Twinfield gem.
 
   class Configuration
-    attr_accessor :session_type # Twinfield::OAuthSession or Twinfield::Session
+    attr_accessor :session_type # Twinfield::Api::OAuthSession or Twinfield::Api::Session
 
-    # in case Twinfield::Session is used
+    # in case Twinfield::Api::Session is used
     attr_accessor :username
     attr_accessor :password
     attr_accessor :organisation
     attr_accessor :company
 
-    # in case Twinfield::OAuthSession is used
+    # in case Twinfield::Api::OAuthSession is used
     attr_accessor :cluster
     attr_accessor :access_token
 
@@ -29,10 +29,10 @@ module Twinfield
 
     def session_class
       case session_type
-      when "Twinfield::OAuthSession"
-        return Twinfield::OAuthSession
+      when "Twinfield::Api::OAuthSession"
+        return Twinfield::Api::OAuthSession
       else
-        return Twinfield::Session
+        return Twinfield::Api::Session
       end
     end
   end

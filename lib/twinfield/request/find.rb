@@ -7,7 +7,7 @@ module Twinfield
         options = {}
         options.merge(office: Twinfield.configuration.company)
 
-        response = Twinfield::Finder.request("ART", options)
+        response = Twinfield::Api::Finder.request("ART", options)
 
         array = response.body[:search_response][:data][:items][:array_of_string].values.map do |item|
           {
@@ -23,7 +23,7 @@ module Twinfield
         options = {}
         options.merge(office: Twinfield.configuration.company)
 
-        response = Twinfield::Finder.request("ASM", options)
+        response = Twinfield::Api::Finder.request("ASM", options)
 
         array = response.body[:search_response][:data][:items][:array_of_string].map do |item|
           {
@@ -39,7 +39,7 @@ module Twinfield
         options = {}
         options.merge(office: Twinfield.configuration.company)
 
-        response = Twinfield::Finder.request("BDS", options)
+        response = Twinfield::Api::Finder.request("BDS", options)
 
         array = response.body[:search_response][:data][:items][:array_of_string].values.map do |item|
           {
@@ -55,7 +55,7 @@ module Twinfield
         options = {}
         options.merge(office: Twinfield.configuration.company)
 
-        response = Twinfield::Finder.request("CDA", options)
+        response = Twinfield::Api::Finder.request("CDA", options)
 
         array = response.body[:search_response][:data][:items][:array_of_string].map do |item|
           {
@@ -70,7 +70,7 @@ module Twinfield
       def sales_transactions(options={})
         options.merge(office: Twinfield.configuration.company)
 
-        response = Twinfield::Finder.request("IVT", options)
+        response = Twinfield::Api::Finder.request("IVT", options)
 
         array = response.body[:search_response][:data][:items][:array_of_string].map do |item|
           {
@@ -89,7 +89,7 @@ module Twinfield
         options = { dimtype: "CRD" }
         options.merge(office: Twinfield.configuration.company)
 
-        response = Twinfield::Finder.request("DIM", options)
+        response = Twinfield::Api::Finder.request("DIM", options)
 
         array = response.body[:search_response][:data][:items][:array_of_string].map do |item|
           {
@@ -105,7 +105,7 @@ module Twinfield
         options = { dimtype: "DEB" }
         options.merge(office: Twinfield.configuration.company)
 
-        response = Twinfield::Finder.request("DIM", options)
+        response = Twinfield::Api::Finder.request("DIM", options)
 
         array = response.body[:search_response][:data][:items][:array_of_string].map do |item|
           {
@@ -121,7 +121,7 @@ module Twinfield
         options = { dimtype: "KPL" }
         options.merge(office: Twinfield.configuration.company)
 
-        response = Twinfield::Finder.request("DIM", options)
+        response = Twinfield::Api::Finder.request("DIM", options)
 
         array = response.body[:search_response][:data][:items][:array_of_string].map do |item|
           {
@@ -136,7 +136,7 @@ module Twinfield
       def general_ledgers(options)
         options = options.merge(office: Twinfield.configuration.company)
 
-        response = Twinfield::Finder.request("DIM", options)
+        response = Twinfield::Api::Finder.request("DIM", options)
 
         array = response.body[:search_response][:data][:items][:array_of_string].map do |item|
           {
@@ -152,7 +152,7 @@ module Twinfield
       def test()
         options = { office: Twinfield.configuration.company, dimtype: "CRD" }
 
-        response = Twinfield::Finder.request("DIM", options)
+        response = Twinfield::Api::Finder.request("DIM", options)
 
         array = response.body[:search_response][:data][:items][:array_of_string].map do |item|
           {

@@ -33,29 +33,32 @@ module Twinfield
     end
 
     def reset_sessions!
-      Twinfield::Process.session=nil
-      Twinfield::Finder.session=nil
+      Twinfield::Api::Process.session=nil
+      Twinfield::Api::Finder.session=nil
     end
   end
 end
 
 require "twinfield/configuration"
-require "twinfield/o_auth_session"
-require "twinfield/session"
-require "twinfield/process"
-require "twinfield/finder"
 require "twinfield/version"
 
-# Create services
+# API Helpers
+require "twinfield/api/o_auth_session"
+require "twinfield/api/session"
+require "twinfield/api/process"
+require "twinfield/api/finder"
+
+
+# Create services (old style)
 require "twinfield/create/cost_center"
 require "twinfield/create/general_ledger"
 require "twinfield/create/debtor"
 require "twinfield/create/creditor"
-require "twinfield/create/invoice"
+require "twinfield/sales_invoice"
 require "twinfield/create/error"
 require "twinfield/create/transaction"
 
-# Requests services
+# Requests services (old style)
 require "twinfield/request/find"
 require "twinfield/request/list"
 require "twinfield/request/read"
