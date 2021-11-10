@@ -1,5 +1,7 @@
 module Twinfield
-  class SalesInvoice
+  class SalesInvoice < Twinfield::AbstractModel
+    extend Twinfield::Helpers::Parsers
+
     class Financials
       attr_accessor :code, :number
 
@@ -19,7 +21,7 @@ module Twinfield
         @vatname = vatname
       end
     end
-    class Line
+    class Line < Twinfield::AbstractModel
       attr_accessor :id, :article, :subarticle, :quantity, :units, :allowdiscountorpremium, :description, :unitspriceexcl, :unitspriceinc, :freetext1, :freetext2, :freetext3, :dim1, :vatcode, :performancetype, :performancedate, :financials, :valueexcl, :vatvalue, :valueinc
 
       def initialize(id: nil, article:, subarticle: nil, quantity: 1, units: nil, allowdiscountorpremium: true, description: nil, unitspriceexcl: nil, unitspriceinc: nil, freetext1: nil, freetext2: nil, freetext3: nil, dim1: nil, vatcode: nil, performancetype: nil, performancedate: nil)
@@ -127,20 +129,6 @@ module Twinfield
 
 
         invoice
-      end
-
-      private
-
-      def parse_date string
-        if string && string != ""
-          Date.strptime(string, '%Y%m%d')
-        end
-      end
-
-      def parse_float string
-        if string && string != ""
-          Float(string)
-        end
       end
     end
 

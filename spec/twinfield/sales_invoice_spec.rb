@@ -77,6 +77,4 @@ describe Twinfield::SalesInvoice do
       end
     end
   end
-
-
 end

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <soap:Body>
+    <ProcessXmlStringResponse xmlns="http://www.twinfield.com/">
+      <ProcessXmlStringResult>
+        <![CDATA[
+        <dimension status="active" result="1">
+          <office name="Heden" shortname="">NLA002058</office>
+          <type name="Debiteuren" shortname="Debiteuren">DEB</type>
+          <code>1000</code>
+          <uid>fc58346d-402f-4051-9001-ec1b947ca29c</uid>
+          <name>Waardedijk</name>
+          <shortname/>
+          <inuse>true</inuse>
+          <behaviour>normal</behaviour>
+          <modified>20211013203053</modified>
+          <touched>0</touched>
+          <beginperiod>0</beginperiod>
+          <beginyear>0</beginyear>
+          <endperiod>0</endperiod>
+          <endyear>0</endyear>
+          <website/>
+          <cocnumber/>
+          <vatnumber/>
+          <editdimensionname>true</editdimensionname>
+          <financials>
+            <matchtype>customersupplier</matchtype>
+            <accounttype>inherit</accounttype>
+            <subanalyse>false</subanalyse>
+            <duedays>30</duedays>
+            <level>2</level>
+            <payavailable>false</payavailable>
+            <meansofpayment>none</meansofpayment>
+            <paycode name="" shortname=""/>
+            <ebilling>true</ebilling>
+            <ebillmail>test@test.nl</ebillmail>
+            <substitutionlevel>1</substitutionlevel>
+            <substitutewith name="Debiteuren" shortname="" dimensiontype="BAS" id="FCFDCD46-BCAC-4CDE-B973-A231C8B34F8B">1300</substitutewith>
+            <relationsreference/>
+            <vattype name="" shortname=""/>
+            <vatcode fixed="false"/>
+            <vatobligatory>false</vatobligatory>
+            <performancetype/>
+            <collectmandate>
+              <id>1000</id>
+              <signaturedate/>
+            </collectmandate>
+            <collectionschema>core</collectionschema>
+            <childvalidations>
+              <childvalidation type="code" level="1">1300</childvalidation>
+            </childvalidations>
+          </financials>
+          <creditmanagement>
+            <responsibleuser name="" shortname=""/>
+            <basecreditlimit>0.00</basecreditlimit>
+            <sendreminder>true</sendreminder>
+            <reminderemail/>
+            <blocked locked="false" modified="">false</blocked>
+            <freetext1/>
+            <freetext2/>
+            <freetext3/>
+            <comment/>
+          </creditmanagement>
+          <remittanceadvice>
+            <sendtype>ToFileManager</sendtype>
+            <sendmail/>
+          </remittanceadvice>
+          <addresses>
+            <address id="1" type="invoice" default="true">
+              <name>Waardedijk</name>
+              <country name="Nederland" shortname="">NL</country>
+              <ictcountrycode locked="true">NL</ictcountrycode>
+              <city>Utrecht</city>
+              <postcode>1401 AB</postcode>
+              <telephone>023-2356784</telephone>
+              <telefax/>
+              <email/>
+              <contact/>
+              <field1>T.a.v. De heer A. Waardedijk</field1>
+              <field2>Pompoenplein 33</field2>
+              <field3/>
+              <field4/>
+              <field5/>
+              <field6/>
+            </address>
+          </addresses>
+          <banks/>
+        </dimension>
+        ]]>
+      </ProcessXmlStringResult>
+    </ProcessXmlStringResponse>
+  </soap:Body>
+</soap:Envelope>

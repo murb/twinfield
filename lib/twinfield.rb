@@ -39,7 +39,11 @@ module Twinfield
   end
 end
 
+# Helpers
+require "twinfield/helpers/parsers"
+
 require "twinfield/configuration"
+require "twinfield/abstract_model"
 require "twinfield/version"
 
 # API Helpers
@@ -49,12 +53,16 @@ require "twinfield/api/process"
 require "twinfield/api/finder"
 
 
+# New style models
+require "twinfield/sales_invoice"
+require "twinfield/customer"
+
+
 # Create services (old style)
 require "twinfield/create/cost_center"
 require "twinfield/create/general_ledger"
 require "twinfield/create/debtor"
 require "twinfield/create/creditor"
-require "twinfield/sales_invoice"
 require "twinfield/create/error"
 require "twinfield/create/transaction"
 
