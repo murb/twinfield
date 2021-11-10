@@ -73,11 +73,11 @@ module Twinfield
           if uniq_twig_keys.count == 1 && "#{uniq_twig_keys.first}s" == node.name
             twig = twig.map{|a| a.values}.flatten
           elsif node.is_a?(Nokogiri::XML::Element) && node.children.count == 1 && node.children.first.is_a?(Nokogiri::XML::Text)
-            twig = node.text()
+            twig = node.text
             if twig.match(/\A\d*$/)
               twig = twig.to_i
             end
-          elsif node.text().strip == ""
+          elsif node.text.strip == ""
             twig = nil
           end
 

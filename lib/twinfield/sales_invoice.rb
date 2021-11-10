@@ -73,55 +73,55 @@ module Twinfield
         invoice_xml = Twinfield::Api::Process.read(:salesinvoice, options)
 
         invoice = Twinfield::SalesInvoice.new(
-          office: invoice_xml.css("header office").text(),
-          invoicetype: invoice_xml.css("header invoicetype").text(),
-          invoicedate: parse_date(invoice_xml.css("header invoicedate").text()),
-          duedate: parse_date(invoice_xml.css("header duedate").text()),
-          bank: invoice_xml.css("header bank").text(),
-          deliveraddressnumber: invoice_xml.css("header deliveraddressnumber").text(),
-          invoiceaddressnumber: invoice_xml.css("header invoiceaddressnumber").text(),
-          customer: invoice_xml.css("header customer").text(),
-          period: invoice_xml.css("header period").text(),
-          currency: invoice_xml.css("header currency").text(),
-          status: invoice_xml.css("header status").text(),
-          paymentmethod: invoice_xml.css("header paymentmethod").text(),
-          headertext: invoice_xml.css("header headertext").text(),
-          footertext: invoice_xml.css("header footertext").text()
+          office: invoice_xml.css("header office").text,
+          invoicetype: invoice_xml.css("header invoicetype").text,
+          invoicedate: parse_date(invoice_xml.css("header invoicedate").text),
+          duedate: parse_date(invoice_xml.css("header duedate").text),
+          bank: invoice_xml.css("header bank").text,
+          deliveraddressnumber: invoice_xml.css("header deliveraddressnumber").text,
+          invoiceaddressnumber: invoice_xml.css("header invoiceaddressnumber").text,
+          customer: invoice_xml.css("header customer").text,
+          period: invoice_xml.css("header period").text,
+          currency: invoice_xml.css("header currency").text,
+          status: invoice_xml.css("header status").text,
+          paymentmethod: invoice_xml.css("header paymentmethod").text,
+          headertext: invoice_xml.css("header headertext").text,
+          footertext: invoice_xml.css("header footertext").text
         )
 
-        invoice.invoicenumber = invoice_xml.css("header invoicenumber").text()
-        invoice.financials = Financials.new(code: invoice_xml.css("financials code").text(), number: invoice_xml.css("financials number").text())
+        invoice.invoicenumber = invoice_xml.css("header invoicenumber").text
+        invoice.financials = Financials.new(code: invoice_xml.css("financials code").text, number: invoice_xml.css("financials number").text)
 
         invoice_xml.css("lines line").each do |xml_line|
           line = Line.new(
-            id: xml_line.attributes["id"].text(),
-            article: xml_line.css("article").text(),
-            subarticle: xml_line.css("subarticle").text(),
-            quantity: parse_float(xml_line.css("quantity").text()),
-            units: xml_line.css("units").text(),
-            allowdiscountorpremium: xml_line.css("allowdiscountorpremium").text(),
-            description: xml_line.css("description").text(),
-            unitspriceexcl: parse_float(xml_line.css("unitspriceexcl").text()),
-            freetext1: xml_line.css("freetext1").text(),
-            freetext2: xml_line.css("freetext2").text(),
-            freetext3: xml_line.css("freetext3").text(),
-            dim1: xml_line.css("dim1").text(),
-            vatcode: xml_line.css("vatcode").text()
+            id: xml_line.attributes["id"].text,
+            article: xml_line.css("article").text,
+            subarticle: xml_line.css("subarticle").text,
+            quantity: parse_float(xml_line.css("quantity").text),
+            units: xml_line.css("units").text,
+            allowdiscountorpremium: xml_line.css("allowdiscountorpremium").text,
+            description: xml_line.css("description").text,
+            unitspriceexcl: parse_float(xml_line.css("unitspriceexcl").text),
+            freetext1: xml_line.css("freetext1").text,
+            freetext2: xml_line.css("freetext2").text,
+            freetext3: xml_line.css("freetext3").text,
+            dim1: xml_line.css("dim1").text,
+            vatcode: xml_line.css("vatcode").text
           )
-          line.valueexcl = xml_line.css("valueexcl").text()
-          line.vatvalue = xml_line.css("vatvalue").text()
-          line.valueinc = xml_line.css("valueinc").text()
+          line.valueexcl = xml_line.css("valueexcl").text
+          line.vatvalue = xml_line.css("vatvalue").text
+          line.valueinc = xml_line.css("valueinc").text
 
           invoice.lines << line
         end
 
         invoice_xml.css("vatlines vatline").each do |xml_line|
           line = VatLine.new(
-            vatcode: xml_line.css("vatcode").text(),
-            vatname: xml_line.css("vatcode")[0].attributes["name"].text(),
-            vatvalue: parse_float(xml_line.css("vatvalue").text()),
-            performancetype: xml_line.css("performancetype").text(),
-            performancedate: xml_line.css("performancedate").text()
+            vatcode: xml_line.css("vatcode").text,
+            vatname: xml_line.css("vatcode")[0].attributes["name"].text,
+            vatvalue: parse_float(xml_line.css("vatvalue").text),
+            performancetype: xml_line.css("performancetype").text,
+            performancedate: xml_line.css("performancedate").text
           )
 
           invoice.vat_lines << line
@@ -151,6 +151,7 @@ module Twinfield
       @paymentmethod = paymentmethod
       @headertext = headertext
       @footertext = footertext
+      @office = office
     end
 
     def raisewarning
@@ -172,7 +173,7 @@ module Twinfield
     def to_xml
       Nokogiri::XML::Builder.new do |xml|
         xml.salesinvoice(raisewarning: raisewarning, autobalancevat: autobalancevat) {
-          xml.header {
+          xml.header do
             xml.office office
             xml.invoicetype invoicetype
             xml.invoicedate invoicedate&.strftime("%Y%m%d")
@@ -188,12 +189,12 @@ module Twinfield
             xml.paymentmethod paymentmethod
             xml.headertext headertext
             xml.footertext footertext
-          }
-          xml.lines {
+          end
+          xml.lines do
             generate_lines.each do |line|
               xml << line
             end
-          }
+          end
         }
       end.doc.root.to_xml
     end

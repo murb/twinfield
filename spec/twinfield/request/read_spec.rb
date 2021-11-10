@@ -16,7 +16,7 @@ describe Twinfield::Request::Read do
     end
     it "works for an invoice" do
       invoice_response = File.read(File.expand_path('../../../fixtures/cluster/processxml/invoice/create_success.xml', __FILE__))
-      hash = Twinfield::Request::Read.xml_to_json(Nokogiri::XML(Nokogiri::XML(invoice_response).remove_namespaces!.xpath("//ProcessXmlStringResult").text()))
+      hash = Twinfield::Request::Read.xml_to_json(Nokogiri::XML(Nokogiri::XML(invoice_response).remove_namespaces!.xpath("//ProcessXmlStringResult").text))
       expect(hash[:salesinvoice].keys).to include :header
       expect(hash[:salesinvoice][:header][:invoicenumber]).to eq(3)
       expect(hash[:salesinvoice][:lines].count).to eq(1)
