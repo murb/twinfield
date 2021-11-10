@@ -151,7 +151,7 @@ module Twinfield
       @paymentmethod = paymentmethod
       @headertext = headertext
       @footertext = footertext
-      @office = office
+      @office = office || Twinfield.configuration.company
     end
 
     def raisewarning

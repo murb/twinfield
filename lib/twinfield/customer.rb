@@ -51,9 +51,9 @@ module Twinfield
     end
 
     class Bank
-      attr_accessor :ascription, :accountnumber, :address, :bankname, :biccode, :city, :country, :iban, :natbiccode, :postcode, :state
+      attr_accessor :ascription, :accountnumber, :address, :bankname, :biccode, :city, :country, :iban, :natbiccode, :postcode, :state, :id, :default
 
-      def initialize(ascription: nil, accountnumber: nil, address: nil, bankname: nil, biccode: nil, city: nil, country: nil, iban: nil, natbiccode: nil, postcode: nil, state: nil, id:)
+      def initialize(ascription: nil, accountnumber: nil, address: nil, bankname: nil, biccode: nil, city: nil, country: nil, iban: nil, natbiccode: nil, postcode: nil, state: nil, id:, default: nil)
         @ascription= ascription
         @accountnumber= accountnumber
         @address= address
@@ -65,11 +65,13 @@ module Twinfield
         @natbiccode= natbiccode
         @postcode= postcode
         @state= state
+        @default= default
+        @id= id
       end
 
       def to_xml
         Nokogiri::XML::Builder.new do |xml|
-          xml.bank do
+          xml.bank(id: id, default: default) do
             xml.ascription ascription
             xml.accountnumber accountnumber
             xml.address address
@@ -86,10 +88,10 @@ module Twinfield
       end
 
       def self.from_xml(nokogiri_xml)
-        obj = self.new(id: nokogiri.attributes["id"].text)
+        obj = self.new(id: nokogiri_xml.attributes["id"].text, default: nokogiri_xml.attributes["default"].text)
         obj.ascription = nokogiri_xml.css("ascription").text
         obj.accountnumber = nokogiri_xml.css("accountnumber").text
-        obj.address = Address.from_xml(nokogiri_xml.css("address"))
+        obj.address = Address.from_xml(nokogiri_xml.css("address")[0]) if nokogiri_xml.css("address")[0].children.count > 0
         obj.bankname = nokogiri_xml.css("bankname").text
         obj.biccode = nokogiri_xml.css("biccode").text
         obj.city = nokogiri_xml.css("city").text
@@ -152,7 +154,6 @@ module Twinfield
             xml.performancetype performancetype
             xml << collectmandate.to_xml
             xml.collectionschema collectionschema
-            xml.childvalidations childvalidations
           end
         end.doc.root.to_xml
       end
@@ -230,9 +231,9 @@ module Twinfield
     end
 
     class Address
-      attr_accessor :name, :country, :ictcountrycode, :city, :postcode, :telephone, :telefax, :email, :contact, :field1, :field2, :field3, :field4, :field5, :field6
+      attr_accessor :name, :country, :ictcountrycode, :city, :postcode, :telephone, :telefax, :email, :contact, :field1, :field2, :field3, :field4, :field5, :field6, :type, :default
 
-      def initialize(name: , country: nil, ictcountrycode: nil, city: nil, postcode: nil, telephone: nil, telefax: nil, email: nil, contact: nil, field1: nil, field2: nil, field3: nil, field4: nil, field5: nil, field6: nil, id:)
+      def initialize(name: , country: nil, ictcountrycode: nil, city: nil, postcode: nil, telephone: nil, telefax: nil, email: nil, contact: nil, field1: nil, field2: nil, field3: nil, field4: nil, field5: nil, field6: nil, id:, type: nil, default: nil)
         @name= name
         @country= country
         @ictcountrycode= ictcountrycode
@@ -249,11 +250,13 @@ module Twinfield
         @field5= field5
         @field6= field6
         @id = id
+        @type = type
+        @default = default
       end
 
       def to_xml
         Nokogiri::XML::Builder.new do |xml|
-          xml.address(id: @id) do
+          xml.address(id: @id, type: @type, default: @default) do
             xml.name name
             xml.country country
             xml.ictcountrycode ictcountrycode
@@ -276,6 +279,8 @@ module Twinfield
       def self.from_xml nokogiri
         obj = self.new(id: nokogiri.attributes["id"].text, name: nokogiri.css("name").text)
         obj.country= nokogiri.css("country").text
+        obj.default= nokogiri.attributes["default"].text
+        obj.type= nokogiri.attributes["type"].text
         obj.ictcountrycode= nokogiri.css("ictcountrycode").text
         obj.city= nokogiri.css("city").text
         obj.postcode= nokogiri.css("postcode").text
@@ -293,12 +298,11 @@ module Twinfield
       end
     end
 
-    attr_accessor :office, :type, :code, :uid, :name, :shortname, :inuse, :behaviour, :modified, :touched, :beginperiod, :beginyear, :endperiod, :endyear, :website, :cocnumber, :vatnumber, :financials, :creditmanagement, :remittanceadvice, :addresses, :banks, :status
+    attr_accessor :office, :code, :uid, :name, :shortname, :inuse, :behaviour, :modified, :touched, :beginperiod, :beginyear, :endperiod, :endyear, :website, :cocnumber, :vatnumber, :financials, :creditmanagement, :remittanceadvice, :addresses, :banks, :status
 
-    def initialize(office: nil, type: nil, code: nil, uid: nil, name: , shortname:, inuse: nil, behaviour: nil, modified: nil, touched: nil, beginperiod: nil, beginyear: nil, endperiod: nil, endyear: nil, website: nil, cocnumber: nil, vatnumber: nil, financials: nil, creditmanagement: nil, remittanceadvice: nil, addresses: nil, banks: nil, status: :active)
-      @office= office
+    def initialize(office: nil, code: , uid: nil, name: , shortname: nil, inuse: nil, behaviour: nil, modified: nil, touched: nil, beginperiod: nil, beginyear: nil, endperiod: nil, endyear: nil, website: nil, cocnumber: nil, vatnumber: nil, financials: nil, creditmanagement: nil, remittanceadvice: nil, addresses: nil, banks: nil, status: :active)
+      @office= office || Twinfield.configuration.company
       @status= status
-      @type= type
       @code= code
       @uid= uid
       @name= name
@@ -325,21 +329,20 @@ module Twinfield
       Nokogiri::XML::Builder.new do |xml|
         xml.dimension(status: status) do
           xml.office office
-          xml.type type
+          xml.type "DEB"
           xml.code code
-          xml.uid uid
+          xml.uid uid if uid
           xml.name name
           xml.shortname shortname
-          xml.inuse inuse
-          xml.behaviour behaviour
-          xml.beginperiod beginperiod
-          xml.beginyear beginyear
-          xml.endperiod endperiod
-          xml.endyear endyear
+          # xml.behaviour behaviour #temporarily disable
+          xml.beginperiod beginperiod if beginperiod
+          xml.beginyear beginyear if beginyear
+          xml.endperiod endperiod if endperiod
+          xml.endyear endyear if endyear
           xml.website website
-          xml << financials.to_xml
-          xml << creditmanagement.to_xml
-          xml << remittanceadvice.to_xml
+          xml << financials&.to_xml
+          xml << creditmanagement&.to_xml
+          xml << remittanceadvice&.to_xml
           xml.addresses do
             addresses.each do |line|
               xml << line.to_xml
@@ -354,9 +357,23 @@ module Twinfield
       end.doc.root.to_xml
     end
 
-    # def save
-    #financials
-    # end
+    def save
+      response = Twinfield::Api::Process.request { self.to_xml }
+
+      xml = Nokogiri::XML(response.body[:process_xml_string_response][:process_xml_string_result])
+
+      if xml.at_css("dimension").attributes["result"].value == "1"
+        self.class.from_xml(xml)
+      else
+        raise Twinfield::Create::Error.new(xml.css("[msg]").map{ |x| x.attributes["msg"].value }, object: self)
+      end
+    end
+
+    def destroy
+      self.status = :deleted
+      self.save
+    end
+    alias_method :delete, :destroy
 
     class << self
       def find(customercode)
@@ -366,11 +383,9 @@ module Twinfield
       end
 
       def from_xml(nokogiri)
-        obj = self.new(shortname: nokogiri.css("dimension > shortname").text, name: nokogiri.css("dimension > name").text)
+        obj = self.new(shortname: nokogiri.css("dimension > shortname").text, name: nokogiri.css("dimension > name").text, code: nokogiri.css("dimension > code").text)
         obj.status= nokogiri.css("dimension")[0].attributes["status"].text
         obj.office= nokogiri.css("dimension > office").text
-        obj.type= nokogiri.css("dimension > type").text
-        obj.code= nokogiri.css("dimension > code").text
         obj.uid= nokogiri.css("dimension > uid").text
         obj.inuse= nokogiri.css("dimension > inuse").text
         obj.behaviour= nokogiri.css("dimension > behaviour").text
@@ -386,7 +401,8 @@ module Twinfield
         obj.financials= Financials.from_xml(nokogiri.css("dimension > financials")[0])
         obj.creditmanagement= CreditManagement.from_xml(nokogiri.css("dimension > creditmanagement")[0])
         obj.remittanceadvice= RemittanceAdvice.from_xml(nokogiri.css("dimension > remittanceadvice")[0])
-        obj.addresses= nokogiri.css("dimension > addresses address").map{ |xml_fragment| Address.from_xml(xml_fragment) }
+        obj.addresses= nokogiri.css("dimension > addresses > address").map{ |xml_fragment| Address.from_xml(xml_fragment) }
+        obj.banks= nokogiri.css("dimension > banks > bank").map{ |xml_fragment| Bank.from_xml(xml_fragment) }
         obj
       end
     end

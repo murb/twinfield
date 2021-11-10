@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <soap:Body>
+    <ProcessXmlStringResponse xmlns="http://www.twinfield.com/">
+      <ProcessXmlStringResult>
+        <![CDATA[
+        <dimension status="active" result="1">
+          <office name="Heden" shortname="">NLA002058</office>
+          <type name="Debiteuren" shortname="Debiteuren">DEB</type>
+          <code>1200</code>
+          <name>Maarten Brouwers</name>
+          <shortname/>
+          <website/>
+          <addresses>
+            <address default="true" id="1" type="invoice">
+              <name>Maarten Brouwers</name>
+              <country name="Nederland" shortname="">NL</country>
+              <ictcountrycode>NL</ictcountrycode>
+              <city/>
+              <postcode/>
+              <telephone/>
+              <telefax/>
+              <email/>
+              <contact/>
+              <field1/>
+              <field2/>
+              <field3/>
+              <field4/>
+              <field5/>
+              <field6/>
+            </address>
+          </addresses>
+          <banks/>
+          <uid>ece29a7f-344f-4e37-b5ca-53e2a468070e</uid>
+          <inuse>false</inuse>
+          <behaviour>normal</behaviour>
+          <touched>0</touched>
+          <beginperiod>0</beginperiod>
+          <beginyear>0</beginyear>
+          <endperiod>0</endperiod>
+          <endyear>0</endyear>
+          <vatnumber/>
+          <cocnumber/>
+          <editdimensionname>true</editdimensionname>
+          <financials>
+            <level>2</level>
+            <matchtype>customersupplier</matchtype>
+            <accounttype>inherit</accounttype>
+            <subanalyse>false</subanalyse>
+            <payavailable>false</payavailable>
+            <meansofpayment>none</meansofpayment>
+            <paycode/>
+            <ebilling>false</ebilling>
+            <ebillmail/>
+            <duedays>30</duedays>
+            <relationsreference/>
+            <substitutionlevel>1</substitutionlevel>
+            <substitutewith name="Debiteuren" shortname="" id="fcfdcd46-bcac-4cde-b973-a231c8b34f8b">1300</substitutewith>
+            <vatobligatory>false</vatobligatory>
+            <performancetype/>
+            <collectmandate>
+              <id>1200</id>
+              <signaturedate/>
+            </collectmandate>
+            <collectionschema>core</collectionschema>
+            <vatcode name="" shortname="" type=""/>
+            <vattype name="" shortname=""/>
+            <childvalidations>
+              <childvalidation type="code" level="1">1300</childvalidation>
+            </childvalidations>
+          </financials>
+          <creditmanagement>
+            <responsibleuser/>
+            <basecreditlimit>0.00</basecreditlimit>
+            <sendreminder>true</sendreminder>
+            <reminderemail/>
+            <blocked locked="false" modified="">false</blocked>
+            <freetext2/>
+            <comment/>
+            <responsibleuser/>
+            <basecreditlimit>0.00</basecreditlimit>
+            <sendreminder>true</sendreminder>
+            <reminderemail/>
+            <blocked locked="false" modified="">false</blocked>
+            <comment/>
+            <freetext1/>
+            <freetext2/>
+            <freetext3/>
+          </creditmanagement>
+          <remittanceadvice>
+            <sendtype>ToFileManager</sendtype>
+            <sendmail/>
+          </remittanceadvice>
+          <modified>20211110121916</modified>
+        </dimension>
+        ]]>
+      </ProcessXmlStringResult>
+    </ProcessXmlStringResponse>
+  </soap:Body>
+</soap:Envelope>
