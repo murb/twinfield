@@ -38,6 +38,14 @@ describe Twinfield::SalesInvoice do
         expect(invoice.lines[2].description).to eq("Custom article")
         expect(invoice.vat_lines[0].vatname).to eq("BTW 21%")
       end
+
+      it "returns nil when empty result" do
+        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
+          with(body: /\<read\>\s*\<type\>salesinvoice\<\/type\>/).
+          to_return(body: File.read(File.expand_path('../../fixtures/cluster/processxml/invoice/read_not_found.xml', __FILE__)))
+        invoice = Twinfield::SalesInvoice.find(13, invoicetype: "VERKOOP")
+        expect(invoice).to eq(nil)
+      end
     end
   end
 

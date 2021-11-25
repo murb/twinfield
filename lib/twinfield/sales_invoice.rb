@@ -90,6 +90,9 @@ module Twinfield
         )
 
         invoice.invoicenumber = invoice_xml.css("header invoicenumber").text
+
+        return nil if invoice.invoicenumber.strip != invoicenumber.to_s
+
         invoice.financials = Financials.new(code: invoice_xml.css("financials code").text, number: invoice_xml.css("financials number").text)
 
         invoice_xml.css("lines line").each do |xml_line|
