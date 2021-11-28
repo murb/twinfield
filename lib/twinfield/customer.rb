@@ -376,6 +376,30 @@ module Twinfield
     alias_method :delete, :destroy
 
     class << self
+      def all
+        self.search
+      end
+
+      def search text="*"
+        text = "*#{text}*" unless text.match?(/[?*]/)
+        options = {
+          dimtype: "DEB",
+          office: Twinfield.configuration.company,
+          pattern: text,
+          max_rows: 10000
+        }
+        response = Twinfield::Api::Finder.request("DIM", options)
+        if response.body[:search_response][:data][:total_rows].to_i == 1
+          resp = response.body[:search_response][:data][:items][:array_of_string][:string]
+          return [Customer.new(name: resp[1], code: resp[0])]
+        elsif response.body[:search_response][:data][:total_rows].to_i > 1
+          response.body[:search_response][:data][:items][:array_of_string]
+            .map{|item| Customer.new(name: item[:string][1], code: item[:string][0])}
+        else
+          return []
+        end
+      end
+
       def find(customercode)
         options = {office: Twinfield.configuration.company, code: customercode, dimtype: "DEB"}
         customer_xml = Twinfield::Api::Process.read(:dimensions, options)

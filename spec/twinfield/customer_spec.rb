@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe Twinfield::Customer do
   include SessionStubs
+  include FinderStubs
   include ProcessxmlStubs
 
   before do
@@ -10,6 +11,7 @@ describe Twinfield::Customer do
     stub_cluster_session_wsdl
     stub_select_company
     stub_processxml_wsdl
+    stub_finder_wsdl
   end
 
   let(:existing_customer) do
@@ -30,6 +32,52 @@ describe Twinfield::Customer do
         expect(customer.financials.childvalidations).to eq("1300")
         expect(customer.addresses[0].default).to eq("true")
         expect(customer.addresses[0].type).to eq("invoice")
+      end
+    end
+
+    describe ".all" do
+      it "returns a list of customers" do
+        stub_request(:post, "https://accounting.twinfield.com/webservices/finder.asmx")
+        .with(body: /\>\<string\>dimtype\<\/string\>\<string\>DEB\<\/string\>/)
+        .to_return(body: '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><SearchResponse xmlns="http://www.twinfield.com/"><SearchResult /><data><TotalRows>17</TotalRows><Columns><string>Code</string><string>Naam</string></Columns><Items><ArrayOfString><string>1000</string><string>Waardedijk</string></ArrayOfString><ArrayOfString><string>1001</string><string>Witteveen</string></ArrayOfString><ArrayOfString><string>1002</string><string>Bosman</string></ArrayOfString><ArrayOfString><string>1003</string><string>Samkalde</string></ArrayOfString></Items></data></SearchResponse></soap:Body></soap:Envelope>')
+
+        customers = Twinfield::Customer.all
+        expect(customers.length).to eq(4)
+        expect(customers[0]).to be_a Twinfield::Customer
+        expect(customers.map{|a| a.name}).to include("Waardedijk")
+      end
+    end
+
+    describe ".search" do
+      it "accepts a search param" do
+        stub_request(:post, "https://accounting.twinfield.com/webservices/finder.asmx")
+        .with(body: /\>\<string\>dimtype\<\/string\>\<string\>DEB\<\/string\>/)
+        .to_return(body: '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><SearchResponse xmlns="http://www.twinfield.com/"><SearchResult /><data><TotalRows>17</TotalRows><Columns><string>Code</string><string>Naam</string></Columns><Items><ArrayOfString><string>1000</string><string>Waardedijk</string></ArrayOfString><ArrayOfString><string>1001</string><string>Witteveen</string></ArrayOfString><ArrayOfString><string>1002</string><string>Bosman</string></ArrayOfString><ArrayOfString><string>1003</string><string>Samkalde</string></ArrayOfString></Items></data></SearchResponse></soap:Body></soap:Envelope>')
+
+        customers = Twinfield::Customer.search("*Bos*")
+        expect(customers.length).to eq(4)
+        expect(customers[0]).to be_a Twinfield::Customer
+        expect(customers.map{|a| a.name}).to include("Waardedijk")
+
+      end
+
+      it "deals with no result" do
+        stub_request(:post, "https://accounting.twinfield.com/webservices/finder.asmx")
+        .with(body: /\>\<string\>dimtype\<\/string\>\<string\>DEB\<\/string\>/)
+        .to_return(body: '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><SearchResponse xmlns="http://www.twinfield.com/"><SearchResult /><data><TotalRows>0</TotalRows><Columns><string>Code</string><string>Naam</string></Columns></data></SearchResponse></soap:Body></soap:Envelope>')
+
+        customers = Twinfield::Customer.search("nonexisting")
+        expect(customers.length).to eq(0)
+      end
+
+      it "deals with single result" do
+        stub_request(:post, "https://accounting.twinfield.com/webservices/finder.asmx")
+        .with(body: /\>\<string\>dimtype\<\/string\>\<string\>DEB\<\/string\>/)
+        .to_return(body: '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><SearchResponse xmlns="http://www.twinfield.com/"><SearchResult /><data><TotalRows>1</TotalRows><Columns><string>Code</string><string>Naam</string></Columns><Items><ArrayOfString><string>1002</string><string>Bosman</string></ArrayOfString></Items></data></SearchResponse></soap:Body></soap:Envelope>')
+
+        customers = Twinfield::Customer.search("nonexisting")
+        expect(customers.length).to eq(1)
+        expect(customers[0].name).to eq("Bosman")
       end
     end
   end
