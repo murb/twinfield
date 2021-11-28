@@ -30,12 +30,13 @@ module Twinfield
       # request
       # see: https://accounting.twinfield.com/webservices/documentation/#/ApiReference/Transactions/SalesInvoices
       def request(type, options={})
-        first_row = options.delete(:first_row) || options.delete("firstRow") || 1
-        pattern = options.delete(:pattern) || options.delete("pattern") || "*"
+        first_row = options.delete(:first_row) || 1
+        pattern = options.delete(:pattern) || "*"
+        max_rows = options.delete(:max_rows) || 100
 
         message = {
           "type" => type,
-          "pattern" => "*",
+          "pattern" => pattern,
           "field" => "0",
           "firstRow" => first_row,
           "maxRows" => "100",
