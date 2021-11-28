@@ -83,6 +83,12 @@ describe Twinfield::Customer do
   end
 
   describe "instance methods" do
+    describe "#to_h" do
+      it "returns a hash without higher order objects" do
+        stringified_hash = existing_customer.to_h.to_s
+        expect(stringified_hash).not_to match("Twinfield:")
+      end
+    end
     describe "#to_xml" do
       it "returns returns nokogiri xml" do
         existing_customer.banks << Twinfield::Customer::Bank.new(default: true, accountnumber: 12345678, id: 1)

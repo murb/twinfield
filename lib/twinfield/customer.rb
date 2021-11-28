@@ -8,6 +8,11 @@ module Twinfield
         @id = id
       end
 
+      def to_h
+        {signaturedate: signaturedate, id: id}
+      end
+      alias_method :to_hash, :to_h
+
       def to_xml
         Nokogiri::XML::Builder.new do |xml|
           xml.collectmandate do
@@ -32,6 +37,11 @@ module Twinfield
         @sendtype = sendtype
         @sendmail = sendmail
       end
+
+      def to_h
+        {sendtype: sendtype, sendmail: sendmail}
+      end
+      alias_method :to_hash, :to_h
 
       def to_xml
         Nokogiri::XML::Builder.new do |xml|
@@ -68,6 +78,25 @@ module Twinfield
         @default= default
         @id= id
       end
+
+      def to_h
+        {
+          address: address,
+          ascription: ascription,
+          accountnumber: accountnumber,
+          bankname: bankname,
+          biccode: biccode,
+          city: city,
+          country: country,
+          iban: iban,
+          natbiccode: natbiccode,
+          postcode: postcode,
+          state: state,
+          id: id,
+          default: default
+        }
+      end
+      alias_method :to_hash, :to_h
 
       def to_xml
         Nokogiri::XML::Builder.new do |xml|
@@ -132,6 +161,32 @@ module Twinfield
         @childvalidations = childvalidations
       end
 
+      def to_h
+        {
+          matchtype: matchtype,
+          accounttype: accounttype,
+          subanalyse: subanalyse,
+          duedays: duedays,
+          level: level,
+          payavailable: payavailable,
+          meansofpayment: meansofpayment,
+          paycode: paycode,
+          ebilling: ebilling,
+          ebillmail: ebillmail,
+          substitutewith: substitutewith,
+          substitutionlevel: substitutionlevel,
+          relationsreference: relationsreference,
+          vattype: vattype,
+          vatcode: vatcode,
+          vatobligatory: vatobligatory,
+          performancetype: performancetype,
+          collectmandate: collectmandate.to_h,
+          collectionschema: collectionschema,
+          childvalidations: childvalidations
+        }
+      end
+      alias_method :to_hash, :to_h
+
       def to_xml
         Nokogiri::XML::Builder.new do |xml|
           xml.financials do
@@ -186,6 +241,21 @@ module Twinfield
 
     class CreditManagement
       attr_accessor :responsibleuser, :basecreditlimit, :sendreminder, :reminderemail, :blocked, :freetext1, :freetext2, :freetext3, :comment
+
+      def to_h
+        {
+          responsibleuser: responsibleuser,
+          basecreditlimit: basecreditlimit,
+          sendreminder: sendreminder,
+          reminderemail: reminderemail,
+          blocked: blocked,
+          freetext1: freetext1,
+          freetext2: freetext2,
+          freetext3: freetext3,
+          comment: comment
+        }
+      end
+      alias_method :to_hash, :to_h
 
       def initialize(responsibleuser: nil, basecreditlimit: nil, sendreminder: nil, reminderemail: nil, blocked: nil, freetext1: nil, freetext2: nil, freetext3: nil, comment: nil)
         @responsibleuser = responsibleuser
@@ -253,6 +323,29 @@ module Twinfield
         @type = type
         @default = default
       end
+
+      def to_h
+        {
+          name: name,
+          country: country,
+          ictcountrycode: ictcountrycode,
+          city: city,
+          postcode: postcode,
+          telephone: telephone,
+          telefax: telefax,
+          email: email,
+          contact: contact,
+          field1: field1,
+          field2: field2,
+          field3: field3,
+          field4: field4,
+          field5: field5,
+          field6: field6,
+          type: type,
+          default: default
+        }
+      end
+      alias_method :to_hash, :to_h
 
       def to_xml
         Nokogiri::XML::Builder.new do |xml|
@@ -325,6 +418,34 @@ module Twinfield
       @banks= banks || []
     end
 
+    def to_h
+      {
+        office: office,
+        code: code,
+        uid: uid,
+        name: name,
+        shortname: shortname,
+        inuse: inuse,
+        behaviour: behaviour,
+        modified: modified,
+        touched: touched,
+        beginperiod: beginperiod,
+        beginyear: beginyear,
+        endperiod: endperiod,
+        endyear: endyear,
+        website: website,
+        cocnumber: cocnumber,
+        vatnumber: vatnumber,
+        financials: financials.to_h,
+        creditmanagement: creditmanagement.to_h,
+        remittanceadvice: remittanceadvice.to_h,
+        addresses: addresses.map(&:to_h),
+        banks: banks.map(&:to_h),
+        status: status
+      }
+    end
+    alias_method :to_hash, :to_h
+
     def to_xml
       Nokogiri::XML::Builder.new do |xml|
         xml.dimension(status: status) do
@@ -374,6 +495,11 @@ module Twinfield
       self.save
     end
     alias_method :delete, :destroy
+
+
+    def load
+      Customer.find(code)
+    end
 
     class << self
       def all
