@@ -130,8 +130,72 @@ module Twinfield
           invoice.vat_lines << line
         end
 
-
         invoice
+      end
+
+      def search(options = {})
+        response = Twinfield::Api::Process.request(:process_xml_string) do
+          %Q(
+            <columns code="000">
+             <sort>
+                <field>fin.trs.head.code</field>
+             </sort>
+             <column>
+                <field>fin.trs.head.yearperiod</field>
+                <label>Period</label>
+                <visible>true</visible>
+                <ask>true</ask>
+                <operator>between</operator>
+                <from>2021/01</from>
+                <to>2021/12</to>
+             </column>
+             <column>
+                <field>fin.trs.head.code</field>
+                <label>Transaction type</label>
+                <visible>true</visible>
+             </column>
+             <column>
+                <field>fin.trs.head.shortname</field>
+                <label>Name</label>
+                <visible>true</visible>
+             </column>
+             <column>
+                <field>fin.trs.head.number</field>
+                <label>Trans. no.</label>
+                <visible>true</visible>
+             </column>
+             <column>
+                <field>fin.trs.line.dim1</field>
+                <label>General ledger</label>
+                <visible>true</visible>
+                <ask>true</ask>
+                <operator>between</operator>
+                <from>1300</from>
+                <to>1300</to>
+             </column>
+             <column>
+                <field>fin.trs.head.curcode</field>
+                <label>Currency</label>
+                <visible>true</visible>
+             </column>
+             <column>
+                <field>fin.trs.line.valuesigned</field>
+                <label>Value</label>
+                <visible>true</visible>
+             </column>
+             <column>
+                <field>fin.trs.line.description</field>
+                <label>Description</label>
+                <visible>true</visible>
+             </column>
+
+           </columns>
+          )
+          # <column>
+          #   <field>fin.trs.line.dim2</field>
+          #   <label>Debtor</label><visible>true</visible><from>#{code}</from><to>#{code}</to><operator>between</operator>
+          # </column>
+        end
       end
     end
 

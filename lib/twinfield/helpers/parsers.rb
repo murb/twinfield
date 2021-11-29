@@ -7,6 +7,12 @@ module Twinfield
         end
       end
 
+      def parse_datetime string
+        if string && string != ""
+          DateTime.strptime(string, '%Y%m%d%H%M%S')
+        end
+      end
+
       def parse_float string
         if string && string != ""
           Float(string)

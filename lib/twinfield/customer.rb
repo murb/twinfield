@@ -1,6 +1,10 @@
 module Twinfield
   class Customer < Twinfield::AbstractModel
+    extend Twinfield::Helpers::Parsers
+
     class CollectMandate
+      extend Twinfield::Helpers::Parsers
+
       attr_accessor :signaturedate, :id
 
       def initialize(signaturedate: nil, id: nil)
@@ -17,14 +21,14 @@ module Twinfield
         Nokogiri::XML::Builder.new do |xml|
           xml.collectmandate do
             xml.id = id
-            xml.signaturedate = signaturedate
+            xml.signaturedate = signaturedate&.strftime("%Y%m%d")
           end
         end.doc.root.to_xml
       end
 
       def self.from_xml(nokogiri)
         obj = self.new
-        obj.signaturedate = nokogiri.css("signaturedate").text
+        obj.signaturedate = parse_date(nokogiri.css("signaturedate").text)
         obj.id = nokogiri.css("id").text
         obj
       end
@@ -66,7 +70,7 @@ module Twinfield
       def initialize(ascription: nil, accountnumber: nil, address: nil, bankname: nil, biccode: nil, city: nil, country: nil, iban: nil, natbiccode: nil, postcode: nil, state: nil, id:, default: nil)
         @ascription= ascription
         @accountnumber= accountnumber
-        @address= address
+        @address= address.is_a?(Hash) ? Address.new(**address) : address
         @bankname= bankname
         @biccode= biccode
         @city= city
@@ -81,7 +85,7 @@ module Twinfield
 
       def to_h
         {
-          address: address,
+          address: address.to_h,
           ascription: ascription,
           accountnumber: accountnumber,
           bankname: bankname,
@@ -156,7 +160,7 @@ module Twinfield
         @vatcode = vatcode
         @vatobligatory = vatobligatory
         @performancetype = performancetype
-        @collectmandate = collectmandate
+        @collectmandate = collectmandate.is_a?(Hash) ? Twinfield::Customer::CollectMandate.new(**collectmandate) : collectmandate
         @collectionschema = collectionschema
         @childvalidations = childvalidations
       end
@@ -223,7 +227,7 @@ module Twinfield
         obj.payavailable = nokogiri.css("payavailable").text
         obj.meansofpayment = nokogiri.css("meansofpayment").text
         obj.paycode = nokogiri.css("paycode").text
-        obj.ebilling = nokogiri.css("ebilling").text
+        obj.ebilling = nokogiri.css("ebilling").text == "true" ? true : false
         obj.ebillmail = nokogiri.css("ebillmail").text
         obj.substitutewith = nokogiri.css("substitutewith").text
         obj.substitutionlevel = nokogiri.css("substitutionlevel").text
@@ -301,7 +305,7 @@ module Twinfield
     end
 
     class Address
-      attr_accessor :name, :country, :ictcountrycode, :city, :postcode, :telephone, :telefax, :email, :contact, :field1, :field2, :field3, :field4, :field5, :field6, :type, :default
+      attr_accessor :name, :country, :ictcountrycode, :city, :postcode, :telephone, :telefax, :email, :contact, :field1, :field2, :field3, :field4, :field5, :field6, :type, :default, :id
 
       def initialize(name: , country: nil, ictcountrycode: nil, city: nil, postcode: nil, telephone: nil, telefax: nil, email: nil, contact: nil, field1: nil, field2: nil, field3: nil, field4: nil, field5: nil, field6: nil, id:, type: nil, default: nil)
         @name= name
@@ -342,6 +346,7 @@ module Twinfield
           field5: field5,
           field6: field6,
           type: type,
+          id: id,
           default: default
         }
       end
@@ -370,23 +375,23 @@ module Twinfield
       end
 
       def self.from_xml nokogiri
-        obj = self.new(id: nokogiri.attributes["id"].text, name: nokogiri.css("name").text)
+        obj = self.new(id: nokogiri.attributes["id"]&.text, name: nokogiri.css("name")&.text)
         obj.country= nokogiri.css("country").text
-        obj.default= nokogiri.attributes["default"].text
-        obj.type= nokogiri.attributes["type"].text
-        obj.ictcountrycode= nokogiri.css("ictcountrycode").text
-        obj.city= nokogiri.css("city").text
-        obj.postcode= nokogiri.css("postcode").text
-        obj.telephone= nokogiri.css("telephone").text
-        obj.telefax= nokogiri.css("telefax").text
-        obj.email= nokogiri.css("email").text
-        obj.contact= nokogiri.css("contact").text
-        obj.field1= nokogiri.css("field1").text
-        obj.field2= nokogiri.css("field2").text
-        obj.field3= nokogiri.css("field3").text
-        obj.field4= nokogiri.css("field4").text
-        obj.field5= nokogiri.css("field5").text
-        obj.field6= nokogiri.css("field6").text
+        obj.default= nokogiri.attributes["default"]&.text
+        obj.type= nokogiri.attributes["type"]&.text
+        obj.ictcountrycode= nokogiri.css("ictcountrycode")&.text
+        obj.city= nokogiri.css("city")&.text
+        obj.postcode= nokogiri.css("postcode")&.text
+        obj.telephone= nokogiri.css("telephone")&.text
+        obj.telefax= nokogiri.css("telefax")&.text
+        obj.email= nokogiri.css("email")&.text
+        obj.contact= nokogiri.css("contact")&.text
+        obj.field1= nokogiri.css("field1")&.text
+        obj.field2= nokogiri.css("field2")&.text
+        obj.field3= nokogiri.css("field3")&.text
+        obj.field4= nokogiri.css("field4")&.text
+        obj.field5= nokogiri.css("field5")&.text
+        obj.field6= nokogiri.css("field6")&.text
         obj
       end
     end
@@ -411,11 +416,11 @@ module Twinfield
       @website= website
       @cocnumber= cocnumber
       @vatnumber= vatnumber
-      @financials= financials
-      @creditmanagement= creditmanagement
-      @remittanceadvice= remittanceadvice
-      @addresses= addresses || []
-      @banks= banks || []
+      @financials= financials.is_a?(Hash) ? Financials.new(**financials) : financials
+      @creditmanagement= creditmanagement.is_a?(Hash) ? CreditManagement.new(**creditmanagement) : creditmanagement
+      @remittanceadvice= remittanceadvice.is_a?(Hash) ? RemittanceAdvice.new(**remittanceadvice) : remittanceadvice
+      @addresses= (addresses || []).map{|a| a.is_a?(Hash) ? Address.new(**a) : a}
+      @banks= (banks || []).map{|a| a.is_a?(Hash) ? Bank.new(**a) : a}
     end
 
     def to_h
@@ -496,6 +501,76 @@ module Twinfield
     end
     alias_method :delete, :destroy
 
+    def sales_transactions
+      Twinfield::Request::Find.sales_transactions(dim2: code)
+    end
+
+    def sales_transactions2
+      response = Twinfield::Api::Process.request(:process_xml_string) do
+        %Q(
+          <columns code="000">
+           <sort>
+              <field>fin.trs.head.code</field>
+           </sort>
+           <column>
+              <field>fin.trs.head.yearperiod</field>
+              <label>Period</label>
+              <visible>true</visible>
+              <ask>true</ask>
+              <operator>between</operator>
+              <from>2021/01</from>
+              <to>2021/12</to>
+           </column>
+           <column>
+              <field>fin.trs.head.code</field>
+              <label>Transaction type</label>
+              <visible>true</visible>
+           </column>
+           <column>
+              <field>fin.trs.head.shortname</field>
+              <label>Name</label>
+              <visible>true</visible>
+           </column>
+           <column>
+              <field>fin.trs.head.number</field>
+              <label>Trans. no.</label>
+              <visible>true</visible>
+           </column>
+           <column>
+              <field>fin.trs.line.dim1</field>
+              <label>General ledger</label>
+              <visible>true</visible>
+              <ask>true</ask>
+              <operator>between</operator>
+              <from>1300</from>
+              <to>1300</to>
+           </column>
+           <column>
+              <field>fin.trs.head.curcode</field>
+              <label>Currency</label>
+              <visible>true</visible>
+           </column>
+           <column>
+              <field>fin.trs.line.valuesigned</field>
+              <label>Value</label>
+              <visible>true</visible>
+           </column>
+           <column>
+              <field>fin.trs.line.description</field>
+              <label>Description</label>
+              <visible>true</visible>
+           </column>
+           <column>
+             <field>fin.trs.line.dim2</field>
+             <label>Debtor</label><visible>true</visible><from>#{code}</from><to>#{code}</to><operator>between</operator>
+           </column>
+
+         </columns>
+        )
+      end
+
+      Nokogiri::XML(response.body[:process_xml_string_response][:process_xml_string_result])
+    end
 
     def load
       Customer.find(code)
@@ -539,7 +614,7 @@ module Twinfield
         obj.uid= nokogiri.css("dimension > uid").text
         obj.inuse= nokogiri.css("dimension > inuse").text
         obj.behaviour= nokogiri.css("dimension > behaviour").text
-        obj.modified= nokogiri.css("dimension > modified").text
+        obj.modified= parse_datetime(nokogiri.css("dimension > modified").text)
         obj.touched= nokogiri.css("dimension > touched").text
         obj.beginperiod= nokogiri.css("dimension > beginperiod").text
         obj.beginyear= nokogiri.css("dimension > beginyear").text

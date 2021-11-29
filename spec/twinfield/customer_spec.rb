@@ -32,6 +32,74 @@ describe Twinfield::Customer do
         expect(customer.financials.childvalidations).to eq("1300")
         expect(customer.addresses[0].default).to eq("true")
         expect(customer.addresses[0].type).to eq("invoice")
+        expect(customer.modified).to eq DateTime.new(2021,10,13,20,30,53)
+      end
+    end
+
+    describe ".new" do
+      it "allows to be initialized using a hash" do
+        params = {:office=>"NLA002058",
+ :code=>"1004",
+ :uid=>"c6d17557-dc9b-43ca-92a4-ea07a7627984",
+ :name=>"De Jong",
+ :shortname=>"",
+ :inuse=>"true",
+ :behaviour=>"normal",
+ :modified=>Time.now,
+ :touched=>"1",
+ :beginperiod=>"0",
+ :beginyear=>"0",
+ :endperiod=>"0",
+ :endyear=>"0",
+ :website=>"",
+ :cocnumber=>"",
+ :vatnumber=>"",
+ :financials=>
+  {:matchtype=>"customersupplier",
+   :accounttype=>"inherit",
+   :subanalyse=>"false",
+   :duedays=>"10",
+   :level=>"2",
+   :payavailable=>"true",
+   :meansofpayment=>"paymentfile",
+   :paycode=>"SEPANLDD",
+   :ebilling=>true,
+   :ebillmail=>"test@test.nl",
+   :substitutewith=>"1300",
+   :substitutionlevel=>"1",
+   :relationsreference=>"",
+   :vattype=>"",
+   :vatcode=>"",
+   :vatobligatory=>"false",
+   :performancetype=>"",
+   :collectmandate=>{:signaturedate=>Time.now, :id=>"1004"},
+   :collectionschema=>"core",
+   :childvalidations=>"1300"},
+ :creditmanagement=>{:responsibleuser=>"", :basecreditlimit=>"0.00", :sendreminder=>"true", :reminderemail=>"", :blocked=>"false", :freetext1=>"", :freetext2=>"", :freetext3=>"", :comment=>""},
+ :remittanceadvice=>{:sendtype=>"ToFileManager", :sendmail=>""},
+ :addresses=>
+  [{:name=>"De Jong", :country=>"NL", :ictcountrycode=>"NL", :city=>"Rotterdam", :postcode=>"3012 AF", :telephone=>"010-6874598", :telefax=>"", :email=>"", :contact=>"", :field1=>"De heer G. de Jong", :field2=>"Huizerweg 124a", :field3=>"", :field4=>"", :field5=>"", :field6=>"", :type=>"invoice", :id=>"1", :default=>"true"}],
+ :banks=>
+  [{:address=>{:name=>"", :country=>"", :ictcountrycode=>"", :city=>"", :postcode=>"", :telephone=>"", :telefax=>"", :email=>"", :contact=>"", :field1=>"", :field2=>"", :field3=>"", :field4=>"", :field5=>"", :field6=>"", :type=>nil, :id=>nil, :default=>nil},
+    :ascription=>"De Jong",
+    :accountnumber=>"",
+    :bankname=>"",
+    :biccode=>"",
+    :city=>"",
+    :country=>"NL",
+    :iban=>"NL30TRIO0123456789",
+    :natbiccode=>"",
+    :postcode=>"",
+    :state=>"",
+    :id=>"1",
+    :default=>"true"}],
+ :status=>"active"}
+        c = Twinfield::Customer.new(**params)
+        expect(c.office).to eq("NLA002058")
+        expect(c.code).to eq("1004")
+        expect(c.addresses.first.city).to eq("Rotterdam")
+        expect(c.financials.collectmandate.id).to eq("1004")
+        expect(c.banks.first.iban).to eq("NL30TRIO0123456789")
       end
     end
 
