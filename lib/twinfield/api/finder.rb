@@ -39,7 +39,7 @@ module Twinfield
           "pattern" => pattern,
           "field" => "0",
           "firstRow" => first_row,
-          "maxRows" => "100",
+          "maxRows" => max_rows,
           "options" => {
             "ArrayOfString" => options.map {|k, v| { "string" => [k, v] } }
           }
