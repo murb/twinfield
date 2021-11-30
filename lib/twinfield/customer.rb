@@ -398,7 +398,7 @@ module Twinfield
 
     attr_accessor :office, :code, :uid, :name, :shortname, :inuse, :behaviour, :modified, :touched, :beginperiod, :beginyear, :endperiod, :endyear, :website, :cocnumber, :vatnumber, :financials, :creditmanagement, :remittanceadvice, :addresses, :banks, :status
 
-    def initialize(office: nil, code: , uid: nil, name: , shortname: nil, inuse: nil, behaviour: nil, modified: nil, touched: nil, beginperiod: nil, beginyear: nil, endperiod: nil, endyear: nil, website: nil, cocnumber: nil, vatnumber: nil, financials: nil, creditmanagement: nil, remittanceadvice: nil, addresses: nil, banks: nil, status: :active)
+    def initialize(office: nil, code: nil, uid: nil, name: nil, shortname: nil, inuse: nil, behaviour: nil, modified: nil, touched: nil, beginperiod: nil, beginyear: nil, endperiod: nil, endyear: nil, website: nil, cocnumber: nil, vatnumber: nil, financials: nil, creditmanagement: nil, remittanceadvice: nil, addresses: nil, banks: nil, status: :active)
       @office= office || Twinfield.configuration.company
       @status= status
       @code= code
@@ -577,8 +577,18 @@ module Twinfield
     end
 
     class << self
+      # @return Array<Twinfield::Customer>
       def all
         self.search
+      end
+
+      # helper method that calculates the next unused code
+      # @return String
+      def next_unused_twinfield_customer_code
+        latest = Twinfield::Customer.all.map(&:code).map(&:to_i).sort.last
+        latest += 1
+        raise "invalid new customer code" if latest == 1
+        latest.to_s
       end
 
       def search text="*"
@@ -624,8 +634,8 @@ module Twinfield
         obj.cocnumber= nokogiri.css("dimension > cocnumber").text
         obj.vatnumber= nokogiri.css("dimension > vatnumber").text
         obj.financials= Financials.from_xml(nokogiri.css("dimension > financials")[0])
-        obj.creditmanagement= CreditManagement.from_xml(nokogiri.css("dimension > creditmanagement")[0])
-        obj.remittanceadvice= RemittanceAdvice.from_xml(nokogiri.css("dimension > remittanceadvice")[0])
+        obj.creditmanagement= CreditManagement.from_xml(nokogiri.css("dimension > creditmanagement")[0]) if nokogiri.css("dimension > creditmanagement")[0]
+        obj.remittanceadvice= RemittanceAdvice.from_xml(nokogiri.css("dimension > remittanceadvice")[0]) if nokogiri.css("dimension > remittanceadvice")[0]
         obj.addresses= nokogiri.css("dimension > addresses > address").map{ |xml_fragment| Address.from_xml(xml_fragment) }
         obj.banks= nokogiri.css("dimension > banks > bank").map{ |xml_fragment| Bank.from_xml(xml_fragment) }
         obj

@@ -148,6 +148,16 @@ describe Twinfield::Customer do
         expect(customers[0].name).to eq("Bosman")
       end
     end
+
+    describe ".next_unused_twinfield_customer_code" do
+      it "returns a new code" do
+        stub_request(:post, "https://accounting.twinfield.com/webservices/finder.asmx")
+        .with(body: /maxRows\>10000\<\/ma(.*)\>\<string\>dimtype\<\/string\>\<string\>DEB\<\/string\>/)
+        .to_return(body: '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><SearchResponse xmlns="http://www.twinfield.com/"><SearchResult /><data><TotalRows>17</TotalRows><Columns><string>Code</string><string>Naam</string></Columns><Items><ArrayOfString><string>1000</string><string>Waardedijk</string></ArrayOfString><ArrayOfString><string>1001</string><string>Witteveen</string></ArrayOfString><ArrayOfString><string>1002</string><string>Bosman</string></ArrayOfString><ArrayOfString><string>1003</string><string>Samkalde</string></ArrayOfString></Items></data></SearchResponse></soap:Body></soap:Envelope>')
+
+        expect(Twinfield::Customer.next_unused_twinfield_customer_code).to eq("1004")
+      end
+    end
   end
 
   describe "instance methods" do
