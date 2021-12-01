@@ -79,7 +79,7 @@ module Twinfield
         @natbiccode= natbiccode
         @postcode= postcode
         @state= state
-        @default= default
+        @default= ["true",true,1,"1"].include?(default)
         @id= id
       end
 
@@ -325,7 +325,7 @@ module Twinfield
         @field6= field6
         @id = id
         @type = type
-        @default = default
+        @default = ["true",true,1,"1"].include?(default)
       end
 
       def to_h
@@ -375,9 +375,8 @@ module Twinfield
       end
 
       def self.from_xml nokogiri
-        obj = self.new(id: nokogiri.attributes["id"]&.text, name: nokogiri.css("name")&.text)
+        obj = self.new(id: nokogiri.attributes["id"]&.text, name: nokogiri.css("name")&.text, default: nokogiri.attributes["default"]&.text)
         obj.country= nokogiri.css("country").text
-        obj.default= nokogiri.attributes["default"]&.text
         obj.type= nokogiri.attributes["type"]&.text
         obj.ictcountrycode= nokogiri.css("ictcountrycode")&.text
         obj.city= nokogiri.css("city")&.text
