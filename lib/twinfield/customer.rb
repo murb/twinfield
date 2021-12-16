@@ -307,7 +307,7 @@ module Twinfield
     class Address
       attr_accessor :name, :country, :ictcountrycode, :city, :postcode, :telephone, :telefax, :email, :contact, :field1, :field2, :field3, :field4, :field5, :field6, :type, :default, :id
 
-      def initialize(name: , country: nil, ictcountrycode: nil, city: nil, postcode: nil, telephone: nil, telefax: nil, email: nil, contact: nil, field1: nil, field2: nil, field3: nil, field4: nil, field5: nil, field6: nil, id:, type: nil, default: nil)
+      def initialize(name: , country: nil, ictcountrycode: nil, city: nil, postcode: nil, telephone: nil, telefax: nil, email: nil, contact: nil, field1: nil, field2: nil, field3: nil, field4: nil, field5: nil, field6: nil, id: nil, type: nil, default: nil)
         @name= name
         @country= country
         @ictcountrycode= ictcountrycode
@@ -490,7 +490,7 @@ module Twinfield
       if xml.at_css("dimension").attributes["result"].value == "1"
         self.class.from_xml(xml)
       else
-        raise Twinfield::Create::Error.new(xml.css("[msg]").map{ |x| x.attributes["msg"].value }, object: self)
+        raise Twinfield::Create::Error.new(xml.css("[msg]").map{ |x| x.attributes["msg"].value }.join(" "), object: self)
       end
     end
 

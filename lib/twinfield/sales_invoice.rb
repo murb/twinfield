@@ -24,13 +24,13 @@ module Twinfield
     class Line < Twinfield::AbstractModel
       attr_accessor :id, :article, :subarticle, :quantity, :units, :allowdiscountorpremium, :description, :unitspriceexcl, :unitspriceinc, :freetext1, :freetext2, :freetext3, :dim1, :vatcode, :performancetype, :performancedate, :financials, :valueexcl, :vatvalue, :valueinc
 
-      def initialize(id: nil, article:, subarticle: nil, quantity: 1, units: nil, allowdiscountorpremium: true, description: nil, unitspriceexcl: nil, unitspriceinc: nil, freetext1: nil, freetext2: nil, freetext3: nil, dim1: nil, vatcode: nil, performancetype: nil, performancedate: nil)
+      def initialize(id: nil, article: "-", subarticle: nil, quantity: 1, units: nil, allowdiscountorpremium: true, description: nil, unitspriceexcl: nil, unitspriceinc: nil, freetext1: nil, freetext2: nil, freetext3: nil, dim1: nil, vatcode: nil, performancetype: nil, performancedate: nil)
         @id= id
-        @article= article
+        @article= article # article "-" is an article-less article in Twinfield
         @subarticle= subarticle
-        @quantity= Integer(quantity)
-        @units= Integer(units) if units
-        @allowdiscountorpremium= allowdiscountorpremium
+        @quantity= Integer(quantity) unless article == "-"
+        @units= Integer(units) if units and units != ""
+        @allowdiscountorpremium= allowdiscountorpremium unless article == "-"
         @description= description
         @unitspriceexcl= Float(unitspriceexcl) if unitspriceexcl
         @unitspriceinc= Float(unitspriceinc) if unitspriceinc
@@ -48,17 +48,17 @@ module Twinfield
           xml.line(id: lineid) {
             xml.article article
             xml.subarticle subarticle if subarticle
-            xml.quantity quantity
-            xml.units units
-            xml.allowdiscountorpremium allowdiscountorpremium
-            xml.description description
+            xml.quantity quantity if quantity
+            xml.units units if units
+            xml.allowdiscountorpremium allowdiscountorpremium if allowdiscountorpremium
+            xml.description description if description
             xml.unitspriceexcl unitspriceexcl if unitspriceexcl
             xml.unitspriceinc unitspriceinc if unitspriceinc
             xml.freetext1 freetext1 if freetext1
             xml.freetext2 freetext2 if freetext2
             xml.freetext3 freetext3 if freetext3
-            xml.dim1 dim1
-            xml.vatcode vatcode
+            xml.dim1 dim1 if dim1
+            xml.vatcode vatcode if vatcode
             xml.performancetype performancetype if performancetype
             xml.performancedate performancedate.strftime("%Y%m%d") if performancedate
           }
@@ -111,10 +111,9 @@ module Twinfield
             dim1: xml_line.css("dim1").text,
             vatcode: xml_line.css("vatcode").text
           )
-          line.valueexcl = xml_line.css("valueexcl").text
-          line.vatvalue = xml_line.css("vatvalue").text
-          line.valueinc = xml_line.css("valueinc").text
-
+          line.valueexcl = xml_line.css("valueexcl").text == "" ? nil : xml_line.css("valueexcl").text.to_f
+          line.vatvalue = xml_line.css("vatvalue").text == "" ? nil : xml_line.css("vatvalue").text.to_f
+          line.valueinc = xml_line.css("valueinc").text == "" ? nil : xml_line.css("valueinc").text.to_f
           invoice.lines << line
         end
 
@@ -201,7 +200,7 @@ module Twinfield
 
     attr_accessor :invoicetype, :invoicedate, :duedate, :performancedate, :bank, :invoiceaddressnumber, :deliveraddressnumber, :customer, :period, :currency, :status, :paymentmethod, :headertext, :footertext, :lines, :office, :invoicenumber, :vatvalue, :valueinc, :financials, :vat_lines
 
-    def initialize(duedate: nil, invoicetype:, invoicedate: nil, performancedate: nil, bank: nil, invoiceaddressnumber: nil, deliveraddressnumber: nil, customer:, period: nil, currency: nil, status: "concept", paymentmethod: nil, headertext: nil, footertext: nil, office: nil)
+    def initialize(duedate: nil, invoicetype:, invoicedate: nil, performancedate: nil, bank: nil, invoiceaddressnumber: nil, deliveraddressnumber: nil, customer:, period: nil, currency: nil, status: "concept", paymentmethod: nil, headertext: nil, footertext: nil, office: nil, invoicenumber: nil)
       self.lines = []
       self.vat_lines = []
       @invoicetype = invoicetype
@@ -219,6 +218,7 @@ module Twinfield
       @headertext = headertext
       @footertext = footertext
       @office = office || Twinfield.configuration.company
+      @invoicenumber= invoicenumber
     end
 
     def raisewarning
@@ -242,6 +242,7 @@ module Twinfield
         xml.salesinvoice(raisewarning: raisewarning, autobalancevat: autobalancevat) {
           xml.header do
             xml.office office
+            xml.invoicenumber invoicenumber if invoicenumber
             xml.invoicetype invoicetype
             xml.invoicedate invoicedate&.strftime("%Y%m%d")
             xml.duedate duedate&.strftime("%Y%m%d")
@@ -277,7 +278,7 @@ module Twinfield
         self.invoicenumber = xml.at_css("invoicenumber").content
         self
       else
-        raise Twinfield::Create::Error.new(xml.css("[msg]").map{ |x| x.attributes["msg"].value }, object: self)
+        raise Twinfield::Create::Error.new(xml.css("[msg]").map{ |x| x.attributes["msg"].value }.join(" "), object: self)
       end
     end
   end

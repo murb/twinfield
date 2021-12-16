@@ -55,6 +55,13 @@ describe Twinfield::SalesInvoice do
         invoice = Twinfield::SalesInvoice.new(duedate: Time.now, customer: "1001", invoicetype: "VERKOOP")
         invoice.lines= [Twinfield::SalesInvoice::Line.new(article: "A")]
         expect(invoice.to_xml).to match("<lines>\n    <line id=\"1\">")
+        expect(invoice.to_xml).not_to match("<invoicenumber")
+      end
+
+      it "renders xml with invoicenumber when given (updating)" do
+        invoice = Twinfield::SalesInvoice.new(duedate: Time.now, customer: "1001", invoicetype: "VERKOOP", invoicenumber: "12")
+        invoice.lines= [Twinfield::SalesInvoice::Line.new(article: "A")]
+        expect(invoice.to_xml).to match("<invoicenumber>12</invoicenumber>")
       end
     end
 

@@ -14,6 +14,8 @@ Run the following in your console to install with Bundler:
 
     bundle install
 
+As a companion gem a [`omniauth-twinfield`-gem](https://github.com/murb/omniauth-twinfield) was created to help setting up OAuth.
+
 ## Configuration
 
 Add a config block to your environment.rb:
@@ -50,31 +52,15 @@ Here are some examples that may be useful when using this GEM for the first time
 
 ### Create a new debtor
 
-(if the debtor alreay exsist it is overwritten)
-
-    debtor = Twinfield::Create::Debtor.new
-
-    debtor.code = ""
+    debtor = Twinfield::Customer.new
+    debtor.code = Twinfield::Customer.next_unused_twinfield_customer_code # sorry
     debtor.name = ""
     debtor.shortname = ""
     debtor.country = ""
-    debtor.bank_description = ""
-    debtor.iban = ""
-    debtor.bank_iban = ""
-    debtor.bank_country = ""
-    debtor.bank_biccode = ""
-    debtor.invoice_contact_name = ""
-    debtor.invoice_name = ""
-    debtor.invoice_address = ""
-    debtor.invoice_zipcode = ""
-    debtor.invoice_city = ""
-    debtor.invoice_country = "NL"
-    debtor.financials_duedays = 30
-    debtor.vatcode = ""
-
+    debtor.banks = [Twinfield::Customer::Bank.new]
     debtor.save
 
-### Create a new invoice:
+### Create a new invoice
 
     invoice = Twinfield::SalesInvoice.new(customer: 1003, invoicetype: "FACTUUR", currency: "EUR", invoicedate: Time.now, duedate: Time.now+1.month)
     invoice.lines << Twinfield::SalesInvoice::Line.new(article: "A", unitspriceexcl: 100, allowdiscountorpremium: true, vatcode: "VH")
