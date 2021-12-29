@@ -198,7 +198,7 @@ module Twinfield
       end
     end
 
-    attr_accessor :invoicetype, :invoicedate, :duedate, :performancedate, :bank, :invoiceaddressnumber, :deliveraddressnumber, :customer, :period, :currency, :status, :paymentmethod, :headertext, :footertext, :lines, :office, :invoicenumber, :vatvalue, :valueinc, :financials, :vat_lines
+    attr_accessor :invoicetype, :invoicedate, :duedate, :performancedate, :bank, :invoiceaddressnumber, :deliveraddressnumber, :customer_code, :period, :currency, :status, :paymentmethod, :headertext, :footertext, :lines, :office, :invoicenumber, :vatvalue, :valueinc, :financials, :vat_lines
 
     def initialize(duedate: nil, invoicetype:, invoicedate: nil, performancedate: nil, bank: nil, invoiceaddressnumber: nil, deliveraddressnumber: nil, customer:, period: nil, currency: nil, status: "concept", paymentmethod: nil, headertext: nil, footertext: nil, office: nil, invoicenumber: nil)
       self.lines = []
@@ -210,7 +210,7 @@ module Twinfield
       @bank = bank
       @invoiceaddressnumber = invoiceaddressnumber
       @deliveraddressnumber = deliveraddressnumber
-      @customer = customer
+      self.customer = customer
       @period = period
       @currency = currency
       @status = status
@@ -237,6 +237,19 @@ module Twinfield
       end
     end
 
+    def customer= customer
+      if customer.is_a?(String) || customer.is_a?(Numeric)
+        @customer_code = customer.to_i
+      elsif customer.is_a? Twinfield::Customer
+        @customer_code = customer.code
+        @customer = customer
+      end
+    end
+
+    def customer
+      @customer ||= Twinfield::Customer.find(customer_code)
+    end
+
     def to_xml
       Nokogiri::XML::Builder.new do |xml|
         xml.salesinvoice(raisewarning: raisewarning, autobalancevat: autobalancevat) {
@@ -250,7 +263,7 @@ module Twinfield
             xml.bank bank
             xml.invoiceaddressnumber invoiceaddressnumber if invoiceaddressnumber
             xml.deliveraddressnumber deliveraddressnumber if deliveraddressnumber
-            xml.customer customer
+            xml.customer customer_code
             xml.period period if period
             xml.currency currency
             xml.status status

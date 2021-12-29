@@ -30,7 +30,7 @@ describe Twinfield::Customer do
         customer = Twinfield::Customer.find(1000)
         expect(customer.name).to eq("Waardedijk")
         expect(customer.financials.childvalidations).to eq("1300")
-        expect(customer.addresses[0].default).to eq("true")
+        expect(customer.addresses[0].default).to eq(true)
         expect(customer.addresses[0].type).to eq("invoice")
         expect(customer.modified).to eq DateTime.new(2021,10,13,20,30,53)
       end
