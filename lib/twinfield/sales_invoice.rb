@@ -78,8 +78,8 @@ module Twinfield
           invoicedate: parse_date(invoice_xml.css("header invoicedate").text),
           duedate: parse_date(invoice_xml.css("header duedate").text),
           bank: invoice_xml.css("header bank").text,
-          deliveraddressnumber: invoice_xml.css("header deliveraddressnumber").text,
-          invoiceaddressnumber: invoice_xml.css("header invoiceaddressnumber").text,
+          deliveraddressnumber: invoice_xml.css("header deliveraddressnumber").text&.to_i,
+          invoiceaddressnumber: invoice_xml.css("header invoiceaddressnumber").text&.to_i,
           customer: invoice_xml.css("header customer").text,
           period: invoice_xml.css("header period").text,
           currency: invoice_xml.css("header currency").text,
@@ -248,6 +248,23 @@ module Twinfield
 
     def customer
       @customer ||= Twinfield::Customer.find(customer_code)
+    end
+
+    def deliver_address
+      customer.addresses[deliveraddressnumber-1] if deliveraddressnumber
+    end
+
+    def invoice_address
+      customer.addresses[invoiceaddressnumber-1] if invoiceaddressnumber
+    end
+
+    def transaction
+      @transaction ||= Twinfield::Transaction.find(invoice_number: invoicenumber)
+    end
+
+    # helper method to calculate a total price
+    def total
+      lines.map(&:valueinc).compact.sum
     end
 
     def to_xml

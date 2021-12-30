@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <soap:Body>
+    <ProcessXmlStringResponse xmlns="http://www.twinfield.com/">
+      <ProcessXmlStringResult>
+        <![CDATA[
+        <browse result="1" first="1" last="17" total="17">
+          <th>
+            <td label="transaction_number" hideforuser="false" type="Decimal">fin.trs.head.number</td>
+            <td label="invoice_number" hideforuser="false" type="String">fin.trs.line.invnumber</td>
+            <td label="currency" hideforuser="false" type="String">fin.trs.head.curcode</td>
+            <td label="value" hideforuser="false" type="Value">fin.trs.line.valuesigned</td>
+            <td label="open_value" hideforuser="false" type="Value">fin.trs.line.openvaluesigned</td>
+            <td label="available_for_payruns" hideforuser="false" type="String">fin.trs.line.availableforpayruns</td>
+            <td label="status" hideforuser="false" type="String">fin.trs.line.matchstatus</td>
+            <td label="Debtor" hideforuser="false" type="String">fin.trs.line.dim2</td>
+          </th>
+          <tr>
+            <td field="fin.trs.head.date" hideforuser="false" type="Decimal">20211205</td>
+            <td field="fin.trs.head.number" hideforuser="false" type="Decimal">202000011</td>
+            <td field="fin.trs.line.invnumber" hideforuser="false" type="String">20200198</td>
+            <td field="fin.trs.head.curcode" hideforuser="false" type="String">EUR</td>
+            <td field="fin.trs.line.valuesigned" hideforuser="false" type="Value">2200.00</td>
+            <td field="fin.trs.line.openvaluesigned" hideforuser="false" type="Value">2200.00</td>
+            <td field="fin.trs.line.availableforpayruns" hideforuser="false" type="String" name="Ja">true</td>
+            <td field="fin.trs.line.matchstatus" hideforuser="false" type="String" name="Beschikbaar">available</td>
+            <td field="fin.trs.line.dim2" hideforuser="false" type="String">1003</td>
+            <key>
+              <office>NLA002058</office>
+              <code>VRK</code>
+              <number>202000011</number>
+              <line>1</line>
+            </key>
+          </tr>
+          <tr>
+            <td field="fin.trs.head.date" hideforuser="false" type="Decimal">20211205</td>
+            <td field="fin.trs.head.number" hideforuser="false" type="Decimal">202000017</td>
+            <td field="fin.trs.line.invnumber" hideforuser="false" type="String">20200009</td>
+            <td field="fin.trs.head.curcode" hideforuser="false" type="String">EUR</td>
+            <td field="fin.trs.line.valuesigned" hideforuser="false" type="Value">2404.00</td>
+            <td field="fin.trs.line.openvaluesigned" hideforuser="false" type="Value">2404.00</td>
+            <td field="fin.trs.line.availableforpayruns" hideforuser="false" type="String" name="Ja">true</td>
+            <td field="fin.trs.line.matchstatus" hideforuser="false" type="String" name="Beschikbaar">available</td>
+            <td field="fin.trs.line.dim2" hideforuser="false" type="String">1003</td>
+            <key>
+              <office>NLA002058</office>
+              <code>VRK</code>
+              <number>202000017</number>
+              <line>1</line>
+            </key>
+          </tr>
+          <tr>
+            <td field="fin.trs.head.date" hideforuser="false" type="Decimal">20211205</td>
+            <td field="fin.trs.head.number" hideforuser="false" type="Decimal">202000030</td>
+            <td field="fin.trs.line.invnumber" hideforuser="false" type="String">20200209</td>
+            <td field="fin.trs.head.curcode" hideforuser="false" type="String">EUR</td>
+            <td field="fin.trs.line.valuesigned" hideforuser="false" type="Value">610.00</td>
+            <td field="fin.trs.line.openvaluesigned" hideforuser="false" type="Value">610.00</td>
+            <td field="fin.trs.line.availableforpayruns" hideforuser="false" type="String" name="Ja">true</td>
+            <td field="fin.trs.line.matchstatus" hideforuser="false" type="String" name="Beschikbaar">available</td>
+            <td field="fin.trs.line.dim2" hideforuser="false" type="String">1003</td>
+            <key>
+              <office>NLA002058</office>
+              <code>VRK</code>
+              <number>202000030</number>
+              <line>1</line>
+            </key>
+          </tr>
+          <tr>
+            <td field="fin.trs.head.date" hideforuser="false" type="Decimal">20211205</td>
+            <td field="fin.trs.head.number" hideforuser="false" type="Decimal">202000037</td>
+            <td field="fin.trs.line.invnumber" hideforuser="false" type="String">20200013</td>
+            <td field="fin.trs.head.curcode" hideforuser="false" type="String">EUR</td>
+            <td field="fin.trs.line.valuesigned" hideforuser="false" type="Value">211.00</td>
+            <td field="fin.trs.line.openvaluesigned" hideforuser="false" type="Value">211.00</td>
+            <td field="fin.trs.line.availableforpayruns" hideforuser="false" type="String" name="Ja">true</td>
+            <td field="fin.trs.line.matchstatus" hideforuser="false" type="String" name="Beschikbaar">available</td>
+            <td field="fin.trs.line.dim2" hideforuser="false" type="String">1003</td>
+            <key>
+              <office>NLA002058</office>
+              <code>VRK</code>
+              <number>202000037</number>
+              <line>1</line>
+            </key>
+          </tr>
+          <tr>
+            <td field="fin.trs.head.date" hideforuser="false" type="Decimal">20211205</td>
+            <td field="fin.trs.head.number" hideforuser="false" type="Decimal">202000065</td>
+            <td field="fin.trs.line.invnumber" hideforuser="false" type="String">20200020</td>
+            <td field="fin.trs.head.curcode" hideforuser="false" type="String">EUR</td>
+            <td field="fin.trs.line.valuesigned" hideforuser="false" type="Value">1769.00</td>
+            <td field="fin.trs.line.openvaluesigned" hideforuser="false" type="Value">1769.00</td>
+            <td field="fin.trs.line.availableforpayruns" hideforuser="false" type="String" name="Ja">true</td>
+            <td field="fin.trs.line.matchstatus" hideforuser="false" type="String" name="Beschikbaar">available</td>
+            <td field="fin.trs.line.dim2" hideforuser="false" type="String">1003</td>
+            <key>
+              <office>NLA002058</office>
+              <code>VRK</code>
+              <number>202000065</number>
+              <line>1</line>
+            </key>
+          </tr>
+          <tr>
+            <td field="fin.trs.head.date" hideforuser="false" type="Decimal">20211205</td>
+            <td field="fin.trs.head.number" hideforuser="false" type="Decimal">202000082</td>
+            <td field="fin.trs.line.invnumber" hideforuser="false" type="String">20200157</td>
+            <td field="fin.trs.head.curcode" hideforuser="false" type="String">EUR</td>
+            <td field="fin.trs.line.valuesigned" hideforuser="false" type="Value">2712.00</td>
+            <td field="fin.trs.line.openvaluesigned" hideforuser="false" type="Value">2712.00</td>
+            <td field="fin.trs.line.availableforpayruns" hideforuser="false" type="String" name="Ja">true</td>
+            <td field="fin.trs.line.matchstatus" hideforuser="false" type="String" name="Beschikbaar">available</td>
+            <td field="fin.trs.line.dim2" hideforuser="false" type="String">1003</td>
+            <key>
+              <office>NLA002058</office>
+              <code>VRK</code>
+              <number>202000082</number>
+              <line>1</line>
+            </key>
+          </tr>
+          <tr>
+            <td field="fin.trs.head.date" hideforuser="false" type="Decimal">20211205</td>
+            <td field="fin.trs.head.number" hideforuser="false" type="Decimal">202000122</td>
+            <td field="fin.trs.line.invnumber" hideforuser="false" type="String">20200183</td>
+            <td field="fin.trs.head.curcode" hideforuser="false" type="String">EUR</td>
+            <td field="fin.trs.line.valuesigned" hideforuser="false" type="Value">2543.00</td>
+            <td field="fin.trs.line.openvaluesigned" hideforuser="false" type="Value">2543.00</td>
+            <td field="fin.trs.line.availableforpayruns" hideforuser="false" type="String" name="Ja">true</td>
+            <td field="fin.trs.line.matchstatus" hideforuser="false" type="String" name="Beschikbaar">available</td>
+            <td field="fin.trs.line.dim2" hideforuser="false" type="String">1003</td>
+            <key>
+              <office>NLA002058</office>
+              <code>VRK</code>
+              <number>202000122</number>
+              <line>1</line>
+            </key>
+          </tr>
+          <tr>
+            <td field="fin.trs.head.date" hideforuser="false" type="Decimal">20211205</td>
+            <td field="fin.trs.head.number" hideforuser="false" type="Decimal">202000126</td>
+            <td field="fin.trs.line.invnumber" hideforuser="false" type="String">20200323</td>
+            <td field="fin.trs.head.curcode" hideforuser="false" type="String">EUR</td>
+            <td field="fin.trs.line.valuesigned" hideforuser="false" type="Value">2677.00</td>
+            <td field="fin.trs.line.openvaluesigned" hideforuser="false" type="Value">2677.00</td>
+            <td field="fin.trs.line.availableforpayruns" hideforuser="false" type="String" name="Ja">true</td>
+            <td field="fin.trs.line.matchstatus" hideforuser="false" type="String" name="Beschikbaar">available</td>
+            <td field="fin.trs.line.dim2" hideforuser="false" type="String">1003</td>
+            <key>
+              <office>NLA002058</office>
+              <code>VRK</code>
+              <number>202000126</number>
+              <line>1</line>
+            </key>
+          </tr>
+          <tr>
+            <td field="fin.trs.head.date" hideforuser="false" type="Decimal">20211205</td>
+            <td field="fin.trs.head.number" hideforuser="false" type="Decimal">202000132</td>
+            <td field="fin.trs.line.invnumber" hideforuser="false" type="String">20200117</td>
+            <td field="fin.trs.head.curcode" hideforuser="false" type="String">EUR</td>
+            <td field="fin.trs.line.valuesigned" hideforuser="false" type="Value">806.00</td>
+            <td field="fin.trs.line.openvaluesigned" hideforuser="false" type="Value">806.00</td>
+            <td field="fin.trs.line.availableforpayruns" hideforuser="false" type="String" name="Ja">true</td>
+            <td field="fin.trs.line.matchstatus" hideforuser="false" type="String" name="Beschikbaar">available</td>
+            <td field="fin.trs.line.dim2" hideforuser="false" type="String">1003</td>
+            <key>
+              <office>NLA002058</office>
+              <code>VRK</code>
+              <number>202000132</number>
+              <line>1</line>
+            </key>
+          </tr>
+          <tr>
+            <td field="fin.trs.head.date" hideforuser="false" type="Decimal">20211205</td>
+            <td field="fin.trs.head.number" hideforuser="false" type="Decimal">202000150</td>
+            <td field="fin.trs.line.invnumber" hideforuser="false" type="String">20200194</td>
+            <td field="fin.trs.head.curcode" hideforuser="false" type="String">EUR</td>
+            <td field="fin.trs.line.valuesigned" hideforuser="false" type="Value">610.00</td>
+            <td field="fin.trs.line.openvaluesigned" hideforuser="false" type="Value">610.00</td>
+            <td field="fin.trs.line.availableforpayruns" hideforuser="false" type="String" name="Ja">true</td>
+            <td field="fin.trs.line.matchstatus" hideforuser="false" type="String" name="Beschikbaar">available</td>
+            <td field="fin.trs.line.dim2" hideforuser="false" type="String">1003</td>
+            <key>
+              <office>NLA002058</office>
+              <code>VRK</code>
+              <number>202000150</number>
+              <line>1</line>
+            </key>
+          </tr>
+          <tr>
+            <td field="fin.trs.head.date" hideforuser="false" type="Decimal">20211205</td>
+            <td field="fin.trs.head.number" hideforuser="false" type="Decimal">202100004</td>
+            <td field="fin.trs.line.invnumber" hideforuser="false" type="String">11</td>
+            <td field="fin.trs.head.curcode" hideforuser="false" type="String">EUR</td>
+            <td field="fin.trs.line.valuesigned" hideforuser="false" type="Value">221.00</td>
+            <td field="fin.trs.line.openvaluesigned" hideforuser="false" type="Value">221.00</td>
+            <td field="fin.trs.line.availableforpayruns" hideforuser="false" type="String" name="Ja">true</td>
+            <td field="fin.trs.line.matchstatus" hideforuser="false" type="String" name="Beschikbaar">available</td>
+            <td field="fin.trs.line.dim2" hideforuser="false" type="String">1003</td>
+            <key>
+              <office>NLA002058</office>
+              <code>VRK</code>
+              <number>202100004</number>
+              <line>1</line>
+            </key>
+          </tr>
+          <tr>
+            <td field="fin.trs.head.date" hideforuser="false" type="Decimal">20211205</td>
+            <td field="fin.trs.head.number" hideforuser="false" type="Decimal">202100005</td>
+            <td field="fin.trs.line.invnumber" hideforuser="false" type="String">12</td>
+            <td field="fin.trs.head.curcode" hideforuser="false" type="String">EUR</td>
+            <td field="fin.trs.line.valuesigned" hideforuser="false" type="Value">221.00</td>
+            <td field="fin.trs.line.openvaluesigned" hideforuser="false" type="Value">221.00</td>
+            <td field="fin.trs.line.availableforpayruns" hideforuser="false" type="String" name="Ja">true</td>
+            <td field="fin.trs.line.matchstatus" hideforuser="false" type="String" name="Beschikbaar">available</td>
+            <td field="fin.trs.line.dim2" hideforuser="false" type="String">1003</td>
+            <key>
+              <office>NLA002058</office>
+              <code>VRK</code>
+              <number>202100005</number>
+              <line>1</line>
+            </key>
+          </tr>
+          <tr>
+            <td field="fin.trs.head.date" hideforuser="false" type="Decimal">20211205</td>
+            <td field="fin.trs.head.number" hideforuser="false" type="Decimal">202100006</td>
+            <td field="fin.trs.line.invnumber" hideforuser="false" type="String">13</td>
+            <td field="fin.trs.head.curcode" hideforuser="false" type="String">EUR</td>
+            <td field="fin.trs.line.valuesigned" hideforuser="false" type="Value">221.00</td>
+            <td field="fin.trs.line.openvaluesigned" hideforuser="false" type="Value">221.00</td>
+            <td field="fin.trs.line.availableforpayruns" hideforuser="false" type="String" name="Ja">true</td>
+            <td field="fin.trs.line.matchstatus" hideforuser="false" type="String" name="Beschikbaar">available</td>
+            <td field="fin.trs.line.dim2" hideforuser="false" type="String">1003</td>
+            <key>
+              <office>NLA002058</office>
+              <code>VRK</code>
+              <number>202100006</number>
+              <line>1</line>
+            </key>
+          </tr>
+          <tr>
+            <td field="fin.trs.head.date" hideforuser="false" type="Decimal">20211205</td>
+            <td field="fin.trs.head.number" hideforuser="false" type="Decimal">202100007</td>
+            <td field="fin.trs.line.invnumber" hideforuser="false" type="String">7</td>
+            <td field="fin.trs.head.curcode" hideforuser="false" type="String">EUR</td>
+            <td field="fin.trs.line.valuesigned" hideforuser="false" type="Value">121.00</td>
+            <td field="fin.trs.line.openvaluesigned" hideforuser="false" type="Value">121.00</td>
+            <td field="fin.trs.line.availableforpayruns" hideforuser="false" type="String" name="Ja">true</td>
+            <td field="fin.trs.line.matchstatus" hideforuser="false" type="String" name="Beschikbaar">available</td>
+            <td field="fin.trs.line.dim2" hideforuser="false" type="String">1003</td>
+            <key>
+              <office>NLA002058</office>
+              <code>VRK</code>
+              <number>202100007</number>
+              <line>1</line>
+            </key>
+          </tr>
+          <tr>
+            <td field="fin.trs.head.date" hideforuser="false" type="Decimal">20211205</td>
+            <td field="fin.trs.head.number" hideforuser="false" type="Decimal">202100008</td>
+            <td field="fin.trs.line.invnumber" hideforuser="false" type="String">10</td>
+            <td field="fin.trs.head.curcode" hideforuser="false" type="String">EUR</td>
+            <td field="fin.trs.line.valuesigned" hideforuser="false" type="Value">221.00</td>
+            <td field="fin.trs.line.openvaluesigned" hideforuser="false" type="Value">221.00</td>
+            <td field="fin.trs.line.availableforpayruns" hideforuser="false" type="String" name="Ja">true</td>
+            <td field="fin.trs.line.matchstatus" hideforuser="false" type="String" name="Beschikbaar">available</td>
+            <td field="fin.trs.line.dim2" hideforuser="false" type="String">1003</td>
+            <key>
+              <office>NLA002058</office>
+              <code>VRK</code>
+              <number>202100008</number>
+              <line>1</line>
+            </key>
+          </tr>
+          <tr>
+            <td field="fin.trs.head.date" hideforuser="false" type="Decimal">20211205</td>
+            <td field="fin.trs.head.number" hideforuser="false" type="Decimal">202100009</td>
+            <td field="fin.trs.line.invnumber" hideforuser="false" type="String">14</td>
+            <td field="fin.trs.head.curcode" hideforuser="false" type="String">EUR</td>
+            <td field="fin.trs.line.valuesigned" hideforuser="false" type="Value">221.00</td>
+            <td field="fin.trs.line.openvaluesigned" hideforuser="false" type="Value">221.00</td>
+            <td field="fin.trs.line.availableforpayruns" hideforuser="false" type="String" name="Ja">true</td>
+            <td field="fin.trs.line.matchstatus" hideforuser="false" type="String" name="Beschikbaar">available</td>
+            <td field="fin.trs.line.dim2" hideforuser="false" type="String">1003</td>
+            <key>
+              <office>NLA002058</office>
+              <code>VRK</code>
+              <number>202100009</number>
+              <line>1</line>
+            </key>
+          </tr>
+          <tr>
+            <td field="fin.trs.head.date" hideforuser="false" type="Decimal">20211205</td>
+            <td field="fin.trs.head.number" hideforuser="false" type="Decimal">202100010</td>
+            <td field="fin.trs.line.invnumber" hideforuser="false" type="String">30</td>
+            <td field="fin.trs.head.curcode" hideforuser="false" type="String">EUR</td>
+            <td field="fin.trs.line.valuesigned" hideforuser="false" type="Value">2420.89</td>
+            <td field="fin.trs.line.openvaluesigned" hideforuser="false" type="Value">2420.89</td>
+            <td field="fin.trs.line.availableforpayruns" hideforuser="false" type="String" name="Ja">true</td>
+            <td field="fin.trs.line.matchstatus" hideforuser="false" type="String" name="Beschikbaar">available</td>
+            <td field="fin.trs.line.dim2" hideforuser="false" type="String">1003</td>
+            <key>
+              <office>NLA002058</office>
+              <code>VRK</code>
+              <number>202100010</number>
+              <line>1</line>
+            </key>
+          </tr>
+        </browse>
+        ]]>
+      </ProcessXmlStringResult>
+    </ProcessXmlStringResponse>
+  </soap:Body>
+</soap:Envelope>

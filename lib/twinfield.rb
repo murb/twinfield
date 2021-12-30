@@ -52,11 +52,10 @@ require "twinfield/api/session"
 require "twinfield/api/process"
 require "twinfield/api/finder"
 
-
 # New style models
+require "twinfield/transaction"
 require "twinfield/sales_invoice"
 require "twinfield/customer"
-
 
 # Create services (old style)
 require "twinfield/create/cost_center"

@@ -50,6 +50,22 @@ describe Twinfield::SalesInvoice do
   end
 
   describe "instance methods" do
+    describe "#transaction" do
+      it "returns a transaction" do
+        stub_session_wsdl
+        stub_create_session
+        stub_cluster_session_wsdl
+        stub_select_company
+        stub_processxml_wsdl
+
+        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
+          with(body: /2021-0812/).
+          to_return(body: File.read(File.expand_path('../../fixtures/cluster/processxml/columns/sales_transactions.xml', __FILE__)))
+
+        invoice = Twinfield::SalesInvoice.new(duedate: Time.now, customer: "1001", invoicetype: "VERKOOP", invoicenumber: "2021-0812")
+        transaction = invoice.transaction
+      end
+    end
     describe "#to_xml" do
       it "renders xml" do
         invoice = Twinfield::SalesInvoice.new(duedate: Time.now, customer: "1001", invoicetype: "VERKOOP")

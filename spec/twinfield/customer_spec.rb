@@ -178,6 +178,20 @@ describe Twinfield::Customer do
       end
     end
 
+    describe "#sales_transactions" do
+      it "returns Twinfield::SalesTransactions" do
+        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
+          to_return(body: File.read(File.expand_path('../../fixtures/cluster/processxml/columns/sales_transactions.xml', __FILE__)))
+
+        customer = Twinfield::Customer.new(name: "Maarten Brouwers", code: "1003")
+        transaction = customer.sales_transactions.first
+
+        expect(transaction).to be_a(Twinfield::Transaction)
+        expect(transaction.value).to eql(2200.0)
+      end
+
+    end
+
     describe "#save" do
       it "saves a new record" do
         stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
