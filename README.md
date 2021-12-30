@@ -69,6 +69,18 @@ Here are some examples that may be useful when using this GEM for the first time
 
     invoice.save
 
+### Read an invoice
+
+The following should be enough to
+
+    invoice = Twinfield::SalesInvoice.find(12, invoicetype: "FACTUUR")
+    invoice.lines # returns the lines
+    invoice.vat_lines # returns the vat lines
+    invoice.total # returns the total amount (derived)
+    invoice.customer # returns an Twinfield::Customer
+    invoice.invoice_address # returns the customer's invoice address (Twinfield::Customer::Address, not just a code)
+    invoice.delivery_address # returns the full delivery address (Twinfield::Customer::Address, not just a code)
+
 ### List office
 
     Twinfield::Request::Read.office
