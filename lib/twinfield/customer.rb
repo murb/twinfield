@@ -104,7 +104,10 @@ module Twinfield
 
       def to_xml
         Nokogiri::XML::Builder.new do |xml|
-          xml.bank(id: id, default: default) do
+          attributes = {default: default}
+          attributes[:id] = id if id
+
+          xml.bank(attributes) do
             xml.ascription ascription
             xml.accountnumber accountnumber
             xml.address address

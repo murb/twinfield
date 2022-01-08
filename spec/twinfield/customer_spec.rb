@@ -176,6 +176,12 @@ describe Twinfield::Customer do
         expect(recreated_customer.addresses[0].name).to eq(existing_customer.addresses[0].name)
         expect(recreated_customer.banks[0].accountnumber).to eq("12345678")
       end
+
+      it "Twinfield::Customer::Bank doesn't ad an id attribute if id is nil" do
+        b = Twinfield::Customer::Bank.new(default: true, iban: 12345678)
+        expect(b.to_xml).to match("default=\"true\"")
+        expect(b.to_xml).not_to match("id=\"\"")
+      end
     end
 
     describe "#sales_transactions" do
