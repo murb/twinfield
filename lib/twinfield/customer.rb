@@ -67,7 +67,7 @@ module Twinfield
     class Bank
       attr_accessor :ascription, :accountnumber, :address, :bankname, :biccode, :city, :country, :iban, :natbiccode, :postcode, :state, :id, :default
 
-      def initialize(ascription: nil, accountnumber: nil, address: nil, bankname: nil, biccode: nil, city: nil, country: nil, iban: nil, natbiccode: nil, postcode: nil, state: nil, id:, default: nil)
+      def initialize(ascription: nil, accountnumber: nil, address: nil, bankname: nil, biccode: nil, city: nil, country: nil, iban: nil, natbiccode: nil, postcode: nil, state: nil, id: nil, default: nil)
         @ascription= ascription
         @accountnumber= accountnumber
         @address= address.is_a?(Hash) ? Address.new(**address) : address
