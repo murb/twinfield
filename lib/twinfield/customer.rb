@@ -184,7 +184,7 @@ module Twinfield
           vatcode: vatcode,
           vatobligatory: vatobligatory,
           performancetype: performancetype,
-          collectmandate: collectmandate.to_h,
+          collectmandate: collectmandate&.to_h,
           collectionschema: collectionschema,
           childvalidations: childvalidations
         }
@@ -211,7 +211,7 @@ module Twinfield
             xml.vatcode vatcode
             xml.vatobligatory vatobligatory
             xml.performancetype performancetype
-            xml << collectmandate.to_xml
+            xml << collectmandate.to_xml if collectmandate
             xml.collectionschema collectionschema
           end
         end.doc.root.to_xml
