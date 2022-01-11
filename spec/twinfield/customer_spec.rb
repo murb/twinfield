@@ -167,14 +167,23 @@ describe Twinfield::Customer do
         expect(stringified_hash).not_to match("Twinfield:")
       end
     end
+
     describe "#to_xml" do
       it "returns returns nokogiri xml" do
+        date = Time.now.to_date
+        collectmandate_id = "4c3f01c582814bc78a8858453392899e"
         existing_customer.banks << Twinfield::Customer::Bank.new(default: true, accountnumber: 12345678, id: 1)
-        recreated_customer = Twinfield::Customer.from_xml(Nokogiri::XML(existing_customer.to_xml))
+        existing_customer.financials.collectmandate = Twinfield::Customer::CollectMandate.new(signaturedate: date, id: collectmandate_id)
+
+        customer_xml = existing_customer.to_xml
+
+        recreated_customer = Twinfield::Customer.from_xml(customer_xml)
+
         expect(recreated_customer.name).to eq(existing_customer.name)
         expect(recreated_customer.financials.ebillmail).to eq(existing_customer.financials.ebillmail)
         expect(recreated_customer.addresses[0].name).to eq(existing_customer.addresses[0].name)
         expect(recreated_customer.banks[0].accountnumber).to eq("12345678")
+        expect(recreated_customer.financials.collectmandate.signaturedate).to eq(date)
       end
 
       it "Twinfield::Customer::Bank doesn't ad an id attribute if id is nil" do
@@ -182,6 +191,15 @@ describe Twinfield::Customer do
         expect(b.to_xml).to match("default=\"true\"")
         expect(b.to_xml).not_to match("id=\"\"")
       end
+
+      it "Twinfield::Customer::CollectMandate.to_xml" do
+        date = Time.now.to_date
+        collectmandate_id = "4c3f01c582814bc78a8858453392899e"
+
+        cm = Twinfield::Customer::CollectMandate.new(signaturedate: date, id: collectmandate_id)
+        expect(cm.to_xml).to match("<id>4c3f01c582814bc78a8858453392899e</id>")
+      end
+
     end
 
     describe "#sales_transactions" do

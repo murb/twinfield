@@ -20,8 +20,8 @@ module Twinfield
       def to_xml
         Nokogiri::XML::Builder.new do |xml|
           xml.collectmandate do
-            xml.id = id
-            xml.signaturedate = signaturedate&.strftime("%Y%m%d")
+            xml.id id
+            xml.signaturedate signaturedate&.strftime("%Y%m%d")
           end
         end.doc.root.to_xml
       end
@@ -556,7 +556,9 @@ module Twinfield
         self.from_xml(customer_xml)
       end
 
-      def from_xml(nokogiri)
+      def from_xml(nokogiri_or_string)
+        nokogiri = nokogiri_or_string.is_a?(Nokogiri::XML::Document) ? nokogiri_or_string : Nokogiri::XML(nokogiri_or_string)
+
         obj = self.new(shortname: nokogiri.css("dimension > shortname").text, name: nokogiri.css("dimension > name").text, code: nokogiri.css("dimension > code").text)
         obj.status= nokogiri.css("dimension")[0].attributes["status"].text
         obj.office= nokogiri.css("dimension > office").text
