@@ -27,20 +27,20 @@ module Twinfield
       def initialize(id: nil, article: "-", subarticle: nil, quantity: 1, units: nil, allowdiscountorpremium: true, description: nil, unitspriceexcl: nil, unitspriceinc: nil, freetext1: nil, freetext2: nil, freetext3: nil, dim1: nil, vatcode: nil, performancetype: nil, performancedate: nil)
         @id= id
         @article= article # article "-" is an article-less article in Twinfield
-        @subarticle= subarticle
+        @subarticle= subarticle if subarticle.to_s != ""
         @quantity= Integer(quantity) unless article == "-"
         @units= Integer(units) if units and units != ""
         @allowdiscountorpremium= allowdiscountorpremium unless article == "-"
         @description= description
         @unitspriceexcl= Float(unitspriceexcl) if unitspriceexcl
         @unitspriceinc= Float(unitspriceinc) if unitspriceinc
-        @freetext1= freetext1
-        @freetext2= freetext2
-        @freetext3= freetext3
-        @dim1= dim1
-        @vatcode= vatcode
-        @performancetype= performancetype
-        @performancedate= performancedate
+        @freetext1= freetext1 if freetext1.to_s != ""
+        @freetext2= freetext2 if freetext2.to_s != ""
+        @freetext3= freetext3 if freetext3.to_s != ""
+        @dim1= dim1 if dim1.to_s != ""
+        @vatcode= vatcode if vatcode.to_s != ""
+        @performancetype= performancetype if performancetype.to_s != ""
+        @performancedate= performancedate if performancedate.to_s != ""
       end
 
       def to_xml(lineid = id)
