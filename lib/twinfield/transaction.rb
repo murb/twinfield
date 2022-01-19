@@ -2,7 +2,7 @@ module Twinfield
   class Transaction < Twinfield::AbstractModel
     extend Twinfield::Helpers::Parsers
 
-    attr_accessor :invoice_number, :customer_code, :key, :currency, :value, :open_value, :available_for_payruns, :match_status, :transaction_number, :date
+    attr_accessor :invoice_number, :customer_code, :key, :currency, :value, :open_value, :available_for_payruns, :status, :transaction_number, :date
 
     class << self
 
@@ -26,7 +26,7 @@ module Twinfield
           value: transaction_xml.css("td[field='fin.trs.line.valuesigned']").text&.to_f,
           open_value: transaction_xml.css("td[field='fin.trs.line.openvaluesigned']").text&.to_f,
           available_for_payruns: transaction_xml.css("td[field='fin.trs.line.availableforpayruns']").text&.to_f,
-          match_status: transaction_xml.css("td[field='fin.trs.line.matchstatus']").text,
+          status: transaction_xml.css("td[field='fin.trs.line.matchstatus']").text,
           customer_code: transaction_xml.css("td[field='fin.trs.line.dim2']").text,
           key: transaction_xml.css("key").text.gsub(/\s/,""),
           date: parse_date(transaction_xml.css("td[field='fin.trs.head.date']").text)
@@ -261,8 +261,18 @@ module Twinfield
 
         build_request = %Q(
           <sort>
-             <field>fin.trs.head.date</field>
+             <field>fin.trs.head.code</field>
           </sort>
+          <column>
+            <field>fin.trs.head.shortname</field>
+            <label>Naam</label>
+            <visible>true</visible>
+          </column>
+          <column>
+            <field>fin.trs.head.code</field>
+            <label>Code</label>
+            <visible>true</visible>
+          </column>
           <column>
              <field>fin.trs.head.number</field>
              <label>transaction_number</label>
@@ -358,7 +368,7 @@ module Twinfield
       end
     end
 
-    def initialize(invoice_number:, customer_code:, key:, currency:, value:, open_value:, available_for_payruns:, match_status:, transaction_number:, date:)
+    def initialize(invoice_number:, customer_code:, key:, currency:, value:, open_value:, available_for_payruns:, status:, transaction_number:, date:)
       self.invoice_number = invoice_number
       self.customer_code = customer_code
       self.key = key
@@ -366,7 +376,7 @@ module Twinfield
       self.value = value
       self.open_value = open_value
       self.available_for_payruns = available_for_payruns
-      self.match_status = match_status
+      self.status = status
       self.transaction_number = transaction_number
       self.date = date
     end
