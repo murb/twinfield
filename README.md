@@ -2,6 +2,8 @@
 
 Twinfield is an international Web service for collaborative online accounting. The Twinfield gem is a simple client for their SOAP-based API.
 
+**Note:** This project started as a clone of the `twinfield`-gem, but [I've been working](CHANGELOG.md) to abstract the soap calls that make communicating with Twinfield so unbearable away. Perhaps I'll release this as a gem on its own.
+
 ## Installing
 
 ### Using Twinfield
