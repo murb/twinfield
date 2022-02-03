@@ -507,8 +507,8 @@ module Twinfield
     end
     alias_method :delete, :destroy
 
-    def sales_transactions
-      Twinfield::Transaction.where(customer_code: code)
+    def transactions(filter_hash = {})
+      Twinfield::Transaction.where(**{customer_code: code}.merge(filter_hash))
     end
 
     def load
