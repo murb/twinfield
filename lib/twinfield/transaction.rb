@@ -363,13 +363,12 @@ module Twinfield
         build_request += if number
           "<column>
               <field>fin.trs.head.number</field>
-              <label>number</label>
+              <label>Boekst.nr.</label>
               <visible>true</visible>
               <ask>true</ask>
-              <operator>equal</operator>
+              <operator>between</operator>
               <from>#{number}</from>
               <to>#{number}</to>
-              <finderparam>#{number}</finderparam>
             </column>
           "
         else

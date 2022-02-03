@@ -64,6 +64,14 @@ describe Twinfield::SalesInvoice do
       end
 
       it "returns a transaction" do
+        invoice = Twinfield::SalesInvoice.new(duedate: Time.now, customer: "1001", invoicetype: "VERKOOP", invoicenumber: "2021-0812")
+        invoice.financials = Twinfield::SalesInvoice::Financials.new(code: "VRK", number: "20210812")
+
+        expect(Twinfield::Transaction).to receive(:find).with(code: "VRK", number: "20210812")
+        invoice.transaction
+      end
+
+      it "returns a transaction" do
         stub_session_wsdl
         stub_create_session
         stub_cluster_session_wsdl
@@ -76,6 +84,7 @@ describe Twinfield::SalesInvoice do
 
         invoice = Twinfield::SalesInvoice.new(duedate: Time.now, customer: "1001", invoicetype: "VERKOOP", invoicenumber: "2021-0812")
         invoice.financials = Twinfield::SalesInvoice::Financials.new(code: "VRK", number: "20210812")
+
         transaction = invoice.transaction
         expect(invoice.transaction).to be_a(Twinfield::Transaction)
       end
