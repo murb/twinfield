@@ -1,6 +1,7 @@
 module Twinfield
   class Transaction < Twinfield::AbstractModel
     extend Twinfield::Helpers::Parsers
+    include Twinfield::Helpers::TransactionMatch
 
     attr_accessor :invoice_number, :customer_code, :key, :currency, :value, :open_value, :available_for_payruns, :status, :number, :date, :code
 

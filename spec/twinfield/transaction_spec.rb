@@ -14,6 +14,16 @@ describe Twinfield::Transaction do
     stub_finder_wsdl
   end
 
+  describe "instance methods" do
+    describe "#to_transaction_match_line_xml" do
+      it "returns a valid piece of xml" do
+        xml = Nokogiri::XML(Twinfield::Transaction.new(code: "VRK", number: "20210120").to_transaction_match_line_xml(1))
+        xml.css("line transcode").text == "VRK"
+        xml.css("line transnumber").text == "20210120"
+        xml.css("line transline").text == "1"
+      end
+    end
+  end
 
   describe "class methods" do
     describe ".where" do

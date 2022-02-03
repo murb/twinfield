@@ -41,6 +41,7 @@ end
 
 # Helpers
 require "twinfield/helpers/parsers"
+require "twinfield/helpers/transaction_match"
 
 require "twinfield/configuration"
 require "twinfield/abstract_model"
@@ -55,6 +56,7 @@ require "twinfield/api/finder"
 # New style models
 require "twinfield/transaction"
 require "twinfield/sales_invoice"
+require "twinfield/payment_transaction"
 require "twinfield/customer"
 
 # Create services (old style)
