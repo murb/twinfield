@@ -83,9 +83,15 @@ The following should be enough to
     invoice.invoice_address # returns the customer's invoice address (Twinfield::Customer::Address, not just a code)
     invoice.delivery_address # returns the full delivery address (Twinfield::Customer::Address, not just a code)
 
+### Find a transaction
+
+    transactions = Twinfield::Transaction.where(invoice_number: 12, code: "VRK")
+
 ### List office
 
     Twinfield::Request::Read.office
+
+
 
 ## Known issues
 

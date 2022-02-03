@@ -29,7 +29,8 @@ module Twinfield
           status: transaction_xml.css("td[field='fin.trs.line.matchstatus']").text,
           customer_code: transaction_xml.css("td[field='fin.trs.line.dim2']").text,
           key: transaction_xml.css("key").text.gsub(/\s/,""),
-          date: parse_date(transaction_xml.css("td[field='fin.trs.head.date']").text)
+          date: parse_date(transaction_xml.css("td[field='fin.trs.head.date']").text),
+          code: transaction_xml.css("td[field='fin.trs.head.code']").text
         )
       end
 
@@ -37,7 +38,7 @@ module Twinfield
         where(customer_code: customer_code, invoice_number: invoice_number).first
       end
 
-      def where(customer_code: nil, invoice_number: nil)
+      def where(customer_code: nil, invoice_number: nil, code: nil)
         # <?xml version="1.0"?>
         # <browse result="1">
         #   <office name="Heden" shortname="">NLA002058</office>
@@ -268,11 +269,7 @@ module Twinfield
             <label>Naam</label>
             <visible>true</visible>
           </column>
-          <column>
-            <field>fin.trs.head.code</field>
-            <label>Code</label>
-            <visible>true</visible>
-          </column>
+
           <column>
              <field>fin.trs.head.number</field>
              <label>transaction_number</label>
@@ -327,6 +324,27 @@ module Twinfield
                </column>"
         end
 
+        build_request += if code
+          "<column>
+              <field>fin.trs.head.code</field>
+              <label>Code</label>
+              <visible>true</visible>
+              <ask>true</ask>
+              <operator>equal</operator>
+              <from>#{code}</from>
+              <to>#{code}</to>
+
+              <finderparam>#{code}</finderparam>
+            </column>
+          "
+        else
+          "<column>
+            <field>fin.trs.head.code</field>
+            <label>Code</label>
+            <visible>true</visible>
+          </column>"
+        end
+
         build_request += if invoice_number
           "<column>
               <field>fin.trs.line.invnumber</field>
@@ -368,7 +386,7 @@ module Twinfield
       end
     end
 
-    def initialize(invoice_number:, customer_code:, key:, currency:, value:, open_value:, available_for_payruns:, status:, transaction_number:, date:)
+    def initialize(invoice_number:, customer_code:, key:, currency:, value:, open_value:, available_for_payruns:, status:, transaction_number:, date:, code:)
       self.invoice_number = invoice_number
       self.customer_code = customer_code
       self.key = key
@@ -379,6 +397,7 @@ module Twinfield
       self.status = status
       self.transaction_number = transaction_number
       self.date = date
+      self.code = code
     end
   end
 end
