@@ -51,6 +51,18 @@ describe Twinfield::SalesInvoice do
 
   describe "instance methods" do
     describe "#transaction" do
+      it "retuns no transaction when no financials info" do
+        stub_session_wsdl
+        stub_create_session
+        stub_cluster_session_wsdl
+        stub_select_company
+        # stub_processxml_wsdl
+
+        invoice = Twinfield::SalesInvoice.new(duedate: Time.now, customer: "1001", invoicetype: "VERKOOP", invoicenumber: "2021-0812")
+        transaction = invoice.transaction
+        expect(invoice.transaction).to be_nil
+      end
+
       it "returns a transaction" do
         stub_session_wsdl
         stub_create_session
@@ -59,11 +71,13 @@ describe Twinfield::SalesInvoice do
         stub_processxml_wsdl
 
         stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
-          with(body: /2021-0812/).
+          with(body: /20210812/).
           to_return(body: File.read(File.expand_path('../../fixtures/cluster/processxml/columns/sales_transactions.xml', __FILE__)))
 
         invoice = Twinfield::SalesInvoice.new(duedate: Time.now, customer: "1001", invoicetype: "VERKOOP", invoicenumber: "2021-0812")
+        invoice.financials = Twinfield::SalesInvoice::Financials.new(code: "VRK", number: "20210812")
         transaction = invoice.transaction
+        expect(invoice.transaction).to be_a(Twinfield::Transaction)
       end
     end
     describe "#to_xml" do

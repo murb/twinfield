@@ -259,7 +259,7 @@ module Twinfield
     end
 
     def transaction
-      @transaction ||= Twinfield::Transaction.find(invoice_number: invoicenumber)
+      @transaction ||= financials&.number ? Twinfield::Transaction.find(invoice_number: financials.number, code: financials.code) : nil
     end
 
     # helper method to calculate a total price

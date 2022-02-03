@@ -2,7 +2,7 @@ module Twinfield
   class Transaction < Twinfield::AbstractModel
     extend Twinfield::Helpers::Parsers
 
-    attr_accessor :invoice_number, :customer_code, :key, :currency, :value, :open_value, :available_for_payruns, :status, :transaction_number, :date
+    attr_accessor :invoice_number, :customer_code, :key, :currency, :value, :open_value, :available_for_payruns, :status, :number, :date, :code
 
     class << self
 
@@ -20,7 +20,7 @@ module Twinfield
         # </tr>"
         # p
         self.new(
-          transaction_number: transaction_xml.css("td[field='fin.trs.head.number']").text,
+          number: transaction_xml.css("td[field='fin.trs.head.number']").text,
           invoice_number: transaction_xml.css("td[field='fin.trs.line.invnumber']").text,
           currency: transaction_xml.css("td[field='fin.trs.head.curcode']").text,
           value: transaction_xml.css("td[field='fin.trs.line.valuesigned']").text&.to_f,
@@ -34,11 +34,11 @@ module Twinfield
         )
       end
 
-      def find(customer_code: nil, invoice_number: nil)
-        where(customer_code: customer_code, invoice_number: invoice_number).first
+      def find(customer_code: nil, invoice_number: nil, code: nil, number: nil)
+        where(customer_code: customer_code, invoice_number: invoice_number, code: code, number: number).first
       end
 
-      def where(customer_code: nil, invoice_number: nil, code: nil)
+      def where(customer_code: nil, invoice_number: nil, code: nil, number: nil)
         # <?xml version="1.0"?>
         # <browse result="1">
         #   <office name="Heden" shortname="">NLA002058</office>
@@ -269,12 +269,6 @@ module Twinfield
             <label>Naam</label>
             <visible>true</visible>
           </column>
-
-          <column>
-             <field>fin.trs.head.number</field>
-             <label>transaction_number</label>
-             <visible>true</visible>
-          </column>
           <column>
             <field>fin.trs.head.date</field>
             <label>Boekdatum</label>
@@ -365,6 +359,26 @@ module Twinfield
           </column>"
         end
 
+        build_request += if number
+          "<column>
+              <field>fin.trs.head.number</field>
+              <label>number</label>
+              <visible>true</visible>
+              <ask>true</ask>
+              <operator>equal</operator>
+              <from>#{number}</from>
+              <to>#{number}</to>
+              <finderparam>#{number}</finderparam>
+            </column>
+          "
+        else
+          "<column>
+            <field>fin.trs.head.number</field>
+            <label>number</label>
+            <visible>true</visible>
+          </column>"
+        end
+
         response = Twinfield::Api::Process.request(:process_xml_string) do
           %Q(
             <columns code="100">
@@ -386,7 +400,7 @@ module Twinfield
       end
     end
 
-    def initialize(invoice_number:, customer_code:, key:, currency:, value:, open_value:, available_for_payruns:, status:, transaction_number:, date:, code:)
+    def initialize(invoice_number: nil, customer_code: nil, key: nil, currency: "EUR", value: nil, open_value: nil, available_for_payruns: nil, status: nil, number: nil, date: nil, code:)
       self.invoice_number = invoice_number
       self.customer_code = customer_code
       self.key = key
@@ -395,7 +409,7 @@ module Twinfield
       self.open_value = open_value
       self.available_for_payruns = available_for_payruns
       self.status = status
-      self.transaction_number = transaction_number
+      self.number = number
       self.date = date
       self.code = code
     end
