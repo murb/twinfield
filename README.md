@@ -89,7 +89,7 @@ The matching transaction can be found using:
 
 ### Find a transaction
 
-    transactions = Twinfield::Transaction.where(invoice_number: 12, code: "VRK")
+    transactions = Twinfield::Browse::Transaction::Customer.where(invoice_number: 12, code: "VRK")
 
 ### Register a payment
 
@@ -101,7 +101,7 @@ The matching transaction can be found using:
 
 Now this payment can be matched against the invoice (if amounts match)):
 
-    trans.match!(Twinfield::Transaction.find(invoice_number: 14, code: "VRK"))
+    trans.match!(Twinfield::Browse::Transaction::Customer.find(invoice_number: 14, code: "VRK"))
 
 ### Get the transactions for a customer
 

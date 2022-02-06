@@ -54,7 +54,8 @@ require "twinfield/api/process"
 require "twinfield/api/finder"
 
 # New style models
-require "twinfield/transaction"
+require "twinfield/browse/transaction/customer"
+require "twinfield/browse/transaction/cost_center"
 require "twinfield/sales_invoice"
 require "twinfield/payment_transaction"
 require "twinfield/customer"

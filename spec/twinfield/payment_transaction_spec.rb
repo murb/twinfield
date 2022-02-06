@@ -76,15 +76,16 @@ describe Twinfield::PaymentTransaction do
 
   describe "#to_match_xml" do
     it "doesn't work if values don't match" do
-      expect {payment_transaction.to_match_xml(Twinfield::Transaction.new(value: 20, code: "VRK"))}.to raise_error(Twinfield::TransactionMatchError)
+      expect {payment_transaction.to_match_xml(Twinfield::Browse::Transaction::Customer.new(value: 20, code: "VRK"))}.to raise_error(Twinfield::TransactionMatchError)
     end
 
     it "returns xml if values match" do
-      expect(payment_transaction.to_match_xml(Twinfield::Transaction.new(value: 60.5, code: "VRK"))).to eq("<match>
+      matchdatestring = Date.today.strftime("%Y%m%d")
+      expect(payment_transaction.to_match_xml(Twinfield::Browse::Transaction::Customer.new(value: 60.5, code: "VRK"))).to eq("<match>
           <set>
             <matchcode>170</matchcode>
             <office>company</office>
-            <matchdate>20220203</matchdate>
+            <matchdate>#{matchdatestring}</matchdate>
             <lines>
               <line><transcode>PIN</transcode><transnumber></transnumber><transline>1</transline></line>
               <line><transcode>VRK</transcode><transnumber></transnumber><transline>2</transline></line>
@@ -110,14 +111,14 @@ describe Twinfield::PaymentTransaction do
       stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
       to_return(body: error_body)
 
-      expect{ Twinfield::Transaction.new(value: 60.5, code: "VRK").match!(payment_transaction)  }.to raise_error(Twinfield::TransactionMatchError)
+      expect{ Twinfield::Browse::Transaction::Customer.new(value: 60.5, code: "VRK").match!(payment_transaction)  }.to raise_error(Twinfield::TransactionMatchError)
     end
 
     it "returns the match when they match" do
       stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
       to_return(body: success_body)
 
-      Twinfield::Transaction.new(value: 60.5, code: "VRK").match!(payment_transaction)
+      Twinfield::Browse::Transaction::Customer.new(value: 60.5, code: "VRK").match!(payment_transaction)
 
       # nothing is really stored in the match it seems; but side effect is that the transactions change from available to matched
     end

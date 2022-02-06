@@ -203,14 +203,14 @@ describe Twinfield::Customer do
     end
 
     describe "#transactions" do
-      it "returns Twinfield::Transactions" do
+      it "returns Twinfield::Browse::Transaction::Customers" do
         stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
           to_return(body: File.read(File.expand_path('../../fixtures/cluster/processxml/columns/sales_transactions.xml', __FILE__)))
 
         customer = Twinfield::Customer.new(name: "Maarten Brouwers", code: "1003")
         transaction = customer.transactions.first
 
-        expect(transaction).to be_a(Twinfield::Transaction)
+        expect(transaction).to be_a(Twinfield::Browse::Transaction::Customer)
         expect(transaction.value).to eql(2200.0)
       end
 
@@ -222,7 +222,7 @@ describe Twinfield::Customer do
         customer = Twinfield::Customer.new(name: "Maarten Brouwers", code: "1003")
         transaction = customer.transactions(code: "VRFK").first
 
-        expect(transaction).to be_a(Twinfield::Transaction)
+        expect(transaction).to be_a(Twinfield::Browse::Transaction::Customer)
         expect(transaction.value).to eql(2200.0)
       end
 

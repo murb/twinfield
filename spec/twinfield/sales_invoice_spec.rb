@@ -67,7 +67,7 @@ describe Twinfield::SalesInvoice do
         invoice = Twinfield::SalesInvoice.new(duedate: Time.now, customer: "1001", invoicetype: "VERKOOP", invoicenumber: "2021-0812")
         invoice.financials = Twinfield::SalesInvoice::Financials.new(code: "VRK", number: "20210812")
 
-        expect(Twinfield::Transaction).to receive(:find).with(code: "VRK", number: "20210812")
+        expect(Twinfield::Browse::Transaction::Customer).to receive(:find).with(code: "VRK", number: "20210812")
         invoice.transaction
       end
 
@@ -86,7 +86,7 @@ describe Twinfield::SalesInvoice do
         invoice.financials = Twinfield::SalesInvoice::Financials.new(code: "VRK", number: "20210812")
 
         transaction = invoice.transaction
-        expect(invoice.transaction).to be_a(Twinfield::Transaction)
+        expect(invoice.transaction).to be_a(Twinfield::Browse::Transaction::Customer)
       end
     end
     describe "#to_xml" do
