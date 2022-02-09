@@ -15,7 +15,7 @@ module Twinfield
               yearperiod: transaction_xml.css("td[field='fin.trs.head.yearperiod']").text,
               currency: transaction_xml.css("td[field='fin.trs.head.curcode']").text,
               value: transaction_xml.css("td[field='fin.trs.line.valuesigned']").text&.to_f,
-              status: transaction_xml.css("td[field='fin.trs.line.matchstatus']").text,
+              status: transaction_xml.css("td[field='fin.trs.head.status']").text,
               dim1: transaction_xml.css("td[field='fin.trs.line.dim1']").text,
               dim2: transaction_xml.css("td[field='fin.trs.line.dim2']").text,
               key: transaction_xml.css("key").text.gsub(/\s/,""),
