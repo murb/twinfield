@@ -21,6 +21,14 @@ describe Twinfield::Customer do
     Twinfield::Customer.find(1000)
   end
 
+  describe Twinfield::Customer::Financials do
+    describe ".to_xml" do
+      it "returns a near empty xml when blank" do
+        expect(Twinfield::Customer::Financials.new(level: 2).to_xml).to eq("<financials>\n  <level>2</level>\n  <meansofpayment>none</meansofpayment>\n</financials>")
+      end
+    end
+  end
+
   describe "class methods" do
     describe ".find" do
       it "returns a sales invoice" do

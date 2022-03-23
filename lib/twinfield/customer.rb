@@ -145,27 +145,31 @@ module Twinfield
 
       attr_accessor :matchtype, :accounttype, :subanalyse, :duedays, :level, :payavailable, :meansofpayment, :paycode, :ebilling, :ebillmail, :substitutewith, :substitutionlevel, :relationsreference, :vattype, :vatcode, :vatobligatory, :performancetype, :collectmandate, :collectionschema, :childvalidations
 
-      def initialize(matchtype: nil, accounttype: nil, subanalyse: nil, duedays: nil, level: nil, payavailable: nil, meansofpayment: nil, paycode: nil, ebilling: nil, ebillmail: nil, substitutewith: nil, substitutionlevel: nil, relationsreference: nil, vattype: nil, vatcode: nil, vatobligatory: nil, performancetype: nil, collectmandate: nil, collectionschema: nil, childvalidations: nil)
+      def initialize(matchtype: nil, accounttype: nil, subanalyse: nil, duedays: nil, level: nil, payavailable: nil, meansofpayment: nil, paycode: nil, ebilling: false, ebillmail: nil, substitutewith: nil, substitutionlevel: nil, relationsreference: nil, vattype: nil, vatcode: nil, vatobligatory: nil, performancetype: nil, collectmandate: nil, collectionschema: nil, childvalidations: nil)
         @matchtype = matchtype
         @accounttype = accounttype
         @subanalyse = subanalyse
         @duedays = duedays
         @level = level
-        @payavailable = payavailable
+        @payavailable = payavailable # Direct Debit / Automatische incasso
         @meansofpayment = meansofpayment
         @paycode = paycode
         @ebilling = ebilling
         @ebillmail = ebillmail
         @substitutewith = substitutewith
         @substitutionlevel = substitutionlevel
-        @relationsreference = relationsreference
-        @vattype = vattype
+        @relationsreference = relationsreference # not in use
+        @vattype = vattype # not in use
         @vatcode = vatcode
         @vatobligatory = vatobligatory
         @performancetype = performancetype
         @collectmandate = collectmandate.is_a?(Hash) ? Twinfield::Customer::CollectMandate.new(**collectmandate) : collectmandate
         @collectionschema = collectionschema
         @childvalidations = childvalidations
+      end
+
+      def meansofpayment
+        @meansofpayment || (payavailable ? "paymentfile" : "none")
       end
 
       def to_h
@@ -197,25 +201,25 @@ module Twinfield
       def to_xml
         Nokogiri::XML::Builder.new do |xml|
           xml.financials do
-            xml.matchtype matchtype
-            xml.accounttype accounttype
-            xml.subanalyse subanalyse
-            xml.duedays duedays
-            xml.level level
-            xml.payavailable payavailable
-            xml.meansofpayment meansofpayment
-            xml.paycode paycode
-            xml.ebilling ebilling
-            xml.ebillmail ebillmail
-            xml.substitutewith substitutewith
-            xml.substitutionlevel substitutionlevel
-            xml.relationsreference relationsreference
-            xml.vattype vattype
-            xml.vatcode vatcode
-            xml.vatobligatory vatobligatory
-            xml.performancetype performancetype
+            xml.matchtype matchtype if matchtype
+            xml.accounttype accounttype if accounttype
+            xml.subanalyse subanalyse if subanalyse
+            xml.duedays duedays if duedays
+            xml.level level if level
+            xml.payavailable payavailable if payavailable
+            xml.meansofpayment meansofpayment if meansofpayment
+            xml.paycode paycode if paycode
+            xml.ebilling ebilling if ebilling
+            xml.ebillmail ebillmail if ebillmail
+            xml.substitutewith substitutewith if substitutewith
+            xml.substitutionlevel substitutionlevel if substitutionlevel
+            xml.relationsreference relationsreference if relationsreference
+            xml.vattype vattype if vattype
+            xml.vatcode vatcode if vatcode
+            xml.vatobligatory vatobligatory if vatobligatory
+            xml.performancetype performancetype if performancetype
             xml << collectmandate.to_xml if collectmandate
-            xml.collectionschema collectionschema
+            xml.collectionschema collectionschema if collectionschema
           end
         end.doc.root.to_xml
       end
