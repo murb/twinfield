@@ -268,6 +268,10 @@ module Twinfield
       end
       alias_method :to_hash, :to_h
 
+      def present?
+        "#{responsibleuser}#{basecreditlimit}#{sendreminder}#{reminderemail}#{blocked}#{freetext3}#{freetext1}#{freetext2}#{comment}".strip != ""
+      end
+
       def initialize(responsibleuser: nil, basecreditlimit: nil, sendreminder: nil, reminderemail: nil, blocked: nil, freetext1: nil, freetext2: nil, freetext3: nil, comment: nil)
         @responsibleuser = responsibleuser
         @basecreditlimit = basecreditlimit
@@ -283,10 +287,10 @@ module Twinfield
       def to_xml
         Nokogiri::XML::Builder.new do |xml|
           xml.creditmanagement do
-            xml.responsibleuser responsibleuser
-            xml.basecreditlimit basecreditlimit
-            xml.sendreminder sendreminder
-            xml.reminderemail reminderemail
+            xml.responsibleuser responsibleuser if responsibleuser
+            xml.basecreditlimit basecreditlimit if basecreditlimit
+            xml.sendreminder sendreminder if sendreminder
+            xml.reminderemail reminderemail if reminderemail
             xml.blocked blocked
             xml.freetext1 freetext1
             xml.freetext2 freetext2
@@ -477,7 +481,7 @@ module Twinfield
           xml.endyear endyear if endyear
           xml.website website
           xml << financials&.to_xml
-          xml << creditmanagement&.to_xml
+          xml << creditmanagement&.to_xml if creditmanagement&.present?
           xml << remittanceadvice&.to_xml
           xml.addresses do
             addresses.each do |line|
