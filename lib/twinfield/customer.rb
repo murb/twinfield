@@ -316,6 +316,8 @@ module Twinfield
     end
 
     class Address
+      TYPES = [:invoice, :postal, :contact]
+
       attr_accessor :name, :country, :ictcountrycode, :city, :postcode, :telephone, :telefax, :email, :contact, :field1, :field2, :field3, :field4, :field5, :field6, :type, :default, :id
 
       def initialize(name: , country: nil, ictcountrycode: nil, city: nil, postcode: nil, telephone: nil, telefax: nil, email: nil, contact: nil, field1: nil, field2: nil, field3: nil, field4: nil, field5: nil, field6: nil, id: nil, type: nil, default: nil)
