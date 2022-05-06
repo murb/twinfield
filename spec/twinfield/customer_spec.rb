@@ -51,6 +51,14 @@ describe Twinfield::Customer do
         expect(customer.addresses[0].type).to eq("invoice")
         expect(customer.modified).to eq DateTime.new(2021,10,13,20,30,53)
       end
+
+      it "deals with an invalid code message" do
+        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
+          with(body: /\<dimtype\>DEB\<\/dimtype\>/).
+          to_return(body: '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><ProcessXmlStringResponse xmlns="http://www.twinfield.com/"><ProcessXmlStringResult>&lt;dimension result="0"&gt;&lt;office name="Heden" shortname=""&gt;NLA002058&lt;/office&gt;&lt;type name="Debiteuren" shortname="Debiteuren"&gt;DEB&lt;/type&gt;&lt;code msgtype="error" msg="De code voldoet niet aan het formaat 1[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]." result="0"&gt;100011&lt;/code&gt;&lt;/dimension&gt;</ProcessXmlStringResult></ProcessXmlStringResponse></soap:Body></soap:Envelope>')
+        customer = Twinfield::Customer.find(1000)
+        expect(customer).to be_nil
+      end
     end
 
     describe ".new" do

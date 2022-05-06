@@ -127,7 +127,7 @@ module Twinfield
         obj = self.new(id: nokogiri_xml.attributes["id"].text, default: nokogiri_xml.attributes["default"].text)
         obj.ascription = nokogiri_xml.css("ascription").text
         obj.accountnumber = nokogiri_xml.css("accountnumber").text
-        obj.address = Address.from_xml(nokogiri_xml.css("address")[0]) if nokogiri_xml.css("address")[0].children.count > 0
+        obj.address = Address.from_xml(nokogiri_xml.css("address")[0]) if nokogiri_xml.css("address")[0] && nokogiri_xml.css("address")[0].children.count > 0
         obj.bankname = nokogiri_xml.css("bankname").text
         obj.biccode = nokogiri_xml.css("biccode").text
         obj.city = nokogiri_xml.css("city").text
@@ -570,9 +570,13 @@ module Twinfield
 
       def from_xml(nokogiri_or_string)
         nokogiri = nokogiri_or_string.is_a?(Nokogiri::XML::Document) ? nokogiri_or_string : Nokogiri::XML(nokogiri_or_string)
+        dimension = nokogiri.css("dimension")[0]
 
         obj = self.new(shortname: nokogiri.css("dimension > shortname").text, name: nokogiri.css("dimension > name").text, code: nokogiri.css("dimension > code").text)
-        obj.status= nokogiri.css("dimension")[0].attributes["status"].text
+        if dimension.attributes["result"]&.text == "0"
+          return nil
+        end
+        obj.status= dimension.attributes["status"].text
         obj.office= nokogiri.css("dimension > office").text
         obj.uid= nokogiri.css("dimension > uid").text
         obj.inuse= nokogiri.css("dimension > inuse").text
