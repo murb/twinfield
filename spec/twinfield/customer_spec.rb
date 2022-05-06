@@ -14,6 +14,15 @@ describe Twinfield::Customer do
     stub_finder_wsdl
   end
 
+  def stub_customer_ids_request(values)
+    stub_request(:post, "https://accounting.twinfield.com/webservices/finder.asmx")
+    .with(body: /maxRows\>10000\<\/ma(.*)\>\<string\>dimtype\<\/string\>\<string\>DEB\<\/string\>/)
+    .to_return(body: '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body>
+      <SearchResponse xmlns="http://www.twinfield.com/"><SearchResult /><data><TotalRows>17</TotalRows><Columns><string>Code</string><string>Naam</string></Columns>
+      <Items>'+values.map{|k,v,| "<ArrayOfString><string>#{k}</string><string>#{v}</string></ArrayOfString>"}.join("")+'
+      </Items></data></SearchResponse></soap:Body></soap:Envelope>')
+  end
+
   let(:existing_customer) do
     stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
       with(body: /\<dimtype\>DEB\<\/dimtype\>/).
@@ -159,11 +168,18 @@ describe Twinfield::Customer do
 
     describe ".next_unused_twinfield_customer_code" do
       it "returns a new code" do
-        stub_request(:post, "https://accounting.twinfield.com/webservices/finder.asmx")
-        .with(body: /maxRows\>10000\<\/ma(.*)\>\<string\>dimtype\<\/string\>\<string\>DEB\<\/string\>/)
-        .to_return(body: '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><SearchResponse xmlns="http://www.twinfield.com/"><SearchResult /><data><TotalRows>17</TotalRows><Columns><string>Code</string><string>Naam</string></Columns><Items><ArrayOfString><string>1000</string><string>Waardedijk</string></ArrayOfString><ArrayOfString><string>1001</string><string>Witteveen</string></ArrayOfString><ArrayOfString><string>1002</string><string>Bosman</string></ArrayOfString><ArrayOfString><string>1003</string><string>Samkalde</string></ArrayOfString></Items></data></SearchResponse></soap:Body></soap:Envelope>')
-
+        stub_customer_ids_request({"1000": "Waardewijk", "1001": "Witteveen", "1002": "Bosman", "1003": "Samkalde"})
         expect(Twinfield::Customer.next_unused_twinfield_customer_code).to eq("1004")
+      end
+
+      it "returns a new code" do
+        stub_customer_ids_request({"1000": "Waardewijk", "1001": "Witteveen", "1002": "Bosman",  "9003": "Company", "1003": "Samkalde"})
+        expect(Twinfield::Customer.next_unused_twinfield_customer_code).to eq("9004")
+      end
+
+      it "returns a new code within a given range" do
+        stub_customer_ids_request({"1000": "Waardewijk", "1001": "Witteveen", "1002": "Bosman",  "9003": "Company", "1003": "Samkalde"})
+        expect(Twinfield::Customer.next_unused_twinfield_customer_code(1000..2000)).to eq("1004")
       end
     end
   end

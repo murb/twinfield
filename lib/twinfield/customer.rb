@@ -533,8 +533,10 @@ module Twinfield
 
       # helper method that calculates the next unused code
       # @return String
-      def next_unused_twinfield_customer_code
-        latest = Twinfield::Customer.all.map(&:code).map(&:to_i).sort.last
+      def next_unused_twinfield_customer_code range=nil
+        current_codes = Twinfield::Customer.all.map(&:code).map(&:to_i).sort
+        current_codes_in_range = current_codes & range.to_a if range
+        latest = (current_codes_in_range || current_codes).last
         latest += 1
         raise "invalid new customer code" if latest == 1
         latest.to_s
