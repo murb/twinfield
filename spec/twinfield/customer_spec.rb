@@ -181,6 +181,11 @@ describe Twinfield::Customer do
         stub_customer_ids_request({"1000": "Waardewijk", "1001": "Witteveen", "1002": "Bosman",  "9003": "Company", "1003": "Samkalde"})
         expect(Twinfield::Customer.next_unused_twinfield_customer_code(1000..2000)).to eq("1004")
       end
+
+      it "returns a new code even when nothing exists in that range" do
+        stub_customer_ids_request({"1000": "Waardewijk", "1001": "Witteveen", "1002": "Bosman",  "9003": "Company", "1003": "Samkalde"})
+        expect(Twinfield::Customer.next_unused_twinfield_customer_code(10000..20000)).to eq("10000")
+      end
     end
   end
 

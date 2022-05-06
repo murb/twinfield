@@ -537,7 +537,7 @@ module Twinfield
         current_codes = Twinfield::Customer.all.map(&:code).map(&:to_i).sort
         current_codes_in_range = current_codes & range.to_a if range
         latest = (current_codes_in_range || current_codes).last
-        latest += 1
+        latest = latest ? latest + 1 : range.to_a.first
         raise "invalid new customer code" if latest == 1
         latest.to_s
       end
