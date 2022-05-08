@@ -572,10 +572,11 @@ module Twinfield
         nokogiri = nokogiri_or_string.is_a?(Nokogiri::XML::Document) ? nokogiri_or_string : Nokogiri::XML(nokogiri_or_string)
         dimension = nokogiri.css("dimension")[0]
 
-        obj = self.new(shortname: nokogiri.css("dimension > shortname").text, name: nokogiri.css("dimension > name").text, code: nokogiri.css("dimension > code").text)
         if dimension.attributes["result"]&.text == "0"
           return nil
         end
+
+        obj = self.new(shortname: nokogiri.css("dimension > shortname").text, name: nokogiri.css("dimension > name").text, code: nokogiri.css("dimension > code").text)
         obj.status= dimension.attributes["status"].text
         obj.office= nokogiri.css("dimension > office").text
         obj.uid= nokogiri.css("dimension > uid").text
