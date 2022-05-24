@@ -104,6 +104,27 @@ describe Twinfield::SalesInvoice do
       end
     end
 
+    describe "#to_h" do
+      let(:invoice) {
+        invoice = Twinfield::SalesInvoice.new(duedate: Time.now, customer: "1001", invoicetype: "VERKOOP")
+        invoice.lines= [Twinfield::SalesInvoice::Line.new(article: "A")]
+        invoice
+      }
+      it "renders a hash" do
+
+
+        expect(invoice.to_h).to be_a Hash
+        expect(invoice.to_h[:customer_code]).to eq(1001)
+        expect(invoice.to_h[:lines][0][:article]).to eq("A")
+      end
+
+      it "enables a roundtrip" do
+        invoice2 = Twinfield::SalesInvoice.new(**invoice.to_h)
+        expect(invoice2.duedate).to eq(invoice.duedate)
+        expect(invoice2.lines.first.article).to eq("A")
+      end
+    end
+
     describe "#save" do
       before do
         stub_session_wsdl

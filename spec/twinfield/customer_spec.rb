@@ -124,6 +124,7 @@ describe Twinfield::Customer do
         expect(c.code).to eq("1004")
         expect(c.addresses.first.city).to eq("Rotterdam")
         expect(c.financials.collectmandate.id).to eq("1004")
+        expect(c.financials.payavailable).to eq("true")
         expect(c.banks.first.iban).to eq("NL30TRIO0123456789")
       end
     end

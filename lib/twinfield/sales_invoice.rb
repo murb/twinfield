@@ -9,6 +9,13 @@ module Twinfield
         @code = code
         @number = number
       end
+
+      def to_h
+        {
+          code: code,
+          number: number
+        }
+      end
     end
     class VatLine
       attr_accessor :vatcode, :vatvalue, :performancetype, :performancedate, :vatname
@@ -19,6 +26,16 @@ module Twinfield
         @performancetype = performancetype
         @performancedate = performancedate
         @vatname = vatname
+      end
+
+      def to_h
+        {
+          vatcode: vatcode,
+          vatvalue: vatvalue,
+          performancetype: performancetype,
+          performancedate: performancedate,
+          vatname: vatname
+        }
       end
     end
     class Line < Twinfield::AbstractModel
@@ -63,6 +80,27 @@ module Twinfield
             xml.performancedate performancedate.strftime("%Y%m%d") if performancedate
           }
         end.doc.root.to_xml
+      end
+
+      def to_h
+        {
+          id: id,
+          article: article,
+          subarticle: subarticle,
+          quantity: quantity,
+          units: units,
+          allowdiscountorpremium: allowdiscountorpremium,
+          description: description,
+          unitspriceexcl: unitspriceexcl,
+          unitspriceinc: unitspriceinc,
+          freetext1: freetext1,
+          freetext2: freetext2,
+          freetext3: freetext3,
+          dim1: dim1,
+          vatcode: vatcode,
+          performancetype: performancetype,
+          performancedate: performancedate
+        }
       end
     end
 
@@ -200,9 +238,9 @@ module Twinfield
 
     attr_accessor :invoicetype, :invoicedate, :duedate, :performancedate, :bank, :invoiceaddressnumber, :deliveraddressnumber, :customer_code, :period, :currency, :status, :paymentmethod, :headertext, :footertext, :lines, :office, :invoicenumber, :vatvalue, :valueinc, :financials, :vat_lines
 
-    def initialize(duedate: nil, invoicetype:, invoicedate: nil, performancedate: nil, bank: nil, invoiceaddressnumber: nil, deliveraddressnumber: nil, customer:, period: nil, currency: nil, status: "concept", paymentmethod: nil, headertext: nil, footertext: nil, office: nil, invoicenumber: nil)
-      self.lines = []
-      self.vat_lines = []
+    def initialize(duedate: nil, invoicetype:, invoicedate: nil, performancedate: nil, bank: nil, invoiceaddressnumber: nil, deliveraddressnumber: nil, customer: nil, customer_code: nil, period: nil, currency: nil, status: "concept", paymentmethod: nil, headertext: nil, footertext: nil, office: nil, invoicenumber: nil, lines: [], vat_lines: [])
+      self.lines = lines.collect{|a| SalesInvoice::Line.new(**a.to_h)}
+      self.vat_lines = vat_lines.collect{|a| SalesInvoice::VatLine.new(**a.to_h)}
       @invoicetype = invoicetype
       @invoicedate = invoicedate
       @duedate = duedate
@@ -210,7 +248,8 @@ module Twinfield
       @bank = bank
       @invoiceaddressnumber = invoiceaddressnumber
       @deliveraddressnumber = deliveraddressnumber
-      self.customer = customer
+      self.customer = customer || customer_code
+      raise ArgumentError.new("missing keyword: :customer or :customer_code") unless self.customer_code
       @period = period
       @currency = currency
       @status = status
@@ -295,6 +334,29 @@ module Twinfield
           end
         }
       end.doc.root.to_xml
+    end
+
+    def to_h
+      {
+        lines: lines.collect(&:to_h),
+        vat_lines: vat_lines.collect(&:to_h),
+        invoicetype: invoicetype,
+        invoicedate: invoicedate,
+        duedate: duedate,
+        performancedate: performancedate,
+        bank: bank,
+        invoiceaddressnumber: invoiceaddressnumber,
+        deliveraddressnumber: deliveraddressnumber,
+        customer_code: customer_code,
+        period: period,
+        currency: currency,
+        status: status,
+        paymentmethod: paymentmethod,
+        headertext: headertext,
+        footertext: footertext,
+        office: office || Twinfield.configuration.company,
+        invoicenumber:invoicenumber
+      }
     end
 
     def save
