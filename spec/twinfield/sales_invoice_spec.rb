@@ -111,8 +111,6 @@ describe Twinfield::SalesInvoice do
         invoice
       }
       it "renders a hash" do
-
-
         expect(invoice.to_h).to be_a Hash
         expect(invoice.to_h[:customer_code]).to eq(1001)
         expect(invoice.to_h[:lines][0][:article]).to eq("A")
@@ -140,6 +138,8 @@ describe Twinfield::SalesInvoice do
           to_return(body: File.read(File.expand_path('../../fixtures/cluster/processxml/invoice/create_error.xml', __FILE__)))
         invoice = Twinfield::SalesInvoice.new(duedate: Time.now, customer: "1001", invoicetype: "VERKOOP")
         expect{ invoice.save }.to raise_error(Twinfield::Create::Error)
+        invoice = Twinfield::SalesInvoice.new(duedate: Time.now, customer: "1001", invoicetype: "VERKOOP")
+        expect{ invoice.save }.to raise_error(Twinfield::Create::EmptyInvoice)
       end
 
       it "succeeds" do

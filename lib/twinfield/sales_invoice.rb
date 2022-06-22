@@ -370,7 +370,11 @@ module Twinfield
         self.invoicenumber = xml.at_css("invoicenumber").content
         self
       else
-        raise Twinfield::Create::Error.new(xml.css("[msg]").map{ |x| x.attributes["msg"].value }.join(" "), object: self)
+        if lines.count == 0
+          raise Twinfield::Create::EmptyInvoice.new(xml.css("[msg]").map{ |x| x.attributes["msg"].value }.join(" "), object: self)
+        else
+          raise Twinfield::Create::Error.new(xml.css("[msg]").map{ |x| x.attributes["msg"].value }.join(" "), object: self)
+        end
       end
     end
   end
