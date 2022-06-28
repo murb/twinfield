@@ -2,7 +2,7 @@
 
 Twinfield is an international Web service for collaborative online accounting. The Twinfield gem is a simple client for their SOAP-based API.
 
-**Note:** This project started as a clone of the `twinfield`-gem, but [I've been working](CHANGELOG.md) to abstract the soap calls that make communicating with Twinfield so unbearable away. Perhaps I'll release this as a gem on its own.
+**Note:** This project started as a clone of the `twinfield`-gem, but [I've been working](CHANGELOG.md) to abstract the soap calls away. Perhaps I'll release this as a gem on its own. For now see "Installing > Using Twinfield".
 
 ## Installing
 
@@ -16,20 +16,13 @@ Run the following in your console to install with Bundler:
 
     bundle install
 
-As a companion gem a [`omniauth-twinfield`-gem](https://github.com/murb/omniauth-twinfield) was created to help setting up OAuth.
+For OAuth authentication, now the default As a companion gem a [`omniauth-twinfield`-gem](https://github.com/murb/omniauth-twinfield) was created to help setting up OAuth.
 
 ## Configuration
 
-Add a config block to your environment.rb:
+Your application will authenticate to Twinfield using OAuth. A companion gem was created to help setting up OAuth communication with your app: [`omniauth-twinfield`-gem](https://github.com/murb/omniauth-twinfield).
 
-    Twinfield.configure do |config|
-      config.username = ""
-      config.password = ""
-      config.organisation = ""
-      config.company = ""
-    end
-
-In OAuth settings initializization typically occurs later, but configuration is no different. Cluster and access token are retrieved in the OAuth flow.
+Cluster and access token are retrieved in the OAuth flow:
 
     Twinfield.configure do |config|
       config.session_type = "Twinfield::Api::OAuthSession"
@@ -40,7 +33,7 @@ In OAuth settings initializization typically occurs later, but configuration is 
 
     Twinfield::Request::List.offices
 
-    Now configure the company you're looking for:
+Now configure the company you're looking for:
 
     Twinfield.configuration.company="NL123"
 
