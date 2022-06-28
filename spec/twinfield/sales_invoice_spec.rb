@@ -47,6 +47,15 @@ describe Twinfield::SalesInvoice do
         expect(invoice).to eq(nil)
       end
     end
+
+    describe ".new" do
+      it "initializes from a hash" do
+        hash = {:lines=>[{:id=>"1", :article=>"HUUR", :subarticle=>"1", :quantity=>1, :units=>1, :allowdiscountorpremium=>"true", :description=>"Huur", :unitspriceexcl=>7.23, :unitspriceinc=>nil, :freetext1=>nil, :freetext2=>nil, :freetext3=>nil, :dim1=>"8000", :vatcode=>"VH", :performancetype=>nil, :performancedate=>nil}, {:id=>"2", :article=>"-", :subarticle=>nil, :quantity=>nil, :units=>nil, :allowdiscountorpremium=>nil, :description=>"Beschrijving", :unitspriceexcl=>nil, :unitspriceinc=>nil, :freetext1=>nil, :freetext2=>nil, :freetext3=>nil, :dim1=>nil, :vatcode=>nil, :performancetype=>nil, :performancedate=>nil}], :vat_lines=>[{:vatcode=>"VH", :vatvalue=>1.73, :performancetype=>"", :performancedate=>"", :vatname=>"BTW 21%"}], :invoicetype=>"FACTUUR", :invoicedate=>"2022-06-24", :duedate=>"2022-07-24", :performancedate=>nil, :bank=>"BNK", :invoiceaddressnumber=>1, :deliveraddressnumber=>1, :customer_code=>2321, :period=>"2022/6", :currency=>"EUR", :status=>"final", :paymentmethod=>"bank", :headertext=>"", :footertext=>"Footer", :office=>"NL123", :invoicenumber=>"1622"}
+        invoice = Twinfield::SalesInvoice.new(**hash)
+        expect(invoice.invoicedate).to eq(Date.new(2022,6,24))
+        expect(invoice.invoicedate).not_to eq("2022-06-24")
+      end
+    end
   end
 
   describe "instance methods" do

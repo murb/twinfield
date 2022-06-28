@@ -242,9 +242,9 @@ module Twinfield
       self.lines = lines.collect{|a| SalesInvoice::Line.new(**a.to_h)}
       self.vat_lines = vat_lines.collect{|a| SalesInvoice::VatLine.new(**a.to_h)}
       @invoicetype = invoicetype
-      @invoicedate = invoicedate
-      @duedate = duedate
-      @performancedate = performancedate
+      @invoicedate = invoicedate.is_a?(String) ? Date.parse(invoicedate) : invoicedate
+      @duedate = duedate.is_a?(String) ? Date.parse(duedate) : duedate
+      @performancedate = performancedate.is_a?(String) ? Date.parse(performancedate) : performancedate
       @bank = bank
       @invoiceaddressnumber = invoiceaddressnumber
       @deliveraddressnumber = deliveraddressnumber
