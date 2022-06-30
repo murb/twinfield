@@ -276,6 +276,10 @@ module Twinfield
       end
     end
 
+    def final?
+      ["final", :final].include? status
+    end
+
     def customer= customer
       if customer.is_a?(String) || customer.is_a?(Numeric)
         @customer_code = customer.to_i

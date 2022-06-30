@@ -59,6 +59,18 @@ describe Twinfield::SalesInvoice do
   end
 
   describe "instance methods" do
+    describe "#final?" do
+      it "returns false by default" do
+        invoice = Twinfield::SalesInvoice.new(invoicetype: "F", customer_code: 12)
+        expect(invoice.final?).to be_falsey
+      end
+
+      it "returns true when status == final" do
+        invoice = Twinfield::SalesInvoice.new(invoicetype: "F", customer_code: 12, status: :final)
+        expect(invoice.final?).to be_truthy
+      end
+    end
+
     describe "#transaction" do
       it "retuns no transaction when no financials info" do
         stub_session_wsdl
