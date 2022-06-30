@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <soap:Body>
+    <ProcessXmlStringResponse xmlns="http://www.twinfield.com/">
+      <ProcessXmlStringResult>
+        <![CDATA[
+        <salesinvoice raisewarning="false" autobalancevat="true" msgtype="error" msg="Kan geen factuur bijwerken die geen concept meer is." result="0">
+          <header>
+            <office>NLA002058</office>
+            <invoicenumber>1630</invoicenumber>
+            <invoicetype>FACTUUR</invoicetype>
+            <invoicedate>20220630</invoicedate>
+            <duedate>20220730</duedate>
+            <bank>BNK</bank>
+            <invoiceaddressnumber>1</invoiceaddressnumber>
+            <deliveraddressnumber>1</deliveraddressnumber>
+            <customer>1003</customer>
+            <period>2022/6</period>
+            <currency>EUR</currency>
+            <status>final</status>
+            <paymentmethod>bank</paymentmethod>
+            <headertext/>
+            <footertext/>
+          </header>
+          <lines>
+            <line id="1">
+              <article>VERKOOPHEDEN</article>
+              <quantity>1</quantity>
+              <allowdiscountorpremium>true</allowdiscountorpremium>
+              <unitspriceexcl>330.58</unitspriceexcl>
+              <subarticle/>
+              <units>1</units>
+              <vatcode name="BTW 21%" shortname="V 21%">VH</vatcode>
+              <description>Verkoop kunstwerk - Heden</description>
+              <performancedate/>
+              <performancetype/>
+              <freetext1/>
+              <freetext2/>
+              <freetext3/>
+              <dim1 name="Verkoop kunstwerk - Heden" shortname="">8100</dim1>
+              <valueexcl>330.58</valueexcl>
+              <vatvalue>69.42</vatvalue>
+              <valueinc>400.00</valueinc>
+            </line>
+            <line id="2">
+              <article>-</article>
+              <description>I93023:  - Herbarium</description>
+            </line>
+          </lines>
+          <totals>
+            <valueexcl>330.58</valueexcl>
+            <valueinc>400.00</valueinc>
+          </totals>
+          <vatlines>
+            <vatline>
+              <vatcode name="BTW 21%" shortname="V 21%" percentage="21.000000000">VH</vatcode>
+              <vatvalue>69.42</vatvalue>
+              <performancetype/>
+              <performancedate/>
+            </vatline>
+          </vatlines>
+        </salesinvoice>
+        ]]>
+      </ProcessXmlStringResult>
+    </ProcessXmlStringResponse>
+  </soap:Body>
+</soap:Envelope>

@@ -163,6 +163,17 @@ describe Twinfield::SalesInvoice do
         expect{ invoice.save }.to raise_error(Twinfield::Create::EmptyInvoice)
       end
 
+      it "reports errors when fixed because finalized" do
+        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
+          with(body: /<customer>1001<\/customer>/).
+          to_return(body: File.read(File.expand_path('../../fixtures/cluster/processxml/invoice/create_final_error.xml', __FILE__)))
+        invoice = Twinfield::SalesInvoice.new(duedate: Time.now, customer: "1001", invoicetype: "VERKOOP")
+        expect{ invoice.save }.to raise_error(Twinfield::Create::Error)
+        invoice = Twinfield::SalesInvoice.new(duedate: Time.now, customer: "1001", invoicetype: "VERKOOP")
+        expect{ invoice.save }.to raise_error(Twinfield::Create::Finalized)
+      end
+
+
       it "succeeds" do
         stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
           with(body: /<customer>1001<\/customer>/).
