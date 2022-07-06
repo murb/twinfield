@@ -86,10 +86,10 @@ The matching transaction can be found using:
 
 ### Register a payment
 
-    trans = Twinfield::PaymentTransaction.new(code: "PIN", currency: "EUR")
-    trans.lines << Twinfield::PaymentTransaction::Line.new(type: :total, balance_code: "1230", value: 0.0, debitcredit: :debit)
-    trans.lines << Twinfield::PaymentTransaction::Line.new(type: :detail, balance_code: 1300, value: 60.5, debitcredit: :credit, customer_code: 1003, invoicenumber: 14)
-    trans.lines << Twinfield::PaymentTransaction::Line.new(type: :detail, balance_code: 1234, value: 60.5, debitcredit: :debit)
+    trans = Twinfield::Transaction.new(code: "PIN", currency: "EUR")
+    trans.lines << Twinfield::Transaction::Line.new(type: :total, balance_code: "1230", value: 0.0, debitcredit: :debit)
+    trans.lines << Twinfield::Transaction::Line.new(type: :detail, balance_code: 1300, value: 60.5, debitcredit: :credit, customer_code: 1003, invoicenumber: 14)
+    trans.lines << Twinfield::Transaction::Line.new(type: :detail, balance_code: 1234, value: 60.5, debitcredit: :debit)
     trans.save
 
 Now this payment can be matched against the invoice (if amounts match)):

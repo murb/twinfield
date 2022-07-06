@@ -57,7 +57,7 @@ require "twinfield/api/finder"
 require "twinfield/browse/transaction/customer"
 require "twinfield/browse/transaction/cost_center"
 require "twinfield/sales_invoice"
-require "twinfield/payment_transaction"
+require "twinfield/transaction"
 require "twinfield/customer"
 
 # Create services (old style)

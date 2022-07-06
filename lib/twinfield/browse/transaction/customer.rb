@@ -1,4 +1,4 @@
-# These models are the result of a browse response; and sadly do not map 1 on 1 on a e.g. PaymentTransaction; and reconstruction isn't possible with just the results from the browse response.
+# These models are the result of a browse response; and sadly do not map 1 on 1 on a e.g. Transaction; and reconstruction isn't possible with just the results from the browse response.
 
 module Twinfield
   module Browse

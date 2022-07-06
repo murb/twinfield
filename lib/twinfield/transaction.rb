@@ -1,5 +1,5 @@
 module Twinfield
-  class PaymentTransaction < Twinfield::AbstractModel
+  class Transaction < Twinfield::AbstractModel
     extend Twinfield::Helpers::Parsers
     include Twinfield::Helpers::TransactionMatch
 
