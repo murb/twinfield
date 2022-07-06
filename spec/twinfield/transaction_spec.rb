@@ -31,8 +31,8 @@ describe Twinfield::Transaction do
   end
 
   describe "#to_xml" do
-    it "converts a PIN transaction to xml" do
-      expect(payment_transaction.to_xml).to eq("<transaction destiny=\"final\">
+    let(:expected_xml) {
+      "<transaction destiny=\"final\">
   <header>
     <office>company</office>
     <code>PIN</code>
@@ -61,7 +61,28 @@ describe Twinfield::Transaction do
   <debitcredit>debit</debitcredit>
 </line>
   </lines>
-</transaction>")
+</transaction>"
+    }
+
+    it "converts a PIN transaction to xml" do
+      expect(payment_transaction.to_xml).to eq(expected_xml)
+    end
+
+    context "with hash" do
+      let(:payment_transaction) do
+        trans_h = {
+          code: "PIN", currency: "EUR", date: Date.new(2021,1,1), lines: [
+            {type: :total, balance_code: "1230", value: 0.0, debitcredit: :debit},
+            {type: :detail, balance_code: 1300, value: 60.5, debitcredit: :credit, customer_code: 1003, invoicenumber: 14},
+            {type: :detail, balance_code: 1234, value: 60.5, debitcredit: :debit},
+          ]
+        }
+        Twinfield::Transaction.new **trans_h
+      end
+
+      it "converts a PIN transaction to xml" do
+        expect(payment_transaction.to_xml).to eq(expected_xml)
+      end
     end
   end
 

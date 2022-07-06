@@ -55,7 +55,7 @@ module Twinfield
       self.currency = currency
       self.date = date
       self.period = period || "#{date.year}/#{'%02d' % date.month}"
-      self.lines = lines
+      self.lines = lines.collect{|a| a.is_a?(Line) ? a : Line.new(**a)}
       self.destiny = destiny
       self.number = number
     end
