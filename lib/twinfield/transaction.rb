@@ -38,6 +38,10 @@ module Twinfield
         type == :detail
       end
 
+      def total?
+        type == :total
+      end
+
       def credit?
         debitcredit == :credit
       end
@@ -87,7 +91,11 @@ module Twinfield
             xml.period period
           end
           xml.lines do
-            lines.each do |line|
+            lines.select(&:total?).each do |line|
+              xml << line.to_xml
+            end
+
+            lines.select(&:detail?).each do |line|
               xml << line.to_xml
             end
           end

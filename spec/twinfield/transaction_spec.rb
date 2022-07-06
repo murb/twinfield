@@ -6,9 +6,9 @@ describe Twinfield::Transaction do
 
   let(:payment_transaction) do
     trans = Twinfield::Transaction.new(code: "PIN", currency: "EUR", date: Date.new(2021,1,1))
-    trans.lines << Twinfield::Transaction::Line.new(type: :total, balance_code: "1230", value: 0.0, debitcredit: :debit)
     trans.lines << Twinfield::Transaction::Line.new(type: :detail, balance_code: 1300, value: 60.5, debitcredit: :credit, customer_code: 1003, invoicenumber: 14)
     trans.lines << Twinfield::Transaction::Line.new(type: :detail, balance_code: 1234, value: 60.5, debitcredit: :debit)
+    trans.lines << Twinfield::Transaction::Line.new(type: :total, balance_code: "1230", value: 0.0, debitcredit: :debit)
     trans
   end
 
