@@ -41,7 +41,7 @@ module Twinfield
     class Line < Twinfield::AbstractModel
       attr_accessor :id, :article, :subarticle, :quantity, :units, :allowdiscountorpremium, :description, :unitspriceexcl, :unitspriceinc, :freetext1, :freetext2, :freetext3, :dim1, :vatcode, :performancetype, :performancedate, :financials, :valueexcl, :vatvalue, :valueinc
 
-      def initialize(id: nil, article: "-", subarticle: nil, quantity: 1, units: nil, allowdiscountorpremium: true, description: nil, unitspriceexcl: nil, unitspriceinc: nil, freetext1: nil, freetext2: nil, freetext3: nil, dim1: nil, vatcode: nil, performancetype: nil, performancedate: nil)
+      def initialize(id: nil, article: "-", subarticle: nil, quantity: 1, units: nil, allowdiscountorpremium: true, description: nil, unitspriceexcl: nil, unitspriceinc: nil, freetext1: nil, freetext2: nil, freetext3: nil, dim1: nil, vatcode: nil, performancetype: nil, performancedate: nil, valueinc: nil, vatvalue: nil, valueexcl: nil)
         @id= id
         @article= article # article "-" is an article-less article in Twinfield
         @subarticle= subarticle if subarticle.to_s != ""
@@ -58,6 +58,9 @@ module Twinfield
         @vatcode= vatcode if vatcode.to_s != ""
         @performancetype= performancetype if performancetype.to_s != ""
         @performancedate= performancedate if performancedate.to_s != ""
+        @valueinc = valueinc
+        @vatvalue = vatvalue
+        @valueexcl = valueexcl
       end
 
       def to_xml(lineid = id)

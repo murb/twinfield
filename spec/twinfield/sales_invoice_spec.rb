@@ -50,7 +50,7 @@ describe Twinfield::SalesInvoice do
 
     describe ".new" do
       it "initializes from a hash" do
-        hash = {:lines=>[{:id=>"1", :article=>"HUUR", :subarticle=>"1", :quantity=>1, :units=>1, :allowdiscountorpremium=>"true", :description=>"Huur", :unitspriceexcl=>7.23, :unitspriceinc=>nil, :freetext1=>nil, :freetext2=>nil, :freetext3=>nil, :dim1=>"8000", :vatcode=>"VH", :performancetype=>nil, :performancedate=>nil}, {:id=>"2", :article=>"-", :subarticle=>nil, :quantity=>nil, :units=>nil, :allowdiscountorpremium=>nil, :description=>"Beschrijving", :unitspriceexcl=>nil, :unitspriceinc=>nil, :freetext1=>nil, :freetext2=>nil, :freetext3=>nil, :dim1=>nil, :vatcode=>nil, :performancetype=>nil, :performancedate=>nil}], :vat_lines=>[{:vatcode=>"VH", :vatvalue=>1.73, :performancetype=>"", :performancedate=>"", :vatname=>"BTW 21%"}], :invoicetype=>"FACTUUR", :invoicedate=>"2022-06-24", :duedate=>"2022-07-24", :performancedate=>nil, :bank=>"BNK", :invoiceaddressnumber=>1, :deliveraddressnumber=>1, :customer_code=>2321, :period=>"2022/6", :currency=>"EUR", :status=>"final", :paymentmethod=>"bank", :headertext=>"", :footertext=>"Footer", :office=>"NL123", :invoicenumber=>"1622"}
+        hash = {:lines=>[{:id=>"1", :article=>"HUUR", :subarticle=>"1", :quantity=>1, :units=>1, :allowdiscountorpremium=>"true", :description=>"Huur", :unitspriceexcl=>7.23, :unitspriceinc=>nil, valueinc: 8.75, :freetext1=>nil, :freetext2=>nil, :freetext3=>nil, :dim1=>"8000", :vatcode=>"VH", :performancetype=>nil, :performancedate=>nil}, {:id=>"2", :article=>"-", :subarticle=>nil, :quantity=>nil, :units=>nil, :allowdiscountorpremium=>nil, :description=>"Beschrijving", :unitspriceexcl=>nil, :unitspriceinc=>nil, :freetext1=>nil, :freetext2=>nil, :freetext3=>nil, :dim1=>nil, :vatcode=>nil, :performancetype=>nil, :performancedate=>nil}], :vat_lines=>[{:vatcode=>"VH", :vatvalue=>1.73, :performancetype=>"", :performancedate=>"", :vatname=>"BTW 21%"}], :invoicetype=>"FACTUUR", :invoicedate=>"2022-06-24", :duedate=>"2022-07-24", :performancedate=>nil, :bank=>"BNK", :invoiceaddressnumber=>1, :deliveraddressnumber=>1, :customer_code=>2321, :period=>"2022/6", :currency=>"EUR", :status=>"final", :paymentmethod=>"bank", :headertext=>"", :footertext=>"Footer", :office=>"NL123", :invoicenumber=>"1622"}
         invoice = Twinfield::SalesInvoice.new(**hash)
         expect(invoice.invoicedate).to eq(Date.new(2022,6,24))
         expect(invoice.invoicedate).not_to eq("2022-06-24")
@@ -181,6 +181,26 @@ describe Twinfield::SalesInvoice do
         invoice = Twinfield::SalesInvoice.new(duedate: Time.now, customer: "1001", invoicetype: "VERKOOP")
         saved_invoice = invoice.save
         expect(saved_invoice.invoicenumber).to eq("3")
+      end
+    end
+
+    describe "#total" do
+      it "0 on an empty invoice" do
+        expect(Twinfield::SalesInvoice.new(invoicetype: "VERKOOP", customer: "1001").total).to eq(0)
+      end
+
+      it "sums lines perfectly" do
+        stub_session_wsdl
+        stub_create_session
+        stub_cluster_session_wsdl
+        stub_select_company
+        stub_processxml_wsdl
+        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
+          with(body: /\<read\>\s*\<type\>salesinvoice\<\/type\>/).
+          to_return(body: File.read(File.expand_path('../../fixtures/cluster/processxml/invoice/read_success.xml', __FILE__)))
+        invoice = Twinfield::SalesInvoice.find(13, invoicetype: "VERKOOP")
+
+        expect(invoice.total).to eq(221.0)
       end
     end
   end
