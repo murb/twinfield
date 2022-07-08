@@ -70,7 +70,7 @@ module Twinfield
       def initialize(ascription: nil, accountnumber: nil, address: nil, bankname: nil, biccode: nil, city: nil, country: nil, iban: nil, natbiccode: nil, postcode: nil, state: nil, id: nil, default: nil)
         @ascription= ascription
         @accountnumber= accountnumber
-        @address= address.is_a?(Hash) ? Address.new(**address) : address
+        @address= (address.is_a?(Hash) && address != {}) ? Address.new(**address) : address
         @bankname= bankname
         @biccode= biccode
         @city= city
