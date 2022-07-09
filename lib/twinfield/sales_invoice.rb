@@ -102,7 +102,10 @@ module Twinfield
           dim1: dim1,
           vatcode: vatcode,
           performancetype: performancetype,
-          performancedate: performancedate
+          performancedate: performancedate,
+          valueexcl: valueexcl,
+          valueinc: valueinc,
+          vatvalue: vatvalue,
         }
       end
     end
