@@ -4,6 +4,9 @@ describe Twinfield::Transaction do
   include SessionStubs
   include ProcessxmlStubs
 
+  let(:today_string) do
+    Date.today.strftime("%Y%m%d")
+  end
   let(:payment_transaction) do
     trans = Twinfield::Transaction.new(code: "PIN", currency: "EUR", date: Date.new(2021,1,1))
     trans.lines << Twinfield::Transaction::Line.new(type: :detail, balance_code: 1300, value: 60.5, debitcredit: :credit, customer_code: 1003, invoicenumber: 14)
@@ -15,11 +18,11 @@ describe Twinfield::Transaction do
   describe Twinfield::Transaction::Line do
     describe "#to_xml" do
       it "converts a detail line to xml" do
-        expect(Twinfield::Transaction::Line.new(type: :detail, balance_code: 1055, value: 60.5, debitcredit: :debit).to_xml).to eq("<line type=\"detail\">\n  <dim1>1055</dim1>\n  <value>60.5</value>\n  <description/>\n  <debitcredit>debit</debitcredit>\n</line>")
-        expect(Twinfield::Transaction::Line.new(type: :detail, balance_code: 8020, value: 50, debitcredit: :credit, vatcode: "VH").to_xml).to eq("<line type=\"detail\">\n  <dim1>8020</dim1>\n  <value>50.0</value>\n  <description/>\n  <debitcredit>credit</debitcredit>\n  <vatcode>VH</vatcode>\n</line>")
+        expect(Twinfield::Transaction::Line.new(type: :detail, balance_code: 1055, value: 60.5, debitcredit: :debit).to_xml).to eq("<line type=\"detail\">\n  <dim1>1055</dim1>\n  <value>60.5</value>\n  <debitcredit>debit</debitcredit>\n  <currencydate>#{today_string}</currencydate>\n</line>")
+        expect(Twinfield::Transaction::Line.new(type: :detail, balance_code: 8020, value: 50, debitcredit: :credit, vatcode: "VH").to_xml).to eq("<line type=\"detail\">\n  <dim1>8020</dim1>\n  <value>50.0</value>\n  <debitcredit>credit</debitcredit>\n  <vatcode>VH</vatcode>\n  <currencydate>#{today_string}</currencydate>\n</line>")
       end
       it "converts a total line to xml" do
-        expect(Twinfield::Transaction::Line.new(type: :total, balance_code: "0000", value: 0.0, debitcredit: :debit).to_xml).to eq("<line type=\"total\">\n  <dim1>0000</dim1>\n  <value>0.0</value>\n  <debitcredit>debit</debitcredit>\n</line>")
+        expect(Twinfield::Transaction::Line.new(type: :total, balance_code: "0000", value: 0.0, debitcredit: :debit).to_xml).to eq("<line type=\"total\">\n  <dim1>0000</dim1>\n  <value>0.0</value>\n  <debitcredit>debit</debitcredit>\n  <currencydate>#{today_string}</currencydate>\n</line>")
       end
     end
   end
@@ -45,20 +48,21 @@ describe Twinfield::Transaction do
   <dim1>1230</dim1>
   <value>0.0</value>
   <debitcredit>debit</debitcredit>
+  <currencydate>#{today_string}</currencydate>
 </line>
     <line type=\"detail\">
   <dim1>1300</dim1>
   <dim2>1003</dim2>
   <value>60.5</value>
-  <description/>
   <debitcredit>credit</debitcredit>
   <invoicenumber>14</invoicenumber>
+  <currencydate>#{today_string}</currencydate>
 </line>
     <line type=\"detail\">
   <dim1>1234</dim1>
   <value>60.5</value>
-  <description/>
   <debitcredit>debit</debitcredit>
+  <currencydate>#{today_string}</currencydate>
 </line>
   </lines>
 </transaction>"

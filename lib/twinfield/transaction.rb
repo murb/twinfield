@@ -26,10 +26,11 @@ module Twinfield
             xml.dim1 dim1 if dim1
             xml.dim2 dim2 if dim2
             xml.value value if value
-            xml.description description unless type == :total
+            xml.description description if description && type != :total
             xml.debitcredit debitcredit if debitcredit
             xml.invoicenumber invoicenumber if invoicenumber
             xml.vatcode vatcode if vatcode
+            xml.currencydate Date.today.strftime("%Y%m%d")
           }
         end.doc.root.to_xml
       end
