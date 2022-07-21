@@ -1,7 +1,7 @@
 module Twinfield
   module Browse
     module Transaction
-      class CostCenter < Twinfield::AbstractModel
+      class GeneralLedger < Twinfield::AbstractModel
         extend Twinfield::Helpers::Parsers
         include Twinfield::Helpers::TransactionMatch
 
@@ -59,7 +59,6 @@ module Twinfield
                   <operator>between</operator>
                   <from>#{dim2}</from>
                   <to>#{dim2}</to>
-                  <finderparam>dimtype=KPL</finderparam>
                 </column>
                 <column>
                   <field>fin.trs.head.code</field>
@@ -115,7 +114,7 @@ module Twinfield
 
             response = Twinfield::Api::Process.request(:process_xml_string) do
               %Q(
-                <columns code="900">
+                <columns code="000">
                   #{build_request}
                 </columns>
               )
@@ -124,7 +123,7 @@ module Twinfield
             xml = Nokogiri::XML(response.body[:process_xml_string_response][:process_xml_string_result])
 
             xml.css("tr").map do |transaction_xml|
-              Twinfield::Browse::Transaction::CostCenter.initialize_from_columns_response_row(transaction_xml)
+              Twinfield::Browse::Transaction::GeneralLedger.initialize_from_columns_response_row(transaction_xml)
             end
           end
         end
