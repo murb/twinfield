@@ -2,9 +2,9 @@ require "savon"
 
 module Twinfield
   WSDLS = {
-    :session => "https://login.twinfield.com/webservices/session.asmx?wsdl",
-    :process => "/webservices/processxml.asmx?wsdl",
-    :finder => "/webservices/finder.asmx?wsdl"
+    :session => File.join(__dir__, "..", "wsdls", "session.wsdl"),
+    :process => File.join(__dir__, "..", "wsdls", "accounting", "process.wsdl"),
+    :finder => File.join(__dir__, "..", "wsdls", "accounting", "finder.wsdl")
   }
 
   ERRORS = {

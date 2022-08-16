@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.twinfield.com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="http://www.twinfield.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Twinfield session web service methods.</wsdl:documentation>
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.twinfield.com/">
+      <s:element name="Logon">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="user" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="organisation" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LogonResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="LogonResult" type="tns:LogonResult"/>
+            <s:element minOccurs="1" maxOccurs="1" name="nextAction" type="tns:LogonAction"/>
+            <s:element minOccurs="0" maxOccurs="1" name="cluster" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:simpleType name="LogonResult">
+        <s:restriction base="s:string">
+          <s:enumeration value="Ok"/>
+          <s:enumeration value="Blocked"/>
+          <s:enumeration value="Untrusted"/>
+          <s:enumeration value="Invalid"/>
+          <s:enumeration value="Deleted"/>
+          <s:enumeration value="Disabled"/>
+          <s:enumeration value="OrganisationInactive"/>
+          <s:enumeration value="ClientInvalid"/>
+          <s:enumeration value="Failed"/>
+          <s:enumeration value="TokenInvalid"/>
+          <s:enumeration value="NoAvailableCompanies"/>
+          <s:enumeration value="OAuth2AuthenticationRequired"/>
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="LogonAction">
+        <s:restriction base="s:string">
+          <s:enumeration value="None"/>
+          <s:enumeration value="SMSLogon"/>
+          <s:enumeration value="ChangePassword"/>
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="Header" type="tns:Header"/>
+      <s:complexType name="Header">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="SessionID" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="AccessToken" type="s:string"/>
+        </s:sequence>
+        <s:anyAttribute/>
+      </s:complexType>
+      <s:element name="OAuthLogon">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="clientToken" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="clientSecret" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="accessToken" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="accessSecret" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="OAuthLogonResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="OAuthLogonResult" type="tns:LogonResult"/>
+            <s:element minOccurs="1" maxOccurs="1" name="nextAction" type="tns:LogonAction"/>
+            <s:element minOccurs="0" maxOccurs="1" name="cluster" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AccessTokenLogon">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="accessToken" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AccessTokenLogonResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="AccessTokenLogonResult" type="tns:LogonResult"/>
+            <s:element minOccurs="0" maxOccurs="1" name="cluster" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="LogonSoapIn">
+    <wsdl:part name="parameters" element="tns:Logon"/>
+  </wsdl:message>
+  <wsdl:message name="LogonSoapOut">
+    <wsdl:part name="parameters" element="tns:LogonResponse"/>
+  </wsdl:message>
+  <wsdl:message name="LogonHeader">
+    <wsdl:part name="Header" element="tns:Header"/>
+  </wsdl:message>
+  <wsdl:message name="OAuthLogonSoapIn">
+    <wsdl:part name="parameters" element="tns:OAuthLogon"/>
+  </wsdl:message>
+  <wsdl:message name="OAuthLogonSoapOut">
+    <wsdl:part name="parameters" element="tns:OAuthLogonResponse"/>
+  </wsdl:message>
+  <wsdl:message name="OAuthLogonHeader">
+    <wsdl:part name="Header" element="tns:Header"/>
+  </wsdl:message>
+  <wsdl:message name="AccessTokenLogonSoapIn">
+    <wsdl:part name="parameters" element="tns:AccessTokenLogon"/>
+  </wsdl:message>
+  <wsdl:message name="AccessTokenLogonSoapOut">
+    <wsdl:part name="parameters" element="tns:AccessTokenLogonResponse"/>
+  </wsdl:message>
+  <wsdl:message name="AccessTokenLogonHeader">
+    <wsdl:part name="Header" element="tns:Header"/>
+  </wsdl:message>
+  <wsdl:portType name="SessionSoap">
+    <wsdl:operation name="Logon">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Logs on with the user credentials.</wsdl:documentation>
+      <wsdl:input message="tns:LogonSoapIn"/>
+      <wsdl:output message="tns:LogonSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="OAuthLogon">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Logs on with the OAuth credentials.</wsdl:documentation>
+      <wsdl:input message="tns:OAuthLogonSoapIn"/>
+      <wsdl:output message="tns:OAuthLogonSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="AccessTokenLogon">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Creates session based on passed access token and returns its ID and external cluster URL</wsdl:documentation>
+      <wsdl:input message="tns:AccessTokenLogonSoapIn"/>
+      <wsdl:output message="tns:AccessTokenLogonSoapOut"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SessionSoap" type="tns:SessionSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="Logon">
+      <soap:operation soapAction="http://www.twinfield.com/Logon" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+        <soap:header message="tns:LogonHeader" part="Header" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OAuthLogon">
+      <soap:operation soapAction="http://www.twinfield.com/OAuthLogon" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+        <soap:header message="tns:OAuthLogonHeader" part="Header" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AccessTokenLogon">
+      <soap:operation soapAction="http://www.twinfield.com/AccessTokenLogon" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+        <soap:header message="tns:AccessTokenLogonHeader" part="Header" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="SessionSoap12" type="tns:SessionSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="Logon">
+      <soap12:operation soapAction="http://www.twinfield.com/Logon" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+        <soap12:header message="tns:LogonHeader" part="Header" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OAuthLogon">
+      <soap12:operation soapAction="http://www.twinfield.com/OAuthLogon" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+        <soap12:header message="tns:OAuthLogonHeader" part="Header" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AccessTokenLogon">
+      <soap12:operation soapAction="http://www.twinfield.com/AccessTokenLogon" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+        <soap12:header message="tns:AccessTokenLogonHeader" part="Header" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Session">
+    <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Twinfield session web service methods.</wsdl:documentation>
+    <wsdl:port name="SessionSoap" binding="tns:SessionSoap">
+      <soap:address location="https://login.twinfield.com/webservices/session.asmx"/>
+    </wsdl:port>
+    <wsdl:port name="SessionSoap12" binding="tns:SessionSoap12">
+      <soap12:address location="https://login.twinfield.com/webservices/session.asmx"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

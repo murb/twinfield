@@ -15,7 +15,7 @@ module Twinfield
       end
 
       def client
-        @client ||= Savon.client(wsdl: "#{session.cluster}#{Twinfield::WSDLS[:process]}",
+        @client ||= Savon.client(wsdl: Twinfield::WSDLS[:process],
                                  env_namespace: :soap,
                                  encoding: "UTF-8",
                                  namespace_identifier: nil,
