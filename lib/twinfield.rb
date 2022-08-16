@@ -2,9 +2,20 @@ require "savon"
 
 module Twinfield
   WSDLS = {
-    :session => File.join(__dir__, "..", "wsdls", "session.wsdl"),
-    :process => File.join(__dir__, "..", "wsdls", "accounting", "process.wsdl"),
-    :finder => File.join(__dir__, "..", "wsdls", "accounting", "finder.wsdl")
+    session: File.join(__dir__, "..", "wsdls", "session.wsdl"),
+    "accounting" => {
+      :process => File.join(__dir__, "..", "wsdls", "accounting", "process.wsdl"),
+      :finder => File.join(__dir__, "..", "wsdls", "accounting", "finder.wsdl")
+    },
+    "accounting2" => {
+      :process => File.join(__dir__, "..", "wsdls", "accounting2", "process.wsdl"),
+      :finder => File.join(__dir__, "..", "wsdls", "accounting2", "finder.wsdl")
+    },
+    "api.accounting" => {
+      :process => File.join(__dir__, "..", "wsdls", "api.accounting", "process.wsdl"),
+      :finder => File.join(__dir__, "..", "wsdls", "api.accounting", "finder.wsdl")
+    }
+
   }
 
   ERRORS = {
@@ -48,6 +59,8 @@ require "twinfield/abstract_model"
 require "twinfield/version"
 
 # API Helpers
+require "twinfield/api/base_api"
+
 require "twinfield/api/o_auth_session"
 require "twinfield/api/session"
 require "twinfield/api/process"

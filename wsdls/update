@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+curl https://accounting.twinfield.com/webservices/processxml.asmx?wsdl > accounting/process.wsdl
+curl https://accounting.twinfield.com/webservices/finder.asmx?wsdl > accounting/finder.wsdl
+curl https://accounting2.twinfield.com/webservices/processxml.asmx?wsdl > accounting2/process.wsdl
+curl https://accounting2.twinfield.com/webservices/finder.asmx?wsdl > accounting2/finder.wsdl
+curl https://api.accounting.twinfield.com/webservices/processxml.asmx?wsdl > api.accounting/process.wsdl
+curl https://api.accounting.twinfield.com/webservices/finder.asmx?wsdl > api.accounting/finder.wsdl
+curl https://login.twinfield.com/webservices/session.asmx?wsdl > session.wsdl

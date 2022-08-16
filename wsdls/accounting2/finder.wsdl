@@ -148,10 +148,10 @@
   <wsdl:service name="Finder">
     <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Twinfield Finder web service methods.</wsdl:documentation>
     <wsdl:port name="FinderSoap" binding="tns:FinderSoap">
-      <soap:address location="https://accounting.twinfield.com/webservices/finder.asmx" />
+      <soap:address location="https://accounting2.twinfield.com/webservices/finder.asmx" />
     </wsdl:port>
     <wsdl:port name="FinderSoap12" binding="tns:FinderSoap12">
-      <soap12:address location="https://accounting.twinfield.com/webservices/finder.asmx" />
+      <soap12:address location="https://accounting2.twinfield.com/webservices/finder.asmx" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
