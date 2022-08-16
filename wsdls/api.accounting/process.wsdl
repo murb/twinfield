@@ -190,10 +190,10 @@
   <wsdl:service name="ProcessXml">
     <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Twinfield Process XML web service methods.</wsdl:documentation>
     <wsdl:port name="ProcessXmlSoap" binding="tns:ProcessXmlSoap">
-      <soap:address location="https://prod-apimanagement-v2.azure-api.net/webservices/processxml.asmx" />
+      <soap:address location="https://api.accounting.twinfield.com/webservices/processxml.asmx" />
     </wsdl:port>
     <wsdl:port name="ProcessXmlSoap12" binding="tns:ProcessXmlSoap12">
-      <soap12:address location="https://prod-apimanagement-v2.azure-api.net/webservices/processxml.asmx" />
+      <soap12:address location="https://api.accounting.twinfield.com/webservices/processxml.asmx" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
