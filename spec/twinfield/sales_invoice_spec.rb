@@ -18,11 +18,10 @@ describe Twinfield::SalesInvoice do
 
   describe "class methods" do
     before do
-      stub_session_wsdl
+
       stub_create_session
       stub_cluster_session_wsdl
       stub_select_company
-      stub_processxml_wsdl
     end
 
     describe ".find" do
@@ -73,11 +72,10 @@ describe Twinfield::SalesInvoice do
 
     describe "#transaction" do
       it "retuns no transaction when no financials info" do
-        stub_session_wsdl
+
         stub_create_session
         stub_cluster_session_wsdl
         stub_select_company
-        # stub_processxml_wsdl
 
         invoice = Twinfield::SalesInvoice.new(duedate: Time.now, customer: "1001", invoicetype: "VERKOOP", invoicenumber: "2021-0812")
         transaction = invoice.transaction
@@ -93,11 +91,10 @@ describe Twinfield::SalesInvoice do
       end
 
       it "returns a transaction" do
-        stub_session_wsdl
+
         stub_create_session
         stub_cluster_session_wsdl
         stub_select_company
-        stub_processxml_wsdl
 
         stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
           with(body: /20210812/).
@@ -146,11 +143,10 @@ describe Twinfield::SalesInvoice do
 
     describe "#save" do
       before do
-        stub_session_wsdl
+
         stub_create_session
         stub_cluster_session_wsdl
         stub_select_company
-        stub_processxml_wsdl
       end
 
       it "reports errors" do
@@ -190,11 +186,10 @@ describe Twinfield::SalesInvoice do
       end
 
       it "sums lines perfectly" do
-        stub_session_wsdl
+
         stub_create_session
         stub_cluster_session_wsdl
         stub_select_company
-        stub_processxml_wsdl
         stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
           with(body: /\<read\>\s*\<type\>salesinvoice\<\/type\>/).
           to_return(body: File.read(File.expand_path('../../fixtures/cluster/processxml/invoice/read_success.xml', __FILE__)))

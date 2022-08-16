@@ -6,11 +6,10 @@ describe Twinfield::Request::Find do
 
   context "Twinfield::Api::Session" do
     before do
-      stub_session_wsdl
+
       stub_create_session
       stub_cluster_session_wsdl
       stub_select_company
-      stub_finder_wsdl
     end
 
     describe "#sales_transactions" do

@@ -4,8 +4,9 @@ module Twinfield
   WSDLS = {
     session: File.join(__dir__, "..", "wsdls", "session.wsdl"),
     "accounting" => {
-      :process => File.join(__dir__, "..", "wsdls", "accounting", "process.wsdl"),
-      :finder => File.join(__dir__, "..", "wsdls", "accounting", "finder.wsdl")
+      session: File.join(__dir__, "..", "wsdls", "session.wsdl"),
+      process: File.join(__dir__, "..", "wsdls", "accounting", "process.wsdl"),
+      finder: File.join(__dir__, "..", "wsdls", "accounting", "finder.wsdl")
     },
     "accounting2" => {
       :process => File.join(__dir__, "..", "wsdls", "accounting2", "process.wsdl"),

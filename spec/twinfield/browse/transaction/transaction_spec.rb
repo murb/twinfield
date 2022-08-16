@@ -6,12 +6,10 @@ describe Twinfield::Browse::Transaction::Customer do
   include ProcessxmlStubs
 
   before do
-    stub_session_wsdl
+
     stub_create_session
     stub_cluster_session_wsdl
     stub_select_company
-    stub_processxml_wsdl
-    stub_finder_wsdl
   end
 
   describe "instance methods" do

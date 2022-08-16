@@ -125,11 +125,10 @@ describe Twinfield::Transaction do
     let(:success_body) { '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><ProcessXmlStringResponse xmlns="http://www.twinfield.com/"><ProcessXmlStringResult>&lt;match result="1"&gt;&lt;set result="1"&gt;&lt;matchcode name="Debiteuren afletteren"&gt;170&lt;/matchcode&gt;&lt;office&gt;NLA002058&lt;/office&gt;&lt;matchdate&gt;20220203&lt;/matchdate&gt;&lt;lines&gt;&lt;line result="1"&gt;&lt;transcode name="Verkoopfactuur" shortname="Verkoop"&gt;VRK&lt;/transcode&gt;&lt;transnumber&gt;202100008&lt;/transnumber&gt;&lt;transline&gt;1&lt;/transline&gt;&lt;origin&gt;invoice&lt;/origin&gt;&lt;status&gt;final&lt;/status&gt;&lt;dim1&gt;1300&lt;/dim1&gt;&lt;dim2&gt;1003&lt;/dim2&gt;&lt;matchlevel&gt;2&lt;/matchlevel&gt;&lt;basevalueopen&gt;221.00&lt;/basevalueopen&gt;&lt;repvalueopen&gt;221.00&lt;/repvalueopen&gt;&lt;valueopen&gt;221.00&lt;/valueopen&gt;&lt;matchvalue&gt;221.00&lt;/matchvalue&gt;&lt;matchvaluerep&gt;221.00&lt;/matchvaluerep&gt;&lt;matchvaluecur&gt;221.00&lt;/matchvaluecur&gt;&lt;/line&gt;&lt;line result="1"&gt;&lt;transcode name="Pintransacties" shortname="Pin"&gt;PIN&lt;/transcode&gt;&lt;transnumber&gt;202200004&lt;/transnumber&gt;&lt;transline&gt;2&lt;/transline&gt;&lt;origin&gt;import&lt;/origin&gt;&lt;status&gt;final&lt;/status&gt;&lt;dim1&gt;1300&lt;/dim1&gt;&lt;dim2&gt;1003&lt;/dim2&gt;&lt;matchlevel&gt;2&lt;/matchlevel&gt;&lt;basevalueopen&gt;-221.00&lt;/basevalueopen&gt;&lt;repvalueopen&gt;-221.00&lt;/repvalueopen&gt;&lt;valueopen&gt;-221.00&lt;/valueopen&gt;&lt;matchvalue&gt;-221.00&lt;/matchvalue&gt;&lt;matchvaluerep&gt;-221.00&lt;/matchvaluerep&gt;&lt;matchvaluecur&gt;-221.00&lt;/matchvaluecur&gt;&lt;/line&gt;&lt;/lines&gt;&lt;dimensions&gt;&lt;dimension level="2" matchnumber="2"&gt;1003&lt;/dimension&gt;&lt;/dimensions&gt;&lt;value&gt;0.00&lt;/value&gt;&lt;/set&gt;&lt;/match&gt;</ProcessXmlStringResult></ProcessXmlStringResponse></soap:Body></soap:Envelope>' }
 
     before do
-      stub_session_wsdl
+
       stub_create_session
       stub_cluster_session_wsdl
       stub_select_company
-      stub_processxml_wsdl
     end
 
     it "raises an error when they don't match" do

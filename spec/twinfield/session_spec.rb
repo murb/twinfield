@@ -10,7 +10,7 @@ describe Twinfield::Api::Session do
   describe "successful logon" do
 
     before(:all) do
-      stub_session_wsdl
+
       stub_create_session
       stub_cluster_session_wsdl
       stub_select_company
@@ -50,7 +50,7 @@ describe Twinfield::Api::Session do
 
     before(:all) do
       username = "not_valid_username"
-      stub_session_wsdl
+
       stub_create_session username: username, response: "Invalid"
 
       Twinfield.configure do |config|

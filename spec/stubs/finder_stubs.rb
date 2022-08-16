@@ -1,9 +1,4 @@
 module FinderStubs
-  def stub_finder_wsdl
-    stub_request(:get, "https://accounting.twinfield.com/webservices/finder.asmx?wsdl").
-    to_return(status: 200, body: File.read(File.expand_path('../../fixtures/cluster/finder/wsdl.xml', __FILE__)) )
-  end
-
   def stub_finder type, oauth: false
     stub_request(:post, "https://accounting.twinfield.com/webservices/finder.asmx").
       with(

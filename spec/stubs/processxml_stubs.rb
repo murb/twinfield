@@ -1,9 +1,4 @@
 module ProcessxmlStubs
-  def stub_processxml_wsdl
-    stub_request(:get, "https://accounting.twinfield.com/webservices/processxml.asmx?wsdl").
-    to_return(status: 200, body: File.read(File.expand_path('../../fixtures/cluster/processxml/wsdl.xml', __FILE__)) )
-  end
-
   def stub_processxml_list_dimensions dimension_type: 'DEB', company: 'company', oauth: false
     stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
       with(

@@ -1,9 +1,4 @@
 module SessionStubs
-  def stub_session_wsdl
-    stub_request(:get, "https://login.twinfield.com/webservices/session.asmx?wsdl").
-      to_return(status: 200, body: File.read(File.expand_path('../../fixtures/login/session/wsdl.xml', __FILE__)) )
-  end
-
   def stub_create_session username: "username" , password: "password" , organisation: "organisation", response: "Ok"
     stub_request(:post, "https://login.twinfield.com/webservices/session.asmx").
       with(
@@ -18,7 +13,7 @@ module SessionStubs
 
   def stub_cluster_session_wsdl
     stub_request(:get, "https://accounting.twinfield.com/webservices/session.asmx?wsdl").
-      to_return(status: 200, body: File.read(File.expand_path('../../fixtures/cluster/session/wsdl.xml', __FILE__)))
+      to_return(status: 200, body: File.read(File.expand_path('../../../wsdls/accounting/session.wsdl', __FILE__)))
   end
 
   def stub_select_company company: "company"

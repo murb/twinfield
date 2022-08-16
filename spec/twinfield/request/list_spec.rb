@@ -6,11 +6,10 @@ describe Twinfield::Request::List do
 
   context "Twinfield::Api::Session" do
     before do
-      stub_session_wsdl
+
       stub_create_session
       stub_cluster_session_wsdl
       stub_select_company
-      stub_processxml_wsdl
     end
 
     describe "#dimensions" do
@@ -23,9 +22,8 @@ describe Twinfield::Request::List do
 
   context "Twinfield::Api::OAuthSession" do
     before do
-      # stub_session_wsdl
+      #
       # stub_cluster_session_wsdl
-      stub_processxml_wsdl
 
       Twinfield.configure do |config|
         config.session_type = "Twinfield::Api::OAuthSession"
