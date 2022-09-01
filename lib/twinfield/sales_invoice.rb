@@ -18,7 +18,7 @@ module Twinfield
       end
     end
     class VatLine
-      attr_accessor :vatcode, :vatvalue, :performancetype, :performancedate, :vatname
+      attr_accessor :vatcode, :vatvalue, :performancetype, :performancedate, :vatname, :invoice
 
       def initialize(vatcode:, vatvalue:, performancetype:, performancedate:, vatname:)
         @vatcode = vatcode
@@ -39,7 +39,7 @@ module Twinfield
       end
     end
     class Line < Twinfield::AbstractModel
-      attr_accessor :id, :article, :subarticle, :quantity, :units, :allowdiscountorpremium, :description, :unitspriceexcl, :unitspriceinc, :freetext1, :freetext2, :freetext3, :dim1, :vatcode, :performancetype, :performancedate, :financials, :valueexcl, :vatvalue, :valueinc
+      attr_accessor :id, :article, :subarticle, :quantity, :units, :allowdiscountorpremium, :description, :unitspriceexcl, :unitspriceinc, :freetext1, :freetext2, :freetext3, :dim1, :vatcode, :performancetype, :performancedate, :financials, :valueexcl, :vatvalue, :valueinc, :invoice
 
       def initialize(id: nil, article: "-", subarticle: nil, quantity: 1, units: nil, allowdiscountorpremium: true, description: nil, unitspriceexcl: nil, unitspriceinc: nil, freetext1: nil, freetext2: nil, freetext3: nil, dim1: nil, vatcode: nil, performancetype: nil, performancedate: nil, valueinc: nil, vatvalue: nil, valueexcl: nil)
         @id= id
@@ -264,6 +264,10 @@ module Twinfield
       @footertext = footertext
       @office = office || Twinfield.configuration.company
       @invoicenumber= invoicenumber
+    end
+
+    def associated_lines
+      lines.map{|a| a.invoice = self; a}
     end
 
     def raisewarning

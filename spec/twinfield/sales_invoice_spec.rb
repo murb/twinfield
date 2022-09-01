@@ -14,6 +14,14 @@ describe Twinfield::SalesInvoice do
         expect(Twinfield::SalesInvoice::Line.new(article: "A", performancedate: Date.new(2020,12,23)).to_xml(1)).to match("20201223")
       end
     end
+
+    describe "#invoice" do
+      it "returns the containers invoice" do
+        invoice = Twinfield::SalesInvoice.new(duedate: Time.now, customer: "1001", invoicetype: "VERKOOP")
+        invoice.lines= [Twinfield::SalesInvoice::Line.new(article: "A")]
+        expect(invoice.associated_lines.first.invoice).to eq(invoice)
+      end
+    end
   end
 
   describe "class methods" do
