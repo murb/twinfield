@@ -39,7 +39,7 @@ module Twinfield
       end
     end
     class Line < Twinfield::AbstractModel
-      attr_accessor :id, :article, :subarticle, :quantity, :units, :allowdiscountorpremium, :description, :unitspriceexcl, :unitspriceinc, :freetext1, :freetext2, :freetext3, :dim1, :vatcode, :performancetype, :performancedate, :financials, :valueexcl, :vatvalue, :valueinc, :invoice
+      attr_accessor :id, :article, :subarticle, :quantity, :units, :allowdiscountorpremium, :description, :unitspriceexcl, :unitspriceinc, :freetext1, :freetext2, :freetext3, :dim1, :vatcode, :performancetype, :performancedate, :valueexcl, :vatvalue, :valueinc, :invoice
 
       def initialize(id: nil, article: "-", subarticle: nil, quantity: 1, units: nil, allowdiscountorpremium: true, description: nil, unitspriceexcl: nil, unitspriceinc: nil, freetext1: nil, freetext2: nil, freetext3: nil, dim1: nil, vatcode: nil, performancetype: nil, performancedate: nil, valueinc: nil, vatvalue: nil, valueexcl: nil)
         @id= id
@@ -244,9 +244,10 @@ module Twinfield
 
     attr_accessor :invoicetype, :invoicedate, :duedate, :performancedate, :bank, :invoiceaddressnumber, :deliveraddressnumber, :customer_code, :period, :currency, :status, :paymentmethod, :headertext, :footertext, :lines, :office, :invoicenumber, :vatvalue, :valueinc, :financials, :vat_lines
 
-    def initialize(duedate: nil, invoicetype:, invoicedate: nil, performancedate: nil, bank: nil, invoiceaddressnumber: nil, deliveraddressnumber: nil, customer: nil, customer_code: nil, period: nil, currency: nil, status: "concept", paymentmethod: nil, headertext: nil, footertext: nil, office: nil, invoicenumber: nil, lines: [], vat_lines: [])
+    def initialize(duedate: nil, invoicetype:, invoicedate: nil, performancedate: nil, bank: nil, invoiceaddressnumber: nil, deliveraddressnumber: nil, customer: nil, customer_code: nil, period: nil, currency: nil, status: "concept", paymentmethod: nil, headertext: nil, footertext: nil, office: nil, invoicenumber: nil, financials: {}, lines: [], vat_lines: [])
       self.lines = lines.collect{|a| SalesInvoice::Line.new(**a.to_h)}
       self.vat_lines = vat_lines.collect{|a| SalesInvoice::VatLine.new(**a.to_h)}
+      self.financials = SalesInvoice::Financials.new(**financials.to_h) if financials && financials != {}
       @invoicetype = invoicetype
       @invoicedate = invoicedate.is_a?(String) ? Date.parse(invoicedate) : invoicedate
       @duedate = duedate.is_a?(String) ? Date.parse(duedate) : duedate
@@ -354,6 +355,7 @@ module Twinfield
       {
         lines: lines.collect(&:to_h),
         vat_lines: vat_lines.collect(&:to_h),
+        financials: financials&.to_h,
         invoicetype: invoicetype,
         invoicedate: invoicedate,
         duedate: duedate,

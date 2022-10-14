@@ -149,6 +149,30 @@ describe Twinfield::SalesInvoice do
       end
     end
 
+    describe ":financials" do
+      before do
+
+        stub_create_session
+        stub_cluster_session_wsdl
+        stub_select_company
+      end
+
+      it "survives a roundtrip" do
+        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
+          with(body: /\<read\>\s*\<type\>salesinvoice\<\/type\>/).
+          to_return(body: File.read(File.expand_path('../../fixtures/cluster/processxml/invoice/read_success.xml', __FILE__)))
+        invoice = Twinfield::SalesInvoice.find(13, invoicetype: "VERKOOP")
+        expect(invoice.financials).to be_a Twinfield::SalesInvoice::Financials
+        financials_number = "202100006"
+
+        expect(invoice.financials.number).to eq financials_number
+        expect(invoice.to_h[:financials][:number]).to eq financials_number
+
+        cloned_invoice = Twinfield::SalesInvoice.new(**invoice.to_h)
+        expect(invoice.financials.number).to eq financials_number
+      end
+    end
+
     describe "#save" do
       before do
 
