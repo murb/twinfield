@@ -19,7 +19,7 @@ module SessionStubs
   def stub_select_company company: "company"
     stub_request(:post, "https://accounting.twinfield.com/webservices/session.asmx").
              with(
-               body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soap:Envelope xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.twinfield.com/\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Header><Header xmlns=\"http://www.twinfield.com/\"><SessionID>session_id</SessionID></Header></soap:Header><soap:Body><SelectCompany xmlns=\"http://www.twinfield.com/\"><company>#{company}</company></SelectCompany></soap:Body></soap:Envelope>",
+               body: /<soap:Body><SelectCompany xmlns="http:\/\/www.twinfield.com\/\"><company>#{company}<\/company><\/SelectCompany><\/soap:Body>/,
                headers:{
            	  'Soapaction'=>'"http://www.twinfield.com/SelectCompany"',
                }

@@ -2,7 +2,7 @@ module ProcessxmlStubs
   def stub_processxml_list_dimensions dimension_type: 'DEB', company: 'company', oauth: false
     stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
       with(
-        body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soap:Envelope xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.twinfield.com/\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Header>#{twinfield_header(oauth, company)}</soap:Header><soap:Body><ProcessXmlString xmlns=\"http://www.twinfield.com/\"><xmlRequest><![CDATA[\n            <list>\n              <type>dimensions</type>\n              <dimtype>#{dimension_type}</dimtype>\n<office>#{company}</office>\n            </list>\n          ]]></xmlRequest></ProcessXmlString></soap:Body></soap:Envelope>",
+        body: /<soap:Body><ProcessXmlString xmlns=\"http:\/\/www.twinfield.com\/\"><xmlRequest><!\[CDATA\[\n            <list>\n              <type>dimensions<\/type>\n              <dimtype>#{dimension_type}<\/dimtype>\n<office>#{company}<\/office>\n            <\/list>\n          ]]><\/xmlRequest><\/ProcessXmlString><\/soap:Body>/,
          headers: {
     	  'Soapaction'=>'"http://www.twinfield.com/ProcessXmlString"',
         }).
@@ -13,7 +13,7 @@ module ProcessxmlStubs
   def stub_processxml_list_offices oauth: false, company: nil
     stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
       with(
-        body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soap:Envelope xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.twinfield.com/\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Header>#{twinfield_header(oauth, company)}</soap:Header><soap:Body><ProcessXmlString xmlns=\"http://www.twinfield.com/\"><xmlRequest><![CDATA[\n            <list>\n              <type>offices</type>\n              \n            </list>\n          ]]></xmlRequest></ProcessXmlString></soap:Body></soap:Envelope>",
+        body: /<soap:Body><ProcessXmlString xmlns=\"http:\/\/www.twinfield.com\/\"><xmlRequest><!\[CDATA\[\n            <list>\n              <type>offices<\/type>\n              \n            <\/list>\n          \]\]><\/xmlRequest><\/ProcessXmlString><\/soap:Body>/,
          headers: {
     	  'Soapaction'=>'"http://www.twinfield.com/ProcessXmlString"',
         }).

@@ -2,7 +2,7 @@ module FinderStubs
   def stub_finder type, oauth: false
     stub_request(:post, "https://accounting.twinfield.com/webservices/finder.asmx").
       with(
-        body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soap:Envelope xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.twinfield.com/\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Header><Header xmlns=\"http://www.twinfield.com/\"><SessionID>session_id</SessionID></Header></soap:Header><soap:Body><Search xmlns=\"http://www.twinfield.com/\"><type>IVT</type><pattern>*</pattern><field>0</field><firstRow>1</firstRow><maxRows>100</maxRows><options></options></Search></soap:Body></soap:Envelope>",
+        body: /<Search xmlns=\"http:\/\/www.twinfield.com\/\"><type>#{type}<\/type><pattern>\*<\/pattern><field>0<\/field><firstRow>1<\/firstRow><maxRows>100<\/maxRows><options><\/options><\/Search>/,
         headers: {
     	  'Soapaction'=>'"http://www.twinfield.com/Search"'
         }).
