@@ -45,7 +45,7 @@ module Twinfield
         @id= id
         @article= article # article "-" is an article-less article in Twinfield
         @subarticle= subarticle if subarticle.to_s != ""
-        @quantity= Integer(quantity) unless article == "-"
+        @quantity= Float(quantity) unless article == "-"
         @units= Integer(units) if units and units != ""
         @allowdiscountorpremium= allowdiscountorpremium unless article == "-"
         @description= description

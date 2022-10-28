@@ -5,6 +5,14 @@ describe Twinfield::SalesInvoice do
   include ProcessxmlStubs
 
   describe Twinfield::SalesInvoice::Line do
+    describe "class methods" do
+      describe ".new" do
+        it "should keep decials intact" do
+          expect(Twinfield::SalesInvoice::Line.new(quantity: 1.5, article: "A").quantity).to match(1.5)
+        end
+      end
+    end
+
     describe "#to_xml" do
       it "renders xml" do
         expect(Twinfield::SalesInvoice::Line.new(article: "A").to_xml(1)).to match("<line id=\"1\">")
