@@ -23,6 +23,7 @@ module Twinfield
 
     # Log level, e.g. :info, :debug; currently only forwarded to Savon
     attr_accessor :log_level
+    attr_accessor :logger
 
 
     def to_logon_hash

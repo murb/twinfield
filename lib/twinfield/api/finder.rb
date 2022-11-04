@@ -13,6 +13,10 @@ module Twinfield
         # request
         # see: https://accounting.twinfield.com/webservices/documentation/#/ApiReference/Transactions/SalesInvoices
         def request(type, options={})
+          if Twinfield.configuration.logger
+            Twinfield.configuration.logger.debug("  ↳ #{caller.select{|a| !a.match /\/gems\/|\/ruby\/|\<internal\:/}.first}")
+          end
+
           first_row = options.delete(:first_row) || 1
           pattern = options.delete(:pattern) || "*"
           max_rows = options.delete(:max_rows) || 100

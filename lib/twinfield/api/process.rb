@@ -12,6 +12,9 @@ module Twinfield
         end
 
         def request(action=:process_xml_string, options={}, &block)
+          if Twinfield.configuration.logger
+            Twinfield.configuration.logger.debug("  ↳ #{caller.select{|a| !a.match /\/gems\/|\/ruby\/|\<internal\:/}.first}")
+          end
 
           if actions.include?(action)
             message = "<xmlRequest><![CDATA[#{block.call}]]></xmlRequest>"

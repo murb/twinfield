@@ -15,12 +15,18 @@ module Twinfield
         end
 
         def client
-          @client ||= Savon.client(wsdl: wsdl,
-                                   env_namespace: :soap,
-                                   encoding: "UTF-8",
-                                   namespace_identifier: nil,
-                                   log: !!Twinfield.configuration.log_level,
-                                   log_level: Twinfield.configuration.log_level || :info)
+          options = {
+            wsdl: wsdl,
+            env_namespace: :soap,
+            encoding: "UTF-8",
+            namespace_identifier: nil,
+            log: !!Twinfield.configuration.log_level,
+            log_level: Twinfield.configuration.log_level || :info
+          }
+          options[:logger] = Twinfield.configuration.logger if Twinfield.configuration.logger
+
+
+          @client ||= Savon.client(options)
         end
 
 
