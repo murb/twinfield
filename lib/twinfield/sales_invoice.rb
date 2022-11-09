@@ -317,8 +317,15 @@ module Twinfield
     end
 
     # helper method to calculate a total price
-    def total
+    def totalinc
       lines.map(&:valueinc).compact.sum
+    end
+
+    alias_method :total, :totalinc
+
+    # helper method to calculate a total excl price
+    def totalexcl
+      lines.map(&:valueexcl).compact.sum
     end
 
     def to_xml

@@ -220,23 +220,43 @@ describe Twinfield::SalesInvoice do
       end
     end
 
-    describe "#total" do
-      it "0 on an empty invoice" do
-        expect(Twinfield::SalesInvoice.new(invoicetype: "VERKOOP", customer: "1001").total).to eq(0)
-      end
-
-      it "sums lines perfectly" do
-
+    describe "totals" do
+      before do
         stub_create_session
         stub_cluster_session_wsdl
         stub_select_company
         stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
           with(body: /\<read\>\s*\<type\>salesinvoice\<\/type\>/).
           to_return(body: File.read(File.expand_path('../../fixtures/cluster/processxml/invoice/read_success.xml', __FILE__)))
-        invoice = Twinfield::SalesInvoice.find(13, invoicetype: "VERKOOP")
-
-        expect(invoice.total).to eq(221.0)
+        @invoice = Twinfield::SalesInvoice.find(13, invoicetype: "VERKOOP")
       end
+
+      describe "#total" do
+
+        it "0 on an empty invoice" do
+          expect(Twinfield::SalesInvoice.new(invoicetype: "VERKOOP", customer: "1001").total).to eq(0)
+        end
+
+        it "sums lines perfectly" do
+          expect(@invoice.total).to eq(221.0)
+        end
+
+        it "defaults to total incl vat" do
+          expect(@invoice.totalinc).to eq(@invoice.total)
+        end
+      end
+
+      describe "#totalexcl" do
+        it "0 on an empty invoice" do
+          expect(Twinfield::SalesInvoice.new(invoicetype: "VERKOOP", customer: "1001").total).to eq(0)
+        end
+
+        it "sums lines perfectly" do
+          expect(@invoice.totalexcl).to eq(200.0)
+        end
+      end
+
+
     end
   end
 end
