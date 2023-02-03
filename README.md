@@ -103,6 +103,13 @@ This gets a list of sales transactions for customer with code 1003
     customer = Twinfield::Customer.find(1003)
     customer.transactions(code: "VRK")
 
+### Store collect mandate
+
+    customer = Twinfield::Customer.find(1003)
+    customer.financials.collectmandate = Twinfield::Customer::CollectMandate.new(signaturedate: signed_on, id: sepa_proof_uuid)
+    customer.financials.payavailable = true # autosets meansofpayment to paymentfile; can be disabled to temporarily stop collecting through paymentfiles
+    customer.financials.paycode="SEPANLDD"  # has to correspond to the countries default SEPA paymentfile
+
 ### List office
 
     Twinfield::Request::Read.office
