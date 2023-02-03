@@ -172,6 +172,13 @@ module Twinfield
         @meansofpayment || (payavailable ? "paymentfile" : "none")
       end
 
+      def payavailable= value
+        if [true, "true"].include? value
+          @meansofpayment = nil
+          @payavailable = true
+        end
+      end
+
       def to_h
         {
           matchtype: matchtype,

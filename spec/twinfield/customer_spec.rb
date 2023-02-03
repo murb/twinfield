@@ -34,6 +34,29 @@ describe Twinfield::Customer do
         expect(Twinfield::Customer::Financials.new(level: 2).to_xml).to eq("<financials>\n  <level>2</level>\n  <meansofpayment>none</meansofpayment>\n</financials>")
       end
     end
+
+    describe "#meansofpayment" do
+      it "returns 'none' by default" do
+        expect(Twinfield::Customer::Financials.new.meansofpayment).to eq "none"
+      end
+    end
+
+    describe "#payavailable" do
+      it "returns falsey by default" do
+        expect(Twinfield::Customer::Financials.new.payavailable).to be_falsey
+      end
+
+      it "can be set to true and changes meansofpayment" do
+        new_financials = Twinfield::Customer::Financials.new
+
+        expect(new_financials.meansofpayment).to eq "none"
+
+        new_financials.payavailable= true
+
+        expect(new_financials.payavailable).to be_truthy
+        expect(new_financials.meansofpayment).to eq "paymentfile"
+      end
+    end
   end
 
   describe "class methods" do
@@ -235,7 +258,6 @@ describe Twinfield::Customer do
         cm = Twinfield::Customer::CollectMandate.new(signaturedate: date, id: collectmandate_id)
         expect(cm.to_xml).to match("<id>4c3f01c582814bc78a8858453392899e</id>")
       end
-
     end
 
     describe "#transactions" do
