@@ -373,7 +373,7 @@ module Twinfield
       alias_method :to_hash, :to_h
 
       def to_s
-        "#{field1}\n#{field2}\n#{country} #{postcode} #{city}"
+        [name, field1, field2, [country, postcode, city].join(" ")].select{|a| !(a.nil? || a.empty?)}.join("\n")
       end
 
       def to_xml

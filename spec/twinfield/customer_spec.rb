@@ -28,6 +28,15 @@ describe Twinfield::Customer do
     Twinfield::Customer.find(1000)
   end
 
+  describe Twinfield::Customer::Address do
+    describe ".to_s" do
+      it "returns a simple formattable string of the address" do
+        expect(Twinfield::Customer::Address.new(name: "Some Company B.V.", field1: "T.a.v. Jansen", field2: "Berendstraat 12", postcode: "1234AS", city: "Amsterdam", country: "NL").to_s).to eq("Some Company B.V.\nT.a.v. Jansen\nBerendstraat 12\nNL 1234AS Amsterdam")
+        expect(Twinfield::Customer::Address.new(name: "Some Company B.V.", field2: "Berendstraat 12", postcode: "1234AS", city: "Amsterdam", country: "NL").to_s).to eq("Some Company B.V.\nBerendstraat 12\nNL 1234AS Amsterdam")
+      end
+    end
+  end
+
   describe Twinfield::Customer::Financials do
     describe ".to_xml" do
       it "returns a near empty xml when blank" do
@@ -321,5 +330,3 @@ describe Twinfield::Customer do
     end
   end
 end
-
-
