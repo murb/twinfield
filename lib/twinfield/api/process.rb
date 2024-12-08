@@ -2,7 +2,6 @@ module Twinfield
   module Api
     class Process < BaseApi
       class << self
-
         def wsdl
           Twinfield::WSDLS[cluster_short_name][:process]
         end
@@ -11,15 +10,13 @@ module Twinfield
           @actions ||= client.operations
         end
 
-        def request(action=:process_xml_string, options={}, &block)
-          if Twinfield.configuration.logger
-            Twinfield.configuration.logger.debug("  ↳ #{caller.select{|a| !a.match /\/gems\/|\/ruby\/|\<internal\:/}.first}")
-          end
+        def request(action = :process_xml_string, options = {}, &block)
+          Twinfield.configuration.logger&.debug("  ↳ #{caller.find { |a| !a.match(/\/gems\/|\/ruby\/|<internal:/) }}")
 
           if actions.include?(action)
             message = "<xmlRequest><![CDATA[#{block.call}]]></xmlRequest>"
 
-            client.call(action, attributes: { xmlns: "http://www.twinfield.com/" }, soap_header: session.header, message: message)
+            client.call(action, attributes: {xmlns: "http://www.twinfield.com/"}, soap_header: session.header, message: message)
           else
             "action not found"
           end
@@ -27,10 +24,10 @@ module Twinfield
 
         def read(element, options)
           response = Twinfield::Api::Process.request(:process_xml_string) do
-            %Q(
+            %(
               <read>
-                <type>#{element.to_s}</type>
-                #{ Twinfield::Api::Process.options_to_xml(options) }
+                <type>#{element}</type>
+                #{Twinfield::Api::Process.options_to_xml(options)}
               </read>
             )
           end
@@ -39,7 +36,7 @@ module Twinfield
         end
 
         def options_to_xml(options)
-          options.map {|k,v| "<#{k}>#{v}</#{k}>" }.join("\n")
+          options.map { |k, v| "<#{k}>#{v}</#{k}>" }.join("\n")
         end
       end
     end

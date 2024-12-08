@@ -8,9 +8,8 @@ module Twinfield
         attr_accessor :number, :yearperiod, :currency, :value, :status, :dim1, :dim2, :key, :code
 
         class << self
-
           def initialize_from_columns_response_row(transaction_xml)
-            self.new(
+            new(
               number: transaction_xml.css("td[field='fin.trs.head.number']").text,
               yearperiod: transaction_xml.css("td[field='fin.trs.head.yearperiod']").text,
               currency: transaction_xml.css("td[field='fin.trs.head.curcode']").text,
@@ -18,7 +17,7 @@ module Twinfield
               status: transaction_xml.css("td[field='fin.trs.head.status']").text,
               dim1: transaction_xml.css("td[field='fin.trs.line.dim1']").text,
               dim2: transaction_xml.css("td[field='fin.trs.line.dim2']").text,
-              key: transaction_xml.css("key").text.gsub(/\s/,""),
+              key: transaction_xml.css("key").text.gsub(/\s/, ""),
               code: transaction_xml.css("td[field='fin.trs.head.code']").text
             )
           end
@@ -30,7 +29,7 @@ module Twinfield
           # @param years: range
           #
           def where(years: ((Date.today.year - 30)..Date.today.year), dim1: nil, dim2: nil)
-            build_request = %Q(
+            build_request = %(
               <column>
                   <field>fin.trs.head.yearperiod</field>
                   <label>Periode</label>
@@ -114,7 +113,7 @@ module Twinfield
                 )
 
             response = Twinfield::Api::Process.request(:process_xml_string) do
-              %Q(
+              %(
                 <columns code="900">
                   #{build_request}
                 </columns>

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Twinfield::Request::Find do
   include SessionStubs
@@ -6,7 +6,6 @@ describe Twinfield::Request::Find do
 
   context "Twinfield::Api::Session" do
     before do
-
       stub_create_session
       stub_cluster_session_wsdl
       stub_select_company
@@ -20,7 +19,6 @@ describe Twinfield::Request::Find do
     end
 
     describe "#debtor" do
-
     end
   end
 end

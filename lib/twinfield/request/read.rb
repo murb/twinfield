@@ -3,9 +3,8 @@ module Twinfield
     module Read
       extend self
 
-      def  office(options)
-        xml = xml_wrap(read(:office, options))
-        xml
+      def office(options)
+        xml_wrap(read(:office, options))
       end
 
       def debtor(options)
@@ -14,7 +13,7 @@ module Twinfield
         if xml.at_css("dimensions").attributes["result"]&.value == "1"
           []
         elsif xml.at_css("dimension").attributes["result"].value == "1"
-          return {
+          {
             status: 1,
             country: xml.at_css("country").content,
             city: xml.at_css("city").content,
@@ -23,7 +22,7 @@ module Twinfield
             duedays: xml.at_css("duedays").content
           }
         else
-          return {
+          {
             status: 0
           }
         end
@@ -36,7 +35,7 @@ module Twinfield
         xml = xml_wrap(read(:salesinvoice, options))
 
         if xml.at_css("dimension").attributes["result"].value == "1"
-          return {
+          {
             status: 1,
             country: xml.at_css("country").content,
             city: xml.at_css("city").content,
@@ -45,19 +44,19 @@ module Twinfield
             duedays: xml.at_css("duedays").content
           }
         else
-          return {
+          {
             status: 0
           }
         end
       end
 
-      #Twinfield::Request::Read.browse( options: { code: "000" })
+      # Twinfield::Request::Read.browse( options: { code: "000" })
       def browse(options)
         options = options.merge(office: Twinfield.configuration.company)
 
-        xml = xml_wrap(read(:browse, options))
+        xml_wrap(read(:browse, options))
 
-        return {
+        {
           status: 0
         }
       end
@@ -68,13 +67,13 @@ module Twinfield
 
         nokogiri.children.each do |node|
           twig = [xml_to_json(node)]
-          twig_keys = twig.map{|a| a.keys}.flatten
+          twig_keys = twig.map { |a| a.keys }.flatten
           uniq_twig_keys = twig_keys.uniq
           if uniq_twig_keys.count == 1 && "#{uniq_twig_keys.first}s" == node.name
-            twig = twig.map{|a| a.values}.flatten
+            twig = twig.map { |a| a.values }.flatten
           elsif node.is_a?(Nokogiri::XML::Element) && node.children.count == 1 && node.children.first.is_a?(Nokogiri::XML::Text)
             twig = node.text
-            if twig.match(/\A\d*$/)
+            if /\A\d*$/.match?(twig)
               twig = twig.to_i
             end
           elsif node.text.strip == ""
@@ -95,10 +94,10 @@ module Twinfield
 
       def read(element, options = {})
         Twinfield::Api::Process.request(:process_xml_string) do
-          %Q(
+          %(
             <read>
-              <type>#{element.to_s}</type>
-              #{ Twinfield::Api::Process.options_to_xml(options) }
+              <type>#{element}</type>
+              #{Twinfield::Api::Process.options_to_xml(options)}
             </read>
           )
         end
@@ -107,7 +106,6 @@ module Twinfield
       def xml_wrap(response)
         Nokogiri::XML(response.body[:process_xml_string_response][:process_xml_string_result])
       end
-
     end
   end
 end

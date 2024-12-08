@@ -1,7 +1,7 @@
-require File.expand_path('../../lib/twinfield', __FILE__)
-require 'webmock/rspec'
+require File.expand_path("../../lib/twinfield", __FILE__)
+require "webmock/rspec"
 
-Dir.glob(File.expand_path('../stubs/*.rb', __FILE__), &method(:require))
+Dir.glob(File.expand_path("../stubs/*.rb", __FILE__), &method(:require))
 
 def reset_config
   Twinfield.configure do |config|

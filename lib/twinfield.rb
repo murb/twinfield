@@ -2,19 +2,19 @@ require "savon"
 
 module Twinfield
   WSDLS = {
-    session: File.join(__dir__, "..", "wsdls", "session.wsdl"),
+    :session => File.join(__dir__, "..", "wsdls", "session.wsdl"),
     "accounting" => {
       session: File.join(__dir__, "..", "wsdls", "session.wsdl"),
       process: File.join(__dir__, "..", "wsdls", "accounting", "process.wsdl"),
       finder: File.join(__dir__, "..", "wsdls", "accounting", "finder.wsdl")
     },
     "accounting2" => {
-      :process => File.join(__dir__, "..", "wsdls", "accounting2", "process.wsdl"),
-      :finder => File.join(__dir__, "..", "wsdls", "accounting2", "finder.wsdl")
+      process: File.join(__dir__, "..", "wsdls", "accounting2", "process.wsdl"),
+      finder: File.join(__dir__, "..", "wsdls", "accounting2", "finder.wsdl")
     },
     "api.accounting" => {
-      :process => File.join(__dir__, "..", "wsdls", "api.accounting", "process.wsdl"),
-      :finder => File.join(__dir__, "..", "wsdls", "api.accounting", "finder.wsdl")
+      process: File.join(__dir__, "..", "wsdls", "api.accounting", "process.wsdl"),
+      finder: File.join(__dir__, "..", "wsdls", "api.accounting", "finder.wsdl")
     }
 
   }
@@ -45,8 +45,8 @@ module Twinfield
     end
 
     def reset_sessions!
-      Twinfield::Api::Process.session=nil
-      Twinfield::Api::Finder.session=nil
+      Twinfield::Api::Process.session = nil
+      Twinfield::Api::Finder.session = nil
     end
   end
 end

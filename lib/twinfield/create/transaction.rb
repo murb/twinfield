@@ -5,10 +5,11 @@ module Twinfield
     # In Twinfield there is a clear distinction between sales invoices and sales transactions. Sales invoices are the invoices, which will be sent to customers. Sales transactions are the related financial transactions that will be posted in the accounting part of Twinfield.
     #
     class Transaction
-      attr_accessor  :code, :number, :currency, :date, :duedate, :invoicenumber, :lines, :destiny, :raisewarning, :autobalancevat
+      attr_writer :destiny, :autobalancevat, :raisewarning
+      attr_accessor :code, :number, :currency, :date, :duedate, :invoicenumber, :lines
 
       def destiny
-        @destiny || 'temporary'
+        @destiny || "temporary"
       end
 
       def raisewarning
@@ -19,33 +20,35 @@ module Twinfield
         @autobalancevat || true
       end
 
-      def initialize(hash={})
+      def initialize(hash = {})
         # Escape all the things.
-        hash.each do |k,v|
+        hash.each do |k, v|
           val = if v.is_a?(String)
             CGI.escapeHTML(v)
           elsif v.is_a?(Hash)
-            v.inject({}) { |h, (k1, v1)| h[k1] = CGI.escapeHTML(v1); h }
+            v.each_with_object({}) { |(k1, v1), h|
+              h[k1] = CGI.escapeHTML(v1)
+            }
           else
             v
           end
 
-          send("#{k}=", val)
+          send(:"#{k}=", val)
         end
       end
 
       def generate_lines
         xml_lines = lines.map do |line|
-          %Q(
+          %(
             <line type="#{line[:type]}" id="#{line[:id]}" >
               <dim1>#{line[:dim1]}</dim1>
               <dim2>#{line[:dim2]}</dim2>
               <dim3>#{line[:dim3]}</dim3>
               <value>#{line[:value]}</value>
-              #{ "<vatvalue>#{line[:vatvalue]}</vatvalue>" if line[:vatvalue] }
+              #{"<vatvalue>#{line[:vatvalue]}</vatvalue>" if line[:vatvalue]}
               <debitcredit>#{line[:debitcredit]}</debitcredit>
               <description>#{CGI.escapeHTML(line[:description]) if line[:description]}</description>
-              #{ "<vatcode>#{line[:vatcode]}</vatcode>" if line[:vatcode] }
+              #{"<vatcode>#{line[:vatcode]}</vatcode>" if line[:vatcode]}
             </line>
           )
         end
@@ -55,11 +58,11 @@ module Twinfield
 
       def save
         response = Twinfield::Api::Process.request do
-          %Q(
+          %(
             <transaction destiny="#{destiny}" raisewarning="#{raisewarning}" autobalancevat="#{autobalancevat}">
               <header>
                 <code>#{code}</code>
-                #{"<number>#{number}</number>" if number }
+                #{"<number>#{number}</number>" if number}
                 <currency>#{currency}</currency>
                 <date>#{date.strftime("%Y%m%d")}</date>
                 <duedate>#{duedate.strftime("%Y%m%d")}</duedate>
@@ -76,16 +79,16 @@ module Twinfield
         xml = Nokogiri::XML(response.body[:process_xml_string_response][:process_xml_string_result])
 
         if xml.at_css("transaction").attributes["result"].value == "1"
-          return {
+          {
             code: invoicenumber,
             status: 1,
             twinfield_number: xml.at_css("number").content
           }
         else
-          return {
+          {
             code: invoicenumber,
             status: 0,
-            messages: xml.css("[msg]").map{ |x| x.attributes["msg"].value }
+            messages: xml.css("[msg]").map { |x| x.attributes["msg"].value }
           }
         end
       end

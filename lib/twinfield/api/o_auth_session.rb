@@ -3,7 +3,7 @@ module Twinfield
     class OAuthSession
       HEADER_TEMPLATE = {
         "Header" => {},
-        attributes!: {
+        :attributes! => {
           "Header" => {xmlns: "http://www.twinfield.com/"}
         }
       }
@@ -26,15 +26,15 @@ module Twinfield
       # call logon method with relog set to true
       # this wil destroy the current session and cluster
       def relog
-        logon(relog = true)
+        logon(true)
       end
 
       # after a logon try you can ask the current status
       def status
         if connected?
-          return "Ok"
+          "Ok"
         else
-          return "No access token"
+          "No access token"
         end
       end
 
@@ -51,11 +51,8 @@ module Twinfield
         header_contents["AccessToken"] = access_token if access_token
         header_contents["CompanyCode"] = Twinfield.configuration.company if Twinfield.configuration.company
 
-        soap_header = soap_header.merge({"Header" => header_contents})
-
-        soap_header
+        soap_header.merge({"Header" => header_contents})
       end
-
     end
   end
 end

@@ -17,8 +17,13 @@ module Twinfield
         self.type = type.to_sym
       end
 
-      def balance_code; dim1; end
-      def customer_code; dim2; end
+      def balance_code
+        dim1
+      end
+
+      def customer_code
+        dim2
+      end
 
       def to_xml
         Nokogiri::XML::Builder.new do |xml|
@@ -48,26 +53,26 @@ module Twinfield
       end
     end
 
-    attr_accessor :office, :code, :currency, :date, :period, :lines, :number, :destiny, :number
+    attr_accessor :office, :code, :currency, :date, :period, :lines, :destiny, :number
 
-    def initialize(office: nil,  code:,  currency: "EUR",  date: Date.today,  period: nil, destiny: :final, lines: [], number: nil)
+    def initialize(code:, office: nil, currency: "EUR", date: Date.today, period: nil, destiny: :final, lines: [], number: nil)
       self.office = office || Twinfield.configuration.company
       self.code = code
       self.currency = currency
       self.date = date
-      self.period = period || "#{date.year}/#{'%02d' % date.month}"
-      self.lines = lines.collect{|a| a.is_a?(Line) ? a : Line.new(**a)}
+      self.period = period || "#{date.year}/#{"%02d" % date.month}"
+      self.lines = lines.collect { |a| a.is_a?(Line) ? a : Line.new(**a) }
       self.destiny = destiny
       self.number = number
     end
 
     def value
-      0.0 - self.lines.select{|l| l.credit? && l.detail?}.map(&:value).sum
+      0.0 - lines.select { |l| l.credit? && l.detail? }.map(&:value).sum
     end
 
     def save
       response = Twinfield::Api::Process.request do
-        self.to_xml
+        to_xml
       end
 
       xml = Nokogiri::XML(response.body[:process_xml_string_response][:process_xml_string_result])
@@ -76,7 +81,7 @@ module Twinfield
         self.number = xml.at_css("header number").content
         self
       else
-        raise Twinfield::Create::Error.new(xml.css("[msg]").map{ |x| x.attributes["msg"].value }.join(" "), object: self)
+        raise Twinfield::Create::Error.new(xml.css("[msg]").map { |x| x.attributes["msg"].value }.join(" "), object: self)
       end
     end
 
@@ -100,10 +105,8 @@ module Twinfield
               xml << line.to_xml
             end
           end
-
         end
       end.doc.root.to_xml
     end
   end
-
 end

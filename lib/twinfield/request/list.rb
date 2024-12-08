@@ -12,22 +12,22 @@ module Twinfield
             code: xml.at_css("code").content,
             datatype: xml.at_css("datatype").content,
             finder: xml.at_css("finder").content,
-            dropdown: xml.at_css("dropdown").css("option").map {|opt| opt[:name] },
+            dropdown: xml.at_css("dropdown").css("option").map { |opt| opt[:name] },
             canorder: xml.at_css("canorder").content
           }
         end
 
-        return array
+        array
       end
 
       def budgets(options)
-        xml_doc = xml_wrap(list(:budgets, options))
+        xml_wrap(list(:budgets, options))
       end
 
       # Twinfield::Request::List.dimensions({ dimtype: "DEB" })
       def dimensions(options)
         options = options.merge(office: Twinfield.configuration.company)
-        xml_doc = xml_wrap(list(:dimensions, options))
+        xml_wrap(list(:dimensions, options))
       end
 
       def offices
@@ -42,17 +42,17 @@ module Twinfield
           }
         end
 
-        return array
+        array
       end
 
       protected
 
       def list(element, options = {})
         Twinfield::Api::Process.request(:process_xml_string) do
-          %Q(
+          %(
             <list>
-              <type>#{element.to_s}</type>
-              #{ Twinfield::Api::Process.options_to_xml(options) }
+              <type>#{element}</type>
+              #{Twinfield::Api::Process.options_to_xml(options)}
             </list>
           )
         end

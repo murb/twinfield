@@ -10,7 +10,6 @@ module Twinfield
         attr_accessor :invoice_number, :customer_code, :key, :currency, :value, :open_value, :available_for_payruns, :status, :number, :date, :code
 
         class << self
-
           def initialize_from_columns_response_row(transaction_xml)
             # "<tr>
             #    <td field=\"fin.trs.head.number\" hideforuser=\"false\" type=\"Decimal\">202000011</td>
@@ -24,7 +23,7 @@ module Twinfield
             #    <key> <office>NLA002058</office> <code>VRK</code> <number>202000011</number> <line>1</line> </key>
             # </tr>"
             # p
-            self.new(
+            new(
               number: transaction_xml.css("td[field='fin.trs.head.number']").text,
               invoice_number: transaction_xml.css("td[field='fin.trs.line.invnumber']").text,
               currency: transaction_xml.css("td[field='fin.trs.head.curcode']").text,
@@ -33,7 +32,7 @@ module Twinfield
               available_for_payruns: transaction_xml.css("td[field='fin.trs.line.availableforpayruns']").text&.to_f,
               status: transaction_xml.css("td[field='fin.trs.line.matchstatus']").text,
               customer_code: transaction_xml.css("td[field='fin.trs.line.dim2']").text,
-              key: transaction_xml.css("key").text.gsub(/\s/,""),
+              key: transaction_xml.css("key").text.gsub(/\s/, ""),
               date: parse_date(transaction_xml.css("td[field='fin.trs.head.date']").text),
               code: transaction_xml.css("td[field='fin.trs.head.code']").text
             )
@@ -255,7 +254,7 @@ module Twinfield
             #   </columns>
             # </browse>
 
-            build_request = %Q(
+            build_request = %(
               <sort>
                  <field>fin.trs.head.code</field>
               </sort>
@@ -375,7 +374,7 @@ module Twinfield
             end
 
             response = Twinfield::Api::Process.request(:process_xml_string) do
-              %Q(
+              %(
                 <columns code="100">
                   #{build_request}
                 </columns>
@@ -395,7 +394,7 @@ module Twinfield
           end
         end
 
-        def initialize(invoice_number: nil, customer_code: nil, key: nil, currency: "EUR", value: nil, open_value: nil, available_for_payruns: nil, status: nil, number: nil, date: nil, code:)
+        def initialize(code:, invoice_number: nil, customer_code: nil, key: nil, currency: "EUR", value: nil, open_value: nil, available_for_payruns: nil, status: nil, number: nil, date: nil)
           self.invoice_number = invoice_number
           self.customer_code = customer_code
           self.key = key

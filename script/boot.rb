@@ -4,14 +4,14 @@ require "rubygems"
 require "twinfield"
 require File.expand_path("../config", __FILE__)
 #
-#@session = Twinfield::Api::Session.new
-#@session.logon
+# @session = Twinfield::Api::Session.new
+# @session.logon
 #
 # @process = Twinfield::Api::Process.new(@session.session_id, @session.cluster)
 #
-#Twinfield::Request::List.browsefields
+# Twinfield::Request::List.browsefields
 #
-#@dimensions = Twinfield::Request::List.dimensions( { dimtype: "DEB", office: Twinfield.configuration.company } )
+# @dimensions = Twinfield::Request::List.dimensions( { dimtype: "DEB", office: Twinfield.configuration.company } )
 #
 @invoice = Twinfield::SalesInvoice.new
 
@@ -28,32 +28,31 @@ require File.expand_path("../config", __FILE__)
 @invoice.raisewarning = false
 @invoice.autobalancevat = true
 
-@invoice.lines =  [
-                            {
-                              type: 'total',
-                              id: 1,
-                              dim1: 1300,
-                              dim2: "D10000881",
-                              value: 1000000,
-                              debitcredit: "debit",
-                              description: "Totaal regel"
-                            },
-                            {
-                              # Mandatory parameters:
-                              type: 'detail',
-                              id: 2,
-                              dim1: 8000,
-                              dim2: "A0000",
-                              dim3: "M0000",
-                              value: 1000000,
-                              debitcredit: "credit",
-                              description: "Rekening betaald",
+@invoice.lines = [
+  {
+    type: "total",
+    id: 1,
+    dim1: 1300,
+    dim2: "D10000881",
+    value: 1000000,
+    debitcredit: "debit",
+    description: "Totaal regel"
+  },
+  {
+    # Mandatory parameters:
+    type: "detail",
+    id: 2,
+    dim1: 8000,
+    dim2: "A0000",
+    dim3: "M0000",
+    value: 1000000,
+    debitcredit: "credit",
+    description: "Rekening betaald",
 
-                              # Obligatory parameters:
-                              vatvalue: "0",
-                              vatcode: "VL"
-                            }
-                          ]
-#@result = @invoice.save
-#puts @result
-
+    # Obligatory parameters:
+    vatvalue: "0",
+    vatcode: "VL"
+  }
+]
+# @result = @invoice.save
+# puts @result

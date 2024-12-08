@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Twinfield::Configuration do
   after do
@@ -44,16 +44,16 @@ describe Twinfield::Configuration do
 
   describe "#access_token_expired?" do
     it "raises when no access token is given" do
-      expect{Twinfield.configuration.access_token_expired?}.to raise_error(Twinfield::Configuration::Error)
+      expect { Twinfield.configuration.access_token_expired? }.to raise_error(Twinfield::Configuration::Error)
     end
 
     it "returns expired on an old access token" do
-      Twinfield.configuration.access_token = "abc.#{Base64.encode64(JSON({exp:(Time.now-100).to_i}))}.abc"
+      Twinfield.configuration.access_token = "abc.#{Base64.encode64(JSON({exp: (Time.now - 100).to_i}))}.abc"
       expect(Twinfield.configuration.access_token_expired?).to eq(true)
     end
 
     it "returns not expired on an old access token" do
-      Twinfield.configuration.access_token = "abc.#{Base64.encode64(JSON({exp:(Time.now+100).to_i}))}.abc"
+      Twinfield.configuration.access_token = "abc.#{Base64.encode64(JSON({exp: (Time.now + 100).to_i}))}.abc"
       expect(Twinfield.configuration.access_token_expired?).to eq(false)
     end
   end

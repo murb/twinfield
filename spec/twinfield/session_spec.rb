@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Twinfield::Api::Session do
   include SessionStubs
@@ -8,9 +8,7 @@ describe Twinfield::Api::Session do
   end
 
   describe "successful logon" do
-
     before(:all) do
-
       stub_create_session
       stub_cluster_session_wsdl
       stub_select_company
@@ -47,7 +45,6 @@ describe Twinfield::Api::Session do
   end
 
   describe "invalid logon" do
-
     before(:all) do
       username = "not_valid_username"
 

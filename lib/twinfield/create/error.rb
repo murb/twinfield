@@ -13,7 +13,7 @@ module Twinfield
       attr_accessor :object
 
       def initialize message, object:
-        super(message, object: object)
+        super
         self.object = object
       end
     end
@@ -22,7 +22,7 @@ module Twinfield
       attr_accessor :object
 
       def initialize message, object:
-        super(message, object: object)
+        super
         self.object = object
       end
     end

@@ -2,11 +2,10 @@ module Twinfield
   module Api
     class BaseApi
       class << self
-
         def session
           @session ||= Twinfield.configuration.session_class.new
           @session.logon
-          return @session
+          @session
         end
 
         def session= session
@@ -25,10 +24,8 @@ module Twinfield
           }
           options[:logger] = Twinfield.configuration.logger if Twinfield.configuration.logger
 
-
           @client ||= Savon.client(options)
         end
-
 
         def wsdl
           raise "undefined .wsdl"
@@ -39,9 +36,9 @@ module Twinfield
         end
 
         def cluster_short_name
-          if cluster.match("accounting2.")
+          if cluster.match?("accounting2.")
             "accounting2"
-          elsif cluster.match("api.accounting")
+          elsif cluster.match?("api.accounting")
             "api.accounting"
           else
             "accounting"

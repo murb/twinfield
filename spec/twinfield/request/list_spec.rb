@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Twinfield::Request::List do
   include SessionStubs
@@ -6,7 +6,6 @@ describe Twinfield::Request::List do
 
   context "Twinfield::Api::Session" do
     before do
-
       stub_create_session
       stub_cluster_session_wsdl
       stub_select_company
@@ -14,8 +13,8 @@ describe Twinfield::Request::List do
 
     describe "#dimensions" do
       it "lists debtors" do
-        stub_processxml_list_dimensions(dimension_type: 'DEB', company: 'company')
-        expect(subject.dimensions({ dimtype: "DEB" })).to be_a Nokogiri::XML::Document
+        stub_processxml_list_dimensions(dimension_type: "DEB", company: "company")
+        expect(subject.dimensions({dimtype: "DEB"})).to be_a Nokogiri::XML::Document
       end
     end
   end
@@ -44,20 +43,16 @@ describe Twinfield::Request::List do
 
     describe "#dimensions" do
       it "lists debtors" do
-        stub_processxml_list_dimensions(dimension_type: 'DEB', oauth: true)
-        expect(subject.dimensions({ dimtype: "DEB" })).to be_a Nokogiri::XML::Document
+        stub_processxml_list_dimensions(dimension_type: "DEB", oauth: true)
+        expect(subject.dimensions({dimtype: "DEB"})).to be_a Nokogiri::XML::Document
       end
     end
-
 
     describe "#offices" do
       it "lists offices" do
         stub_processxml_list_offices(oauth: true)
         # expect(subject.offices).to be_a Nokogiri::XML::Document
-
       end
     end
-
   end
-
 end

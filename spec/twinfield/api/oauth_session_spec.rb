@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Twinfield::Api::OAuthSession do
   include SessionStubs
@@ -35,4 +35,3 @@ describe Twinfield::Api::OAuthSession do
     end
   end
 end
-

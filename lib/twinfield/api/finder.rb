@@ -12,10 +12,8 @@ module Twinfield
 
         # request
         # see: https://accounting.twinfield.com/webservices/documentation/#/ApiReference/Transactions/SalesInvoices
-        def request(type, options={})
-          if Twinfield.configuration.logger
-            Twinfield.configuration.logger.debug("  ↳ #{caller.select{|a| !a.match /\/gems\/|\/ruby\/|\<internal\:/}.first}")
-          end
+        def request(type, options = {})
+          Twinfield.configuration.logger&.debug("  ↳ #{caller.find { |a| !a.match(/\/gems\/|\/ruby\/|<internal:/) }}")
 
           first_row = options.delete(:first_row) || 1
           pattern = options.delete(:pattern) || "*"
@@ -28,11 +26,11 @@ module Twinfield
             "firstRow" => first_row,
             "maxRows" => max_rows,
             "options" => {
-              "ArrayOfString" => options.map {|k, v| { "string" => [k, v] } }
+              "ArrayOfString" => options.map { |k, v| {"string" => [k, v]} }
             }
           }
 
-          xml = client.operation(:search).build(attributes: { xmlns: "http://www.twinfield.com/" }, soap_header: session.header, message: message).build_document
+          xml = client.operation(:search).build(attributes: {xmlns: "http://www.twinfield.com/"}, soap_header: session.header, message: message).build_document
 
           client.call(:search, xml: strip_global_namespace_from_xml(xml))
         end

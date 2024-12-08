@@ -3,7 +3,7 @@ module Twinfield
     class Session
       HEADER_TEMPLATE = {
         "Header" => {},
-        attributes!: {
+        :attributes! => {
           "Header" => {xmlns: "http://www.twinfield.com/"}
         }
       }
@@ -13,8 +13,8 @@ module Twinfield
       # sets up a new savon client which will be used for current Session
       def initialize
         @client = Savon.client(wsdl: Twinfield::WSDLS[:session],
-                               log: !!Twinfield.configuration.log_level,
-                               log_level: Twinfield.configuration.log_level || :info)
+          log: !!Twinfield.configuration.log_level,
+          log_level: Twinfield.configuration.log_level || :info)
       end
 
       # retrieve a session_id and cluster from twinfield
@@ -40,7 +40,7 @@ module Twinfield
       # call logon method with relog set to true
       # this wil destroy the current session and cluster
       def relog
-        logon(relog = true)
+        logon(true)
       end
 
       # after a logon try you can ask the current status
@@ -58,11 +58,11 @@ module Twinfield
       def abandon
         if session_id
           message = "<Abandon xmlns='http://www.twinfield.com/' />"
-          response = @client.call(:Abandon, attributes: { xmlns: "http://www.twinfield.com/" }, soap_header: header, message: message)
+          @client.call(:Abandon, attributes: {xmlns: "http://www.twinfield.com/"}, soap_header: header, message: message)
 
           # TODO: Return real status
           # There is no message from twinfield if the action succeeded
-          return "Ok"
+          "Ok"
         else
           "no session found"
         end
@@ -70,18 +70,18 @@ module Twinfield
 
       # Keep the session alive, to prevent session time out. A session time out will occur after 20 minutes.
       def keep_alive
-        response = @client.request :keep_alive do
+        @client.request :keep_alive do
           soap.header = header
           soap.body = "<KeepAliveResponse xmlns='http://www.twinfield.com/' />"
         end
         # TODO: Return real status
         # There is no message from twinfield if the action succeeded
-        return "Ok"
+        "Ok"
       end
 
       def header
         soap_header = HEADER_TEMPLATE
-        soap_header = soap_header.merge({"Header"=> {"SessionID"=>session_id}}) if session_id
+        soap_header = soap_header.merge({"Header" => {"SessionID" => session_id}}) if session_id
         soap_header
       end
 
@@ -158,12 +158,12 @@ module Twinfield
       def select_company(code)
         message = "<company>#{code}</company>"
 
-        response = Savon.client(wsdl: "#{@cluster}/webservices/session.asmx?wsdl",
-                                 env_namespace: :soap,
-                                 encoding: "UTF-8",
-                                 namespace_identifier: nil).call(:select_company, attributes: { xmlns: "http://www.twinfield.com/" }, soap_header: header, message: message)
+        Savon.client(wsdl: "#{@cluster}/webservices/session.asmx?wsdl",
+          env_namespace: :soap,
+          encoding: "UTF-8",
+          namespace_identifier: nil).call(:select_company, attributes: {xmlns: "http://www.twinfield.com/"}, soap_header: header, message: message)
 
-        return "Ok"
+        "Ok"
       end
     end
   end

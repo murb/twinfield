@@ -17,6 +17,7 @@ module Twinfield
         }
       end
     end
+
     class VatLine
       attr_accessor :vatcode, :vatvalue, :performancetype, :performancedate, :vatname, :invoice
 
@@ -38,26 +39,27 @@ module Twinfield
         }
       end
     end
+
     class Line < Twinfield::AbstractModel
       attr_accessor :id, :article, :subarticle, :quantity, :units, :allowdiscountorpremium, :description, :unitspriceexcl, :unitspriceinc, :freetext1, :freetext2, :freetext3, :dim1, :vatcode, :performancetype, :performancedate, :valueexcl, :vatvalue, :valueinc, :invoice
 
       def initialize(id: nil, article: "-", subarticle: nil, quantity: 1, units: nil, allowdiscountorpremium: true, description: nil, unitspriceexcl: nil, unitspriceinc: nil, freetext1: nil, freetext2: nil, freetext3: nil, dim1: nil, vatcode: nil, performancetype: nil, performancedate: nil, valueinc: nil, vatvalue: nil, valueexcl: nil)
-        @id= id
-        @article= article # article "-" is an article-less article in Twinfield
-        @subarticle= subarticle if subarticle.to_s != ""
-        @quantity= Float(quantity) unless article == "-"
-        @units= Integer(units) if units and units != ""
-        @allowdiscountorpremium= allowdiscountorpremium unless article == "-"
-        @description= description
-        @unitspriceexcl= Float(unitspriceexcl) if unitspriceexcl
-        @unitspriceinc= Float(unitspriceinc) if unitspriceinc
-        @freetext1= freetext1 if freetext1.to_s != ""
-        @freetext2= freetext2 if freetext2.to_s != ""
-        @freetext3= freetext3 if freetext3.to_s != ""
-        @dim1= dim1 if dim1.to_s != ""
-        @vatcode= vatcode if vatcode.to_s != ""
-        @performancetype= performancetype if performancetype.to_s != ""
-        @performancedate= performancedate if performancedate.to_s != ""
+        @id = id
+        @article = article # article "-" is an article-less article in Twinfield
+        @subarticle = subarticle if subarticle.to_s != ""
+        @quantity = Float(quantity) unless article == "-"
+        @units = Integer(units) if units && units != ""
+        @allowdiscountorpremium = allowdiscountorpremium unless article == "-"
+        @description = description
+        @unitspriceexcl = Float(unitspriceexcl) if unitspriceexcl
+        @unitspriceinc = Float(unitspriceinc) if unitspriceinc
+        @freetext1 = freetext1 if freetext1.to_s != ""
+        @freetext2 = freetext2 if freetext2.to_s != ""
+        @freetext3 = freetext3 if freetext3.to_s != ""
+        @dim1 = dim1 if dim1.to_s != ""
+        @vatcode = vatcode if vatcode.to_s != ""
+        @performancetype = performancetype if performancetype.to_s != ""
+        @performancedate = performancedate if performancedate.to_s != ""
         @valueinc = valueinc
         @vatvalue = vatvalue
         @valueexcl = valueexcl
@@ -105,7 +107,7 @@ module Twinfield
           performancedate: performancedate,
           valueexcl: valueexcl,
           valueinc: valueinc,
-          vatvalue: vatvalue,
+          vatvalue: vatvalue
         }
       end
     end
@@ -155,9 +157,9 @@ module Twinfield
             dim1: xml_line.css("dim1").text,
             vatcode: xml_line.css("vatcode").text
           )
-          line.valueexcl = xml_line.css("valueexcl").text == "" ? nil : xml_line.css("valueexcl").text.to_f
-          line.vatvalue = xml_line.css("vatvalue").text == "" ? nil : xml_line.css("vatvalue").text.to_f
-          line.valueinc = xml_line.css("valueinc").text == "" ? nil : xml_line.css("valueinc").text.to_f
+          line.valueexcl = (xml_line.css("valueexcl").text == "") ? nil : xml_line.css("valueexcl").text.to_f
+          line.vatvalue = (xml_line.css("vatvalue").text == "") ? nil : xml_line.css("vatvalue").text.to_f
+          line.valueinc = (xml_line.css("valueinc").text == "") ? nil : xml_line.css("valueinc").text.to_f
           invoice.lines << line
         end
 
@@ -177,8 +179,8 @@ module Twinfield
       end
 
       def search(options = {})
-        response = Twinfield::Api::Process.request(:process_xml_string) do
-          %Q(
+        Twinfield::Api::Process.request(:process_xml_string) do
+          %(
             <columns code="000">
              <sort>
                 <field>fin.trs.head.code</field>
@@ -244,9 +246,9 @@ module Twinfield
 
     attr_accessor :invoicetype, :invoicedate, :duedate, :performancedate, :bank, :invoiceaddressnumber, :deliveraddressnumber, :customer_code, :period, :currency, :status, :paymentmethod, :headertext, :footertext, :lines, :office, :invoicenumber, :vatvalue, :valueinc, :financials, :vat_lines
 
-    def initialize(duedate: nil, invoicetype:, invoicedate: nil, performancedate: nil, bank: nil, invoiceaddressnumber: nil, deliveraddressnumber: nil, customer: nil, customer_code: nil, period: nil, currency: nil, status: "concept", paymentmethod: nil, headertext: nil, footertext: nil, office: nil, invoicenumber: nil, financials: {}, lines: [], vat_lines: [])
-      self.lines = lines.collect{|a| SalesInvoice::Line.new(**a.to_h)}
-      self.vat_lines = vat_lines.collect{|a| SalesInvoice::VatLine.new(**a.to_h)}
+    def initialize(invoicetype:, duedate: nil, invoicedate: nil, performancedate: nil, bank: nil, invoiceaddressnumber: nil, deliveraddressnumber: nil, customer: nil, customer_code: nil, period: nil, currency: nil, status: "concept", paymentmethod: nil, headertext: nil, footertext: nil, office: nil, invoicenumber: nil, financials: {}, lines: [], vat_lines: [])
+      self.lines = lines.collect { |a| SalesInvoice::Line.new(**a.to_h) }
+      self.vat_lines = vat_lines.collect { |a| SalesInvoice::VatLine.new(**a.to_h) }
       self.financials = SalesInvoice::Financials.new(**financials.to_h) if financials && financials != {}
       @invoicetype = invoicetype
       @invoicedate = invoicedate.is_a?(String) ? Date.parse(invoicedate) : invoicedate
@@ -264,11 +266,14 @@ module Twinfield
       @headertext = headertext
       @footertext = footertext
       @office = office || Twinfield.configuration.company
-      @invoicenumber= invoicenumber
+      @invoicenumber = invoicenumber
     end
 
     def associated_lines
-      lines.map{|a| a.invoice = self; a}
+      lines.map { |a|
+        a.invoice = self
+        a
+      }
     end
 
     def raisewarning
@@ -305,11 +310,11 @@ module Twinfield
     end
 
     def deliver_address
-      customer.addresses[deliveraddressnumber-1] if deliveraddressnumber
+      customer.addresses[deliveraddressnumber - 1] if deliveraddressnumber
     end
 
     def invoice_address
-      customer.addresses[invoiceaddressnumber-1] if invoiceaddressnumber
+      customer.addresses[invoiceaddressnumber - 1] if invoiceaddressnumber
     end
 
     def transaction
@@ -378,13 +383,13 @@ module Twinfield
         headertext: headertext,
         footertext: footertext,
         office: office || Twinfield.configuration.company,
-        invoicenumber:invoicenumber
+        invoicenumber: invoicenumber
       }
     end
 
     def save
       response = Twinfield::Api::Process.request do
-        self.to_xml
+        to_xml
       end
 
       xml = Nokogiri::XML(response.body[:process_xml_string_response][:process_xml_string_result])
@@ -392,14 +397,12 @@ module Twinfield
       if xml.at_css("salesinvoice").attributes["result"].value == "1"
         self.invoicenumber = xml.at_css("invoicenumber").content
         self
+      elsif xml.css("header status").text == "final"
+        raise Twinfield::Create::Finalized.new(xml.css("[msg]").map { |x| x.attributes["msg"].value }.join(" "), object: self)
+      elsif lines.count == 0
+        raise Twinfield::Create::EmptyInvoice.new(xml.css("[msg]").map { |x| x.attributes["msg"].value }.join(" "), object: self)
       else
-        if xml.css("header status").text == "final"
-          raise Twinfield::Create::Finalized.new(xml.css("[msg]").map{ |x| x.attributes["msg"].value }.join(" "), object: self)
-        elsif lines.count == 0
-          raise Twinfield::Create::EmptyInvoice.new(xml.css("[msg]").map{ |x| x.attributes["msg"].value }.join(" "), object: self)
-        else
-          raise Twinfield::Create::Error.new(xml.css("[msg]").map{ |x| x.attributes["msg"].value }.join(" "), object: self)
-        end
+        raise Twinfield::Create::Error.new(xml.css("[msg]").map { |x| x.attributes["msg"].value }.join(" "), object: self)
       end
     end
   end

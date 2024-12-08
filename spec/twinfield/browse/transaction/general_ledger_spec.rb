@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Twinfield::Browse::Transaction::GeneralLedger do
   include SessionStubs
@@ -6,7 +6,6 @@ describe Twinfield::Browse::Transaction::GeneralLedger do
   include ProcessxmlStubs
 
   before do
-
     stub_create_session
     stub_cluster_session_wsdl
     stub_select_company
@@ -15,8 +14,8 @@ describe Twinfield::Browse::Transaction::GeneralLedger do
   describe "class methods" do
     describe ".where" do
       it "returns transactions" do
-        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
-          to_return(body: File.read(File.expand_path('../../../../fixtures/cluster/processxml/columns/sales_transactions.xml', __FILE__)))
+        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx")
+          .to_return(body: File.read(File.expand_path("../../../../fixtures/cluster/processxml/columns/sales_transactions.xml", __FILE__)))
 
         transaction = Twinfield::Browse::Transaction::GeneralLedger.where.first
 
@@ -25,9 +24,9 @@ describe Twinfield::Browse::Transaction::GeneralLedger do
       end
 
       it "accepts a customer code" do
-        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
-          with(body: /<from>1000\/01<\/from>/).
-          to_return(body: File.read(File.expand_path('../../../../fixtures/cluster/processxml/columns/sales_transactions.xml', __FILE__)))
+        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx")
+          .with(body: /<from>1000\/01<\/from>/)
+          .to_return(body: File.read(File.expand_path("../../../../fixtures/cluster/processxml/columns/sales_transactions.xml", __FILE__)))
 
         transaction = Twinfield::Browse::Transaction::GeneralLedger.where(years: 1000..2000).first
 
@@ -36,9 +35,9 @@ describe Twinfield::Browse::Transaction::GeneralLedger do
       end
 
       it "accepts a customer code" do
-        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
-          with(body: /<from>4040<\/from>\s*<to>4040<\/to>/).
-          to_return(body: File.read(File.expand_path('../../../../fixtures/cluster/processxml/columns/sales_transactions.xml', __FILE__)))
+        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx")
+          .with(body: /<from>4040<\/from>\s*<to>4040<\/to>/)
+          .to_return(body: File.read(File.expand_path("../../../../fixtures/cluster/processxml/columns/sales_transactions.xml", __FILE__)))
 
         transaction = Twinfield::Browse::Transaction::GeneralLedger.where(dim1: "4040").first
 
@@ -47,9 +46,9 @@ describe Twinfield::Browse::Transaction::GeneralLedger do
       end
 
       it "accepts a invoice number" do
-        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
-          with(body: /abcd12002/).
-          to_return(body: File.read(File.expand_path('../../../../fixtures/cluster/processxml/columns/sales_transactions.xml', __FILE__)))
+        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx")
+          .with(body: /abcd12002/)
+          .to_return(body: File.read(File.expand_path("../../../../fixtures/cluster/processxml/columns/sales_transactions.xml", __FILE__)))
 
         transaction = Twinfield::Browse::Transaction::GeneralLedger.where(dim2: "abcd12002").first
 

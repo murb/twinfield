@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Twinfield::SalesInvoice do
   include SessionStubs
@@ -16,17 +16,17 @@ describe Twinfield::SalesInvoice do
     describe "#to_xml" do
       it "renders xml" do
         expect(Twinfield::SalesInvoice::Line.new(article: "A").to_xml(1)).to match("<line id=\"1\">")
-        expect(Twinfield::SalesInvoice::Line.new(article: "A", id: 2).to_xml()).to match("<line id=\"2\">")
+        expect(Twinfield::SalesInvoice::Line.new(article: "A", id: 2).to_xml).to match("<line id=\"2\">")
       end
       it "formats dates correctly" do
-        expect(Twinfield::SalesInvoice::Line.new(article: "A", performancedate: Date.new(2020,12,23)).to_xml(1)).to match("20201223")
+        expect(Twinfield::SalesInvoice::Line.new(article: "A", performancedate: Date.new(2020, 12, 23)).to_xml(1)).to match("20201223")
       end
     end
 
     describe "#invoice" do
       it "returns the containers invoice" do
         invoice = Twinfield::SalesInvoice.new(duedate: Time.now, customer: "1001", invoicetype: "VERKOOP")
-        invoice.lines= [Twinfield::SalesInvoice::Line.new(article: "A")]
+        invoice.lines = [Twinfield::SalesInvoice::Line.new(article: "A")]
         expect(invoice.associated_lines.first.invoice).to eq(invoice)
       end
     end
@@ -34,7 +34,6 @@ describe Twinfield::SalesInvoice do
 
   describe "class methods" do
     before do
-
       stub_create_session
       stub_cluster_session_wsdl
       stub_select_company
@@ -42,9 +41,9 @@ describe Twinfield::SalesInvoice do
 
     describe ".find" do
       it "returns a sales invoice" do
-        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
-          with(body: /\<read\>\s*\<type\>salesinvoice\<\/type\>/).
-          to_return(body: File.read(File.expand_path('../../fixtures/cluster/processxml/invoice/read_success.xml', __FILE__)))
+        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx")
+          .with(body: /<read>\s*<type>salesinvoice<\/type>/)
+          .to_return(body: File.read(File.expand_path("../../fixtures/cluster/processxml/invoice/read_success.xml", __FILE__)))
         invoice = Twinfield::SalesInvoice.find(13, invoicetype: "VERKOOP")
         expect(invoice).to be_a(Twinfield::SalesInvoice)
         expect(invoice.invoicenumber).to eq("13")
@@ -55,9 +54,9 @@ describe Twinfield::SalesInvoice do
       end
 
       it "returns nil when empty result" do
-        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
-          with(body: /\<read\>\s*\<type\>salesinvoice\<\/type\>/).
-          to_return(body: File.read(File.expand_path('../../fixtures/cluster/processxml/invoice/read_not_found.xml', __FILE__)))
+        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx")
+          .with(body: /<read>\s*<type>salesinvoice<\/type>/)
+          .to_return(body: File.read(File.expand_path("../../fixtures/cluster/processxml/invoice/read_not_found.xml", __FILE__)))
         invoice = Twinfield::SalesInvoice.find(13, invoicetype: "VERKOOP")
         expect(invoice).to eq(nil)
       end
@@ -65,9 +64,9 @@ describe Twinfield::SalesInvoice do
 
     describe ".new" do
       it "initializes from a hash" do
-        hash = {:lines=>[{:id=>"1", :article=>"HUUR", :subarticle=>"1", :quantity=>1, :units=>1, :allowdiscountorpremium=>"true", :description=>"Huur", :unitspriceexcl=>7.23, :unitspriceinc=>nil, valueinc: 8.75, :freetext1=>nil, :freetext2=>nil, :freetext3=>nil, :dim1=>"8000", :vatcode=>"VH", :performancetype=>nil, :performancedate=>nil}, {:id=>"2", :article=>"-", :subarticle=>nil, :quantity=>nil, :units=>nil, :allowdiscountorpremium=>nil, :description=>"Beschrijving", :unitspriceexcl=>nil, :unitspriceinc=>nil, :freetext1=>nil, :freetext2=>nil, :freetext3=>nil, :dim1=>nil, :vatcode=>nil, :performancetype=>nil, :performancedate=>nil}], :vat_lines=>[{:vatcode=>"VH", :vatvalue=>1.73, :performancetype=>"", :performancedate=>"", :vatname=>"BTW 21%"}], :invoicetype=>"FACTUUR", :invoicedate=>"2022-06-24", :duedate=>"2022-07-24", :performancedate=>nil, :bank=>"BNK", :invoiceaddressnumber=>1, :deliveraddressnumber=>1, :customer_code=>2321, :period=>"2022/6", :currency=>"EUR", :status=>"final", :paymentmethod=>"bank", :headertext=>"", :footertext=>"Footer", :office=>"NL123", :invoicenumber=>"1622"}
+        hash = {lines: [{id: "1", article: "HUUR", subarticle: "1", quantity: 1, units: 1, allowdiscountorpremium: "true", description: "Huur", unitspriceexcl: 7.23, unitspriceinc: nil, valueinc: 8.75, freetext1: nil, freetext2: nil, freetext3: nil, dim1: "8000", vatcode: "VH", performancetype: nil, performancedate: nil}, {id: "2", article: "-", subarticle: nil, quantity: nil, units: nil, allowdiscountorpremium: nil, description: "Beschrijving", unitspriceexcl: nil, unitspriceinc: nil, freetext1: nil, freetext2: nil, freetext3: nil, dim1: nil, vatcode: nil, performancetype: nil, performancedate: nil}], vat_lines: [{vatcode: "VH", vatvalue: 1.73, performancetype: "", performancedate: "", vatname: "BTW 21%"}], invoicetype: "FACTUUR", invoicedate: "2022-06-24", duedate: "2022-07-24", performancedate: nil, bank: "BNK", invoiceaddressnumber: 1, deliveraddressnumber: 1, customer_code: 2321, period: "2022/6", currency: "EUR", status: "final", paymentmethod: "bank", headertext: "", footertext: "Footer", office: "NL123", invoicenumber: "1622"}
         invoice = Twinfield::SalesInvoice.new(**hash)
-        expect(invoice.invoicedate).to eq(Date.new(2022,6,24))
+        expect(invoice.invoicedate).to eq(Date.new(2022, 6, 24))
         expect(invoice.invoicedate).not_to eq("2022-06-24")
       end
     end
@@ -88,13 +87,12 @@ describe Twinfield::SalesInvoice do
 
     describe "#transaction" do
       it "retuns no transaction when no financials info" do
-
         stub_create_session
         stub_cluster_session_wsdl
         stub_select_company
 
         invoice = Twinfield::SalesInvoice.new(duedate: Time.now, customer: "1001", invoicetype: "VERKOOP", invoicenumber: "2021-0812")
-        transaction = invoice.transaction
+        invoice.transaction
         expect(invoice.transaction).to be_nil
       end
 
@@ -107,33 +105,32 @@ describe Twinfield::SalesInvoice do
       end
 
       it "returns a transaction" do
-
         stub_create_session
         stub_cluster_session_wsdl
         stub_select_company
 
-        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
-          with(body: /20210812/).
-          to_return(body: File.read(File.expand_path('../../fixtures/cluster/processxml/columns/sales_transactions.xml', __FILE__)))
+        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx")
+          .with(body: /20210812/)
+          .to_return(body: File.read(File.expand_path("../../fixtures/cluster/processxml/columns/sales_transactions.xml", __FILE__)))
 
         invoice = Twinfield::SalesInvoice.new(duedate: Time.now, customer: "1001", invoicetype: "VERKOOP", invoicenumber: "2021-0812")
         invoice.financials = Twinfield::SalesInvoice::Financials.new(code: "VRK", number: "20210812")
 
-        transaction = invoice.transaction
+        invoice.transaction
         expect(invoice.transaction).to be_a(Twinfield::Browse::Transaction::Customer)
       end
     end
     describe "#to_xml" do
       it "renders xml" do
         invoice = Twinfield::SalesInvoice.new(duedate: Time.now, customer: "1001", invoicetype: "VERKOOP")
-        invoice.lines= [Twinfield::SalesInvoice::Line.new(article: "A")]
+        invoice.lines = [Twinfield::SalesInvoice::Line.new(article: "A")]
         expect(invoice.to_xml).to match("<lines>\n    <line id=\"1\">")
         expect(invoice.to_xml).not_to match("<invoicenumber")
       end
 
       it "renders xml with invoicenumber when given (updating)" do
         invoice = Twinfield::SalesInvoice.new(duedate: Time.now, customer: "1001", invoicetype: "VERKOOP", invoicenumber: "12")
-        invoice.lines= [Twinfield::SalesInvoice::Line.new(article: "A")]
+        invoice.lines = [Twinfield::SalesInvoice::Line.new(article: "A")]
         expect(invoice.to_xml).to match("<invoicenumber>12</invoicenumber>")
       end
     end
@@ -141,7 +138,7 @@ describe Twinfield::SalesInvoice do
     describe "#to_h" do
       let(:invoice) {
         invoice = Twinfield::SalesInvoice.new(duedate: Time.now, customer: "1001", invoicetype: "VERKOOP")
-        invoice.lines= [Twinfield::SalesInvoice::Line.new(article: "A")]
+        invoice.lines = [Twinfield::SalesInvoice::Line.new(article: "A")]
         invoice
       }
       it "renders a hash" do
@@ -159,16 +156,15 @@ describe Twinfield::SalesInvoice do
 
     describe ":financials" do
       before do
-
         stub_create_session
         stub_cluster_session_wsdl
         stub_select_company
       end
 
       it "survives a roundtrip" do
-        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
-          with(body: /\<read\>\s*\<type\>salesinvoice\<\/type\>/).
-          to_return(body: File.read(File.expand_path('../../fixtures/cluster/processxml/invoice/read_success.xml', __FILE__)))
+        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx")
+          .with(body: /<read>\s*<type>salesinvoice<\/type>/)
+          .to_return(body: File.read(File.expand_path("../../fixtures/cluster/processxml/invoice/read_success.xml", __FILE__)))
         invoice = Twinfield::SalesInvoice.find(13, invoicetype: "VERKOOP")
         expect(invoice.financials).to be_a Twinfield::SalesInvoice::Financials
         financials_number = "202100006"
@@ -176,44 +172,42 @@ describe Twinfield::SalesInvoice do
         expect(invoice.financials.number).to eq financials_number
         expect(invoice.to_h[:financials][:number]).to eq financials_number
 
-        cloned_invoice = Twinfield::SalesInvoice.new(**invoice.to_h)
+        Twinfield::SalesInvoice.new(**invoice.to_h)
         expect(invoice.financials.number).to eq financials_number
       end
     end
 
     describe "#save" do
       before do
-
         stub_create_session
         stub_cluster_session_wsdl
         stub_select_company
       end
 
       it "reports errors" do
-        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
-          with(body: /<customer>1001<\/customer>/).
-          to_return(body: File.read(File.expand_path('../../fixtures/cluster/processxml/invoice/create_error.xml', __FILE__)))
+        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx")
+          .with(body: /<customer>1001<\/customer>/)
+          .to_return(body: File.read(File.expand_path("../../fixtures/cluster/processxml/invoice/create_error.xml", __FILE__)))
         invoice = Twinfield::SalesInvoice.new(duedate: Time.now, customer: "1001", invoicetype: "VERKOOP")
-        expect{ invoice.save }.to raise_error(Twinfield::Create::Error)
+        expect { invoice.save }.to raise_error(Twinfield::Create::Error)
         invoice = Twinfield::SalesInvoice.new(duedate: Time.now, customer: "1001", invoicetype: "VERKOOP")
-        expect{ invoice.save }.to raise_error(Twinfield::Create::EmptyInvoice)
+        expect { invoice.save }.to raise_error(Twinfield::Create::EmptyInvoice)
       end
 
       it "reports errors when fixed because finalized" do
-        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
-          with(body: /<customer>1001<\/customer>/).
-          to_return(body: File.read(File.expand_path('../../fixtures/cluster/processxml/invoice/create_final_error.xml', __FILE__)))
+        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx")
+          .with(body: /<customer>1001<\/customer>/)
+          .to_return(body: File.read(File.expand_path("../../fixtures/cluster/processxml/invoice/create_final_error.xml", __FILE__)))
         invoice = Twinfield::SalesInvoice.new(duedate: Time.now, customer: "1001", invoicetype: "VERKOOP")
-        expect{ invoice.save }.to raise_error(Twinfield::Create::Error)
+        expect { invoice.save }.to raise_error(Twinfield::Create::Error)
         invoice = Twinfield::SalesInvoice.new(duedate: Time.now, customer: "1001", invoicetype: "VERKOOP")
-        expect{ invoice.save }.to raise_error(Twinfield::Create::Finalized)
+        expect { invoice.save }.to raise_error(Twinfield::Create::Finalized)
       end
 
-
       it "succeeds" do
-        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
-          with(body: /<customer>1001<\/customer>/).
-          to_return(body: File.read(File.expand_path('../../fixtures/cluster/processxml/invoice/create_success.xml', __FILE__)))
+        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx")
+          .with(body: /<customer>1001<\/customer>/)
+          .to_return(body: File.read(File.expand_path("../../fixtures/cluster/processxml/invoice/create_success.xml", __FILE__)))
         invoice = Twinfield::SalesInvoice.new(duedate: Time.now, customer: "1001", invoicetype: "VERKOOP")
         saved_invoice = invoice.save
         expect(saved_invoice.invoicenumber).to eq("3")
@@ -225,14 +219,13 @@ describe Twinfield::SalesInvoice do
         stub_create_session
         stub_cluster_session_wsdl
         stub_select_company
-        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx").
-          with(body: /\<read\>\s*\<type\>salesinvoice\<\/type\>/).
-          to_return(body: File.read(File.expand_path('../../fixtures/cluster/processxml/invoice/read_success.xml', __FILE__)))
+        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx")
+          .with(body: /<read>\s*<type>salesinvoice<\/type>/)
+          .to_return(body: File.read(File.expand_path("../../fixtures/cluster/processxml/invoice/read_success.xml", __FILE__)))
         @invoice = Twinfield::SalesInvoice.find(13, invoicetype: "VERKOOP")
       end
 
       describe "#total" do
-
         it "0 on an empty invoice" do
           expect(Twinfield::SalesInvoice.new(invoicetype: "VERKOOP", customer: "1001").total).to eq(0)
         end
@@ -255,8 +248,6 @@ describe Twinfield::SalesInvoice do
           expect(@invoice.totalexcl).to eq(200.0)
         end
       end
-
-
     end
   end
 end

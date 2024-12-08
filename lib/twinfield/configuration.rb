@@ -1,13 +1,11 @@
-require 'base64'
-require 'json'
+require "base64"
+require "json"
 
 module Twinfield
-
   # Used for configuration of the Twinfield gem.
 
   class Configuration
     class Error < StandardError
-
     end
     attr_accessor :session_type # Twinfield::Api::OAuthSession or Twinfield::Api::Session
 
@@ -25,7 +23,6 @@ module Twinfield
     attr_accessor :log_level
     attr_accessor :logger
 
-
     def to_logon_hash
       {
         "user" => @username,
@@ -35,17 +32,17 @@ module Twinfield
     end
 
     def access_token_expired?
-      Time.at(JSON.parse(Base64.decode64 access_token.split(".")[1])["exp"]) < Time.now
-    rescue StandardError => e
+      Time.at(JSON.parse(Base64.decode64(access_token.split(".")[1]))["exp"]) < Time.now
+    rescue => e
       raise Twinfield::Configuration::Error, "No valid access token provided (#{e.message})"
     end
 
     def session_class
       case session_type
       when "Twinfield::Api::OAuthSession"
-        return Twinfield::Api::OAuthSession
+        Twinfield::Api::OAuthSession
       else
-        return Twinfield::Api::Session
+        Twinfield::Api::Session
       end
     end
   end
