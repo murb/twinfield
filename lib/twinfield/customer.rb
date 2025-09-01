@@ -536,8 +536,8 @@ module Twinfield
 
     class << self
       # @return Array<Twinfield::Customer>
-      def all
-        search
+      def all modified_since: nil
+        search(modified_since:)
       end
 
       # helper method that calculates the next unused code
@@ -551,7 +551,7 @@ module Twinfield
         latest.to_s
       end
 
-      def search text = "*"
+      def search text = "*", modified_since: nil
         text = "*#{text}*" unless text.match?(/[?*]/)
         options = {
           dimtype: "DEB",
@@ -559,6 +559,8 @@ module Twinfield
           pattern: text,
           max_rows: 10000
         }
+        options[:modifiedsince] = modified_since.methods.include?(:strftime) ? modified_since.strftime("%Y%m%d%H%M%S") : modified_since.strftime if modified_since
+
         response = Twinfield::Api::Finder.request("DIM", options)
         if response.body[:search_response][:data][:total_rows].to_i == 1
           resp = response.body[:search_response][:data][:items][:array_of_string][:string]

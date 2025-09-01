@@ -167,6 +167,18 @@ describe Twinfield::Customer do
         expect(customers[0]).to be_a Twinfield::Customer
         expect(customers.map { |a| a.name }).to include("Waardedijk")
       end
+
+      it "filters on modified since when passed" do
+        request_stub = stub_request(:post, "https://accounting.twinfield.com/webservices/finder.asmx")
+          .with(body: /<ArrayOfString><string>modifiedsince<\/string><string>20250101122232<\/string><\/ArrayOfString><\/options><\/Search><\/soap/)
+          .to_return(body: '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><SearchResponse xmlns="http://www.twinfield.com/"><SearchResult /><data><TotalRows>17</TotalRows><Columns><string>Code</string><string>Naam</string></Columns><Items><ArrayOfString><string>1000</string><string>Waardedijk</string></ArrayOfString><ArrayOfString><string>1001</string><string>Witteveen</string></ArrayOfString><ArrayOfString><string>1002</string><string>Bosman</string></ArrayOfString><ArrayOfString><string>1003</string><string>Samkalde</string></ArrayOfString></Items></data></SearchResponse></soap:Body></soap:Envelope>')
+
+        customers = Twinfield::Customer.all(modified_since: DateTime.new(2025, 1, 1, 12, 22, 32))
+        expect(customers.length).to eq(4)
+        expect(customers[0]).to be_a Twinfield::Customer
+        expect(customers.map { |a| a.name }).to include("Waardedijk")
+        save_requested_signature_body_matching request_stub, file_name: "doc/request_bodies/get_all_customers_with_modified_since.xml"
+      end
     end
 
     describe ".search" do
