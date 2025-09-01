@@ -41,7 +41,7 @@ describe Twinfield::SalesInvoice do
 
     describe ".find" do
       it "returns a sales invoice" do
-        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx")
+        request_stub = stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx")
           .with(body: /<read>\s*<type>salesinvoice<\/type>/)
           .to_return(body: File.read(File.expand_path("../../fixtures/cluster/processxml/invoice/read_success.xml", __FILE__)))
         invoice = Twinfield::SalesInvoice.find(13, invoicetype: "VERKOOP")
@@ -51,6 +51,7 @@ describe Twinfield::SalesInvoice do
         expect(invoice.lines.first).to be_a(Twinfield::SalesInvoice::Line)
         expect(invoice.lines[2].description).to eq("Custom article")
         expect(invoice.vat_lines[0].vatname).to eq("BTW 21%")
+        save_requested_signature_body_matching(request_stub, file_name: "doc/request_bodies/processxml_get_sales_invoice.xml")
       end
 
       it "returns nil when empty result" do
@@ -109,7 +110,7 @@ describe Twinfield::SalesInvoice do
         stub_cluster_session_wsdl
         stub_select_company
 
-        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx")
+        request_stub = stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx")
           .with(body: /20210812/)
           .to_return(body: File.read(File.expand_path("../../fixtures/cluster/processxml/columns/sales_transactions.xml", __FILE__)))
 
@@ -118,6 +119,7 @@ describe Twinfield::SalesInvoice do
 
         invoice.transaction
         expect(invoice.transaction).to be_a(Twinfield::Browse::Transaction::Customer)
+        save_requested_signature_body_matching(request_stub, file_name: "doc/request_bodies/processxml_get_sales_transactions.xml")
       end
     end
     describe "#to_xml" do
@@ -194,6 +196,17 @@ describe Twinfield::SalesInvoice do
         expect { invoice.save }.to raise_error(Twinfield::Create::EmptyInvoice)
       end
 
+      it "succeeds updating" do
+        request_stub = stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx")
+          .with(body: /<customer>1001<\/customer>/)
+          .to_return(body: File.read(File.expand_path("../../fixtures/cluster/processxml/invoice/create_success.xml", __FILE__)))
+
+        invoice = Twinfield::SalesInvoice.new(duedate: Time.now, customer: "1001", invoicetype: "VERKOOP", invoicenumber: "12")
+        invoice.lines = [Twinfield::SalesInvoice::Line.new(article: "A")]
+        invoice.save
+        save_requested_signature_body_matching(request_stub, file_name: "doc/request_bodies/update_invoice.xml")
+      end
+
       it "reports errors when fixed because finalized" do
         stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx")
           .with(body: /<customer>1001<\/customer>/)
@@ -204,13 +217,14 @@ describe Twinfield::SalesInvoice do
         expect { invoice.save }.to raise_error(Twinfield::Create::Finalized)
       end
 
-      it "succeeds" do
-        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx")
+      it "succeeds creating" do
+        request_stub = stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx")
           .with(body: /<customer>1001<\/customer>/)
           .to_return(body: File.read(File.expand_path("../../fixtures/cluster/processxml/invoice/create_success.xml", __FILE__)))
         invoice = Twinfield::SalesInvoice.new(duedate: Time.now, customer: "1001", invoicetype: "VERKOOP")
         saved_invoice = invoice.save
         expect(saved_invoice.invoicenumber).to eq("3")
+        save_requested_signature_body_matching(request_stub, file_name: "doc/request_bodies/create_invoice.xml")
       end
     end
 

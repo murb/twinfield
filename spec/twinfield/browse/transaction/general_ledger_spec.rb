@@ -35,7 +35,7 @@ describe Twinfield::Browse::Transaction::GeneralLedger do
       end
 
       it "accepts a customer code" do
-        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx")
+        request_stub = stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx")
           .with(body: /<from>4040<\/from>\s*<to>4040<\/to>/)
           .to_return(body: File.read(File.expand_path("../../../../fixtures/cluster/processxml/columns/sales_transactions.xml", __FILE__)))
 
@@ -43,6 +43,7 @@ describe Twinfield::Browse::Transaction::GeneralLedger do
 
         expect(transaction).to be_a(Twinfield::Browse::Transaction::GeneralLedger)
         expect(transaction.value).to eql(2200.0)
+        save_requested_signature_body_matching(request_stub, file_name: "doc/request_bodies/processxml_get_transactions_from_general_ledger.xml")
       end
 
       it "accepts a invoice number" do

@@ -51,7 +51,7 @@ describe Twinfield::Request::List do
     describe "#offices" do
       it "lists offices" do
         stub_processxml_list_offices(oauth: true)
-        # expect(subject.offices).to be_a Nokogiri::XML::Document
+        subject.offices
       end
     end
   end

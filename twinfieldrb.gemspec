@@ -10,8 +10,6 @@ Gem::Specification.new do |s|
   s.summary = "A simple client for the Twinfield SOAP-based API (continuation of the twinfield gem)"
   s.description = "Twinfield is an international Web service for collaborative online accounting. The Twinfield gem is a simple client for their SOAP-based API."
 
-  # s.rubyforge_project = "twinfield"
-
   s.files = `git ls-files`.split("\n")
   s.executables = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
   s.require_paths = ["lib"]

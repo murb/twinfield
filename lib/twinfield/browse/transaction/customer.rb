@@ -385,12 +385,9 @@ module Twinfield
 
             transactions_xml = xml.css("tr")
 
-            transactions = []
-            transactions_xml.each do |transaction_xml|
-              transactions << Twinfield::Browse::Transaction::Customer.initialize_from_columns_response_row(transaction_xml)
+            transactions_xml.map do |transaction_xml|
+              Twinfield::Browse::Transaction::Customer.initialize_from_columns_response_row(transaction_xml)
             end
-
-            transactions
           end
         end
 

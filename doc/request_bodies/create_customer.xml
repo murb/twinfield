@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?><soap:Envelope xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.twinfield.com/" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.twinfield.com/" xmlns:s1="http://microsoft.com/wsdl/types/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"><soap:Header><Header xmlns="http://www.twinfield.com/"><SessionID>session_id</SessionID></Header></soap:Header><soap:Body><ProcessXmlString xmlns="http://www.twinfield.com/"><xmlRequest><![CDATA[<dimension status="active">
+  <office>company</office>
+  <type>DEB</type>
+  <code>1200</code>
+  <name>Maarten Brouwers</name>
+  <shortname/>
+  <website/>
+  <addresses/>
+  <banks/>
+</dimension>]]></xmlRequest></ProcessXmlString></soap:Body></soap:Envelope>

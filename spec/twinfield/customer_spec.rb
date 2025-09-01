@@ -70,7 +70,7 @@ describe Twinfield::Customer do
   describe "class methods" do
     describe ".find" do
       it "returns a sales invoice" do
-        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx")
+        request_stub = stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx")
           .with(body: /<dimtype>DEB<\/dimtype>/)
           .to_return(body: File.read(File.expand_path("../../fixtures/cluster/processxml/customer/read_success.xml", __FILE__)))
         customer = Twinfield::Customer.find(1000)
@@ -79,6 +79,7 @@ describe Twinfield::Customer do
         expect(customer.addresses[0].default).to eq(true)
         expect(customer.addresses[0].type).to eq("invoice")
         expect(customer.modified).to eq DateTime.new(2021, 10, 13, 20, 30, 53)
+        save_requested_signature_body_matching(request_stub, file_name: "doc/request_bodies/processxml_get_customer.xml")
       end
 
       it "deals with an invalid code message" do
@@ -170,19 +171,20 @@ describe Twinfield::Customer do
 
     describe ".search" do
       it "accepts a search param" do
-        stub_request(:post, "https://accounting.twinfield.com/webservices/finder.asmx")
-          .with(body: /><string>dimtype<\/string><string>DEB<\/string>/)
+        request_stub = stub_request(:post, "https://accounting.twinfield.com/webservices/finder.asmx")
+          .with(body: /<type>DIM<\/type><pattern>\*Bos\*<\/pattern>/)
           .to_return(body: '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><SearchResponse xmlns="http://www.twinfield.com/"><SearchResult /><data><TotalRows>17</TotalRows><Columns><string>Code</string><string>Naam</string></Columns><Items><ArrayOfString><string>1000</string><string>Waardedijk</string></ArrayOfString><ArrayOfString><string>1001</string><string>Witteveen</string></ArrayOfString><ArrayOfString><string>1002</string><string>Bosman</string></ArrayOfString><ArrayOfString><string>1003</string><string>Samkalde</string></ArrayOfString></Items></data></SearchResponse></soap:Body></soap:Envelope>')
 
         customers = Twinfield::Customer.search("*Bos*")
         expect(customers.length).to eq(4)
         expect(customers[0]).to be_a Twinfield::Customer
-        expect(customers.map { |a| a.name }).to include("Waardedijk")
+        expect(customers.map { |a| a.name }).to include("Bosman")
+        save_requested_signature_body_matching(request_stub, file_name: "doc/request_bodies/processxml_search_customers.xml")
       end
 
       it "deals with no result" do
         stub_request(:post, "https://accounting.twinfield.com/webservices/finder.asmx")
-          .with(body: /><string>dimtype<\/string><string>DEB<\/string>/)
+          .with(body: /<type>DIM<\/type><pattern>\*nonexisting\*<\/pattern>/)
           .to_return(body: '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><SearchResponse xmlns="http://www.twinfield.com/"><SearchResult /><data><TotalRows>0</TotalRows><Columns><string>Code</string><string>Naam</string></Columns></data></SearchResponse></soap:Body></soap:Envelope>')
 
         customers = Twinfield::Customer.search("nonexisting")
@@ -191,7 +193,7 @@ describe Twinfield::Customer do
 
       it "deals with single result" do
         stub_request(:post, "https://accounting.twinfield.com/webservices/finder.asmx")
-          .with(body: /><string>dimtype<\/string><string>DEB<\/string>/)
+          .with(body: /<type>DIM<\/type><pattern>\*nonexisting\*<\/pattern>/)
           .to_return(body: '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><SearchResponse xmlns="http://www.twinfield.com/"><SearchResult /><data><TotalRows>1</TotalRows><Columns><string>Code</string><string>Naam</string></Columns><Items><ArrayOfString><string>1002</string><string>Bosman</string></ArrayOfString></Items></data></SearchResponse></soap:Body></soap:Envelope>')
 
         customers = Twinfield::Customer.search("nonexisting")
@@ -291,7 +293,7 @@ describe Twinfield::Customer do
 
     describe "#save" do
       it "saves a new record" do
-        stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx")
+        request_stub = stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx")
           .with(body: /Maarten Brouwers/)
           .to_return(body: File.read(File.expand_path("../../fixtures/cluster/processxml/customer/create_success.xml", __FILE__)))
 
@@ -299,6 +301,7 @@ describe Twinfield::Customer do
         customer = customer.save
         expect(customer.name).to eq("Maarten Brouwers")
         expect(customer.uid).to eq("ece29a7f-344f-4e37-b5ca-53e2a468070e")
+        save_requested_signature_body_matching request_stub, file_name: "doc/request_bodies/create_customer.xml"
       end
 
       it "updates a record" do

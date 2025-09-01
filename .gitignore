@@ -4,3 +4,5 @@ Gemfile.lock
 pkg/*
 script/config.rb
 .project
+.DS_Store
+doc/request_bodies/.DS_Store

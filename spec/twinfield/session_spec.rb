@@ -20,6 +20,17 @@ describe Twinfield::Api::Session do
       expect(@session.status).to eq "Ok"
     end
 
+    it "should stub_select_compahy" do
+      @session = Twinfield::Api::Session.new
+      stub_create_session
+      stub_cluster_session_wsdl
+      request_stub = stub_select_company
+
+      @session.logon
+      assert_requested(request_stub)
+      save_requested_signature_body_matching(request_stub, file_name: "doc/request_bodies/select_company.xml")
+    end
+
     it "should return that the current session already is connected" do
       expect(@session.logon).to eq "already connected"
     end

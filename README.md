@@ -1,8 +1,8 @@
-# Twinfield
+# TwinfieldRB
 
-Twinfield is an international Web service for collaborative online accounting. The Twinfield gem is a simple client for their SOAP-based API.
+Twinfield is an international Web service for collaborative online accounting. The `twinfieldrb` gem is a simple client for their SOAP-based API (it is a continuation of the long forgotten `twinfield` gem)
 
-**Note:** This project started as a clone of the `twinfield`-gem, but [I've been working](CHANGELOG.md) to abstract the soap calls away. Perhaps I'll release this as a gem on its own. For now see "Installing > Using Twinfield".
+This project started as a clone of the `twinfield`-gem, but [I've been working](CHANGELOG.md) to abstract the soap calls away. Perhaps I'll release this as a gem on its own. For now see "Installing > Using Twinfield".
 
 ## Installing
 
@@ -10,7 +10,7 @@ Twinfield is an international Web service for collaborative online accounting. T
 
 Add Twinfield in `Gemfile` as a gem dependency:
 
-    gem "twinfield", git: "https://github.com/murb/twinfield.git"
+    gem "twinfieldrb", git: "https://github.com/murb/twinfield.git"
 
 Run the following in your console to install with Bundler:
 
