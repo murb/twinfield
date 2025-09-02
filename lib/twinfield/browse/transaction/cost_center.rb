@@ -152,7 +152,7 @@ module Twinfield
 
               build_request += %(
                 <column>
-                  <field>fin.trs.head.modified</field>
+                  <field>fin.trs.line.modified</field>
                   <label>Modification date</label>
                   <visible>false</visible>
                   <ask>false</ask>

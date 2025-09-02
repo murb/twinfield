@@ -73,7 +73,7 @@
                     <ask>false</ask>
                     <operator>between</operator>
                     <from>20121212121200</from>
-                    <to>20250902225503</to>
+                    <to>20250902225710</to>
                   </column>
               <column>
                 <field>fin.trs.head.number</field>
