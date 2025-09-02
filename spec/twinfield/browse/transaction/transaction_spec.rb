@@ -57,6 +57,19 @@ describe Twinfield::Browse::Transaction::Customer do
         expect(transaction.value).to eql(2200.0)
       end
 
+      it "accepts a modified since" do
+        request_stub = stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx")
+          .with(body: />20121212121200</)
+          .to_return(body: File.read(File.expand_path("../../../../fixtures/cluster/processxml/columns/sales_transactions.xml", __FILE__)))
+
+        transaction = Twinfield::Browse::Transaction::Customer.where(modified_since: DateTime.new(2012, 12, 12, 12, 12)).first
+
+        expect(transaction).to be_a(Twinfield::Browse::Transaction::Customer)
+        expect(transaction.value).to eql(2200.0)
+
+        save_requested_signature_body_matching(request_stub, file_name: "doc/request_bodies/processxml_get_customer_transactions_with_modified_since.xml")
+      end
+
       it "accepts a invoice number" do
         stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx")
           .with(body: /abcd12002/)

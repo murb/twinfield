@@ -42,7 +42,7 @@ module Twinfield
             where(customer_code: customer_code, invoice_number: invoice_number, code: code, number: number).first
           end
 
-          def where(customer_code: nil, invoice_number: nil, code: nil, number: nil, years: ((Date.today.year - 30)..Date.today.year))
+          def where(customer_code: nil, invoice_number: nil, code: nil, number: nil, years: ((Date.today.year - 30)..Date.today.year), modified_since: nil)
             # <?xml version="1.0"?>
             # <browse result="1">
             #   <office name="Heden" shortname="">NLA002058</office>
@@ -352,6 +352,24 @@ module Twinfield
                  <label>invoice_number</label>
                  <visible>true</visible>
               </column>"
+            end
+
+            modified_since_string = if modified_since
+              modified_since.strftime("%Y%m%d%H%M%S")
+            end
+
+            if modified_since_string
+              build_request += %(
+                  <column>
+                    <field>fin.trs.head.modified</field>
+                    <label>Modification date</label>
+                    <visible>false</visible>
+                    <ask>false</ask>
+                    <operator>between</operator>
+                    <from>#{modified_since_string}</from>
+                    <to />
+                  </column>
+              )
             end
 
             build_request += if number
