@@ -82,13 +82,13 @@
                 </column>
             
                 <column>
-                  <field>fin.trs.line.modified</field>
+                  <field>fin.trs.head.modified</field>
                   <label>Modification date</label>
-                  <visible>false</visible>
-                  <ask>false</ask>
+                  <visible>true</visible>
+                  <ask>true</ask>
                   <operator>between</operator>
                   <from>20240512110300</from>
-                  <to>20250902225710</to>
+                  <to>20250902230741</to>
                 </column>
               
                 </columns>

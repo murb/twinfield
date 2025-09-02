@@ -142,10 +142,10 @@ module Twinfield
 
               build_request += %(
                 <column>
-                  <field>fin.trs.line.modified</field>
+                  <field>fin.trs.head.modified</field>
                   <label>Modification date</label>
-                  <visible>false</visible>
-                  <ask>false</ask>
+                  <visible>true</visible>
+                  <ask>true</ask>
                   <operator>between</operator>
                   <from>#{modified_since_string}</from>
                   <to>#{current_time_string}</to>
