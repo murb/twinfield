@@ -26,7 +26,6 @@ def save_requested_signature_body_matching request, file_name: Tempfile.new("moc
     File.write(file_name, requests.first.body)
     file_name
   else
-    binding.irb
     raise "Expected 1 matching request, got #{requests.count}"
   end
 end

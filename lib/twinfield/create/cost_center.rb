@@ -1,12 +1,25 @@
 module Twinfield
   module Create
+    # Represents a cost center and provides methods to create it.
+    #
+    # @!attribute name
+    #   @return [String] The name of the cost center.
+    #
+    # @!attribute code
+    #   @return [String] The code of the cost center.
     class CostCenter
       attr_accessor :name, :code
 
+      # Initializes a new instance of CostCenter with optional attributes.
+      #
+      # @param hash [Hash] A hash containing attributes to initialize the object.
       def initialize(hash = {})
         hash.each { |k, v| send(:"#{k}=", CGI.escapeHTML(v)) }
       end
 
+      # Saves the cost center by making a request to Twinfield API.
+      #
+      # @return [Hash] A hash containing the status of the operation and optionally messages if there were errors.
       def save
         response = Twinfield::Api::Process.request do
           %(
