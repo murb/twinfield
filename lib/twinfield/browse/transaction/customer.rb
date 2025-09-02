@@ -362,7 +362,7 @@ module Twinfield
               current_time_string = DateTime.now.to_time.getutc.strftime("%Y%m%d%H%M%S")
               build_request += %(
                   <column>
-                    <field>fin.trs.head.modified</field>
+                    <field>fin.trs.line.modified</field>
                     <label>Modification date</label>
                     <visible>false</visible>
                     <ask>false</ask>
