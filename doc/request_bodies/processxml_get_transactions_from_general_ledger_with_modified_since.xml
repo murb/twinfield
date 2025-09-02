@@ -17,8 +17,8 @@
                   <visible>true</visible>
                   <ask>false</ask>
                   <operator>between</operator>
-                  <from>4040</from>
-                  <to>4040</to>
+                  <from></from>
+                  <to></to>
                   <finderparam/>
               </column>
               <column>
@@ -81,5 +81,15 @@
                   <finderparam/>
                 </column>
             
+                  <column>
+                    <field>fin.trs.head.modified</field>
+                    <label>Modification date</label>
+                    <visible>false</visible>
+                    <ask>false</ask>
+                    <operator>between</operator>
+                    <from>20240512110300</from>
+                    <to />
+                  </column>
+              
                 </columns>
               ]]></xmlRequest></ProcessXmlString></soap:Body></soap:Envelope>
