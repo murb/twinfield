@@ -359,6 +359,7 @@ module Twinfield
             end
 
             if modified_since_string
+              current_time_string = DateTime.now.to_time.getutc.strftime("%Y%m%d%H%M%S")
               build_request += %(
                   <column>
                     <field>fin.trs.head.modified</field>
@@ -367,7 +368,7 @@ module Twinfield
                     <ask>false</ask>
                     <operator>between</operator>
                     <from>#{modified_since_string}</from>
-                    <to />
+                    <to>#{current_time_string}</to>
                   </column>
               )
             end
