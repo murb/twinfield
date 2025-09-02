@@ -81,15 +81,15 @@
                   <finderparam/>
                 </column>
             
-                  <column>
-                    <field>fin.trs.head.modified</field>
-                    <label>Modification date</label>
-                    <visible>false</visible>
-                    <ask>false</ask>
-                    <operator>between</operator>
-                    <from>20240512110300</from>
-                    <to />
-                  </column>
+                <column>
+                  <field>fin.trs.head.modified</field>
+                  <label>Modification date</label>
+                  <visible>false</visible>
+                  <ask>false</ask>
+                  <operator>between</operator>
+                  <from>20240512110300</from>
+                  <to>20250902225503</to>
+                </column>
               
                 </columns>
               ]]></xmlRequest></ProcessXmlString></soap:Body></soap:Envelope>

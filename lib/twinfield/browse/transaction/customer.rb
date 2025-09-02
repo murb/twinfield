@@ -354,12 +354,10 @@ module Twinfield
               </column>"
             end
 
-            modified_since_string = if modified_since
-              modified_since.strftime("%Y%m%d%H%M%S")
-            end
-
-            if modified_since_string
+            if modified_since
+              modified_since_string = modified_since.strftime("%Y%m%d%H%M%S")
               current_time_string = DateTime.now.to_time.getutc.strftime("%Y%m%d%H%M%S")
+
               build_request += %(
                   <column>
                     <field>fin.trs.line.modified</field>

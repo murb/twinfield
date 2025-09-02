@@ -48,7 +48,7 @@ describe Twinfield::Browse::Transaction::CostCenter do
 
       it "accepts a modified since" do
         request_stub = stub_request(:post, "https://accounting.twinfield.com/webservices/processxml.asmx")
-          .with(body: /<from>20240630093000<\/from>\s*<to \/>/)
+          .with(body: /<from>20240630093000<\/from>\s*<to>/)
           .to_return(body: File.read(File.expand_path("../../../../fixtures/cluster/processxml/columns/sales_transactions.xml", __FILE__)))
 
         transaction = Twinfield::Browse::Transaction::CostCenter.where(dim1: "4040", modified_since: DateTime.new(2024, 6, 30, 9, 30)).first
