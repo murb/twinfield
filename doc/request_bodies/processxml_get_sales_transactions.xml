@@ -5,6 +5,16 @@
                  <field>fin.trs.head.code</field>
               </sort>
               <column>
+                  <field>fin.trs.head.office</field>
+                  <label>Office</label>
+                  <visible>true</visible>
+                  <ask>false</ask>
+                  <operator>equal</operator>
+                  <from>company</from>
+                  <to/>
+                  <finderparam/>
+              </column>
+              <column>
                   <field>fin.trs.head.yearperiod</field>
                   <label>Periode</label>
                   <visible>true</visible>

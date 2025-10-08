@@ -7,7 +7,7 @@ module Twinfield
         extend Twinfield::Helpers::Parsers
         include Twinfield::Helpers::TransactionMatch
 
-        attr_accessor :invoice_number, :customer_code, :key, :currency, :value, :open_value, :available_for_payruns, :status, :number, :date, :code
+        attr_accessor :invoice_number, :customer_code, :key, :currency, :value, :open_value, :available_for_payruns, :status, :number, :date, :code, :office
 
         class << self
           def initialize_from_columns_response_row(transaction_xml)
@@ -34,7 +34,8 @@ module Twinfield
               customer_code: transaction_xml.css("td[field='fin.trs.line.dim2']").text,
               key: transaction_xml.css("key").text.gsub(/\s/, ""),
               date: parse_date(transaction_xml.css("td[field='fin.trs.head.date']").text),
-              code: transaction_xml.css("td[field='fin.trs.head.code']").text
+              code: transaction_xml.css("td[field='fin.trs.head.code']").text,
+              office: transaction_xml.css("td[field='fin.trs.head.office']").text
             )
           end
 
@@ -43,221 +44,20 @@ module Twinfield
           end
 
           def where(customer_code: nil, invoice_number: nil, code: nil, number: nil, years: ((Date.today.year - 30)..Date.today.year), modified_since: nil)
-            # <?xml version="1.0"?>
-            # <browse result="1">
-            #   <office name="Heden" shortname="">NLA002058</office>
-            #   <code>100</code>
-            #   <name>Debiteurenkaart</name>
-            #   <shortname>Debiteurenkaart</shortname>
-            #   <visible>true</visible>
-            #   <columns code="100">
-            #     <column id="2">
-            #       <field>fin.trs.head.code</field>
-            #       <label>Dagboek</label>
-            #       <visible>true</visible>
-            #       <ask>true</ask>
-            #       <operator>equal</operator>
-            #       <from/>
-            #       <to/>
-            #       <finderparam>hidden=1</finderparam>
-            #     </column>
-            #     <column id="3">
-            #       <field>fin.trs.head.shortname</field>
-            #       <label>Naam</label>
-            #       <visible>true</visible>
-            #       <ask>false</ask>
-            #       <operator>none</operator>
-            #       <from/>
-            #       <to/>
-            #       <finderparam/>
-            #     </column>
-            #     <column id="4">
-            #       <field>fin.trs.head.number</field>
-            #       <label>Boekst.nr.</label>
-            #       <visible>true</visible>
-            #       <ask>true</ask>
-            #       <operator>between</operator>
-            #       <from/>
-            #       <to/>
-            #       <finderparam/>
-            #     </column>
-            #     <column id="5">
-            #       <field>fin.trs.head.status</field>
-            #       <label>Status</label>
-            #       <visible>true</visible>
-            #       <ask>true</ask>
-            #       <operator>equal</operator>
-            #       <from>normal</from>
-            #       <to/>
-            #       <finderparam/>
-            #     </column>
-            #     <column id="6">
-            #       <field>fin.trs.head.date</field>
-            #       <label>Boekdatum</label>
-            #       <visible>true</visible>
-            #       <ask>false</ask>
-            #       <operator>none</operator>
-            #       <from/>
-            #       <to/>
-            #       <finderparam/>
-            #     </column>
-            #     <column id="7">
-            #       <field>fin.trs.line.dim2</field>
-            #       <label>Debiteur</label>
-            #       <visible>true</visible>
-            #       <ask>true</ask>
-            #       <operator>between</operator>
-            #       <from/>
-            #       <to/>
-            #       <finderparam>dimtype=DEB</finderparam>
-            #     </column>
-            #     <column id="8">
-            #       <field>fin.trs.line.dim2name</field>
-            #       <label>Naam</label>
-            #       <visible>true</visible>
-            #       <ask>false</ask>
-            #       <operator>none</operator>
-            #       <from/>
-            #       <to/>
-            #       <finderparam/>
-            #     </column>
-            #     <column id="9">
-            #       <field>fin.trs.head.curcode</field>
-            #       <label>Valuta</label>
-            #       <visible>false</visible>
-            #       <ask>false</ask>
-            #       <operator>equal</operator>
-            #       <from/>
-            #       <to/>
-            #       <finderparam/>
-            #     </column>
-            #     <column id="10">
-            #       <field>fin.trs.line.valuesigned</field>
-            #       <label>Bedrag</label>
-            #       <visible>false</visible>
-            #       <ask>false</ask>
-            #       <operator>between</operator>
-            #       <from/>
-            #       <to/>
-            #       <finderparam/>
-            #     </column>
-            #     <column id="11">
-            #       <field>fin.trs.line.basevaluesigned</field>
-            #       <label>Euro</label>
-            #       <visible>true</visible>
-            #       <ask>true</ask>
-            #       <operator>between</operator>
-            #       <from/>
-            #       <to/>
-            #       <finderparam/>
-            #     </column>
-            #     <column id="12">
-            #       <field>fin.trs.line.repvaluesigned</field>
-            #       <label/>
-            #       <visible>false</visible>
-            #       <ask>false</ask>
-            #       <operator>between</operator>
-            #       <from/>
-            #       <to/>
-            #       <finderparam/>
-            #     </column>
-            #     <column id="13">
-            #       <field>fin.trs.line.openbasevaluesigned</field>
-            #       <label>Openstaand bedrag</label>
-            #       <visible>true</visible>
-            #       <ask>false</ask>
-            #       <operator>none</operator>
-            #       <from/>
-            #       <to/>
-            #       <finderparam/>
-            #     </column>
-            #     <column id="14">
-            #       <field>fin.trs.line.invnumber</field>
-            #       <label>Factuurnr.</label>
-            #       <visible>true</visible>
-            #       <ask>true</ask>
-            #       <operator>equal</operator>
-            #       <from/>
-            #       <to/>
-            #       <finderparam/>
-            #     </column>
-            #     <column id="15">
-            #       <field>fin.trs.line.datedue</field>
-            #       <label>Vervaldatum</label>
-            #       <visible>true</visible>
-            #       <ask>false</ask>
-            #       <operator>none</operator>
-            #       <from/>
-            #       <to/>
-            #       <finderparam/>
-            #     </column>
-            #     <column id="16">
-            #       <field>fin.trs.line.matchstatus</field>
-            #       <label>Betaalstatus</label>
-            #       <visible>true</visible>
-            #       <ask>true</ask>
-            #       <operator>equal</operator>
-            #       <from/>
-            #       <to/>
-            #       <finderparam/>
-            #     </column>
-            #     <column id="17">
-            #       <field>fin.trs.line.matchnumber</field>
-            #       <label>Betaalnr.</label>
-            #       <visible>true</visible>
-            #       <ask>false</ask>
-            #       <operator>none</operator>
-            #       <from/>
-            #       <to/>
-            #       <finderparam/>
-            #     </column>
-            #     <column id="18">
-            #       <field>fin.trs.line.matchdate</field>
-            #       <label>Betaaldatum</label>
-            #       <visible>true</visible>
-            #       <ask>true</ask>
-            #       <operator>between</operator>
-            #       <from/>
-            #       <to/>
-            #       <finderparam/>
-            #     </column>
-            #     <column id="19">
-            #       <field>fin.trs.line.openvaluesigned</field>
-            #       <label>Openstaand bedrag transactievaluta</label>
-            #       <visible>false</visible>
-            #       <ask>false</ask>
-            #       <operator>none</operator>
-            #       <from/>
-            #       <to/>
-            #       <finderparam/>
-            #     </column>
-            #     <column id="20">
-            #       <field>fin.trs.line.availableforpayruns</field>
-            #       <label>Beschikbaar voor betaalrun</label>
-            #       <visible>false</visible>
-            #       <ask>false</ask>
-            #       <operator>none</operator>
-            #       <from/>
-            #       <to/>
-            #       <finderparam/>
-            #     </column>
-            #     <column id="21">
-            #       <field>fin.trs.line.modified</field>
-            #       <label>Wijzigingsdatum</label>
-            #       <visible>true</visible>
-            #       <ask>true</ask>
-            #       <operator>between</operator>
-            #       <from/>
-            #       <to/>
-            #       <finderparam/>
-            #     </column>
-            #   </columns>
-            # </browse>
-
             build_request = %(
               <sort>
                  <field>fin.trs.head.code</field>
               </sort>
+              <column>
+                  <field>fin.trs.head.office</field>
+                  <label>Office</label>
+                  <visible>true</visible>
+                  <ask>false</ask>
+                  <operator>equal</operator>
+                  <from>#{Twinfield.configuration.company}</from>
+                  <to/>
+                  <finderparam/>
+              </column>
               <column>
                   <field>fin.trs.head.yearperiod</field>
                   <label>Periode</label>
@@ -408,7 +208,7 @@ module Twinfield
           end
         end
 
-        def initialize(code:, invoice_number: nil, customer_code: nil, key: nil, currency: "EUR", value: nil, open_value: nil, available_for_payruns: nil, status: nil, number: nil, date: nil)
+        def initialize(code:, invoice_number: nil, customer_code: nil, key: nil, currency: "EUR", value: nil, open_value: nil, available_for_payruns: nil, status: nil, number: nil, date: nil, office: nil)
           self.invoice_number = invoice_number
           self.customer_code = customer_code
           self.key = key
@@ -420,6 +220,7 @@ module Twinfield
           self.number = number
           self.date = date
           self.code = code
+          self.office = office
         end
       end
     end

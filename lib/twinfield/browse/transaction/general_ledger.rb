@@ -7,7 +7,7 @@ module Twinfield
         extend Twinfield::Helpers::Parsers
         include Twinfield::Helpers::TransactionMatch
 
-        attr_accessor :number, :yearperiod, :currency, :value, :status, :dim1, :dim2, :key, :code
+        attr_accessor :number, :yearperiod, :currency, :value, :status, :dim1, :dim2, :key, :code, :office
 
         class << self
           # Initializes a new GeneralLedger object from a columns response row.
@@ -25,7 +25,8 @@ module Twinfield
               dim1: transaction_xml.css("td[field='fin.trs.line.dim1']").text,
               dim2: transaction_xml.css("td[field='fin.trs.line.dim2']").text,
               key: transaction_xml.css("key").text.gsub(/\s/, ""),
-              code: transaction_xml.css("td[field='fin.trs.head.code']").text
+              code: transaction_xml.css("td[field='fin.trs.head.code']").text,
+              office: transaction_xml.css("td[field='fin.trs.head.office']").text
             )
           end
 
@@ -55,6 +56,16 @@ module Twinfield
             period_to = period_date_to_period(period.end, period_duration)
 
             build_request = %(
+              <column>
+                  <field>fin.trs.head.office</field>
+                  <label>Office</label>
+                  <visible>true</visible>
+                  <ask>false</ask>
+                  <operator>equal</operator>
+                  <from>#{Twinfield.configuration.company}</from>
+                  <to/>
+                  <finderparam/>
+              </column>
               <column>
                   <field>fin.trs.head.yearperiod</field>
                   <label>Periode</label>
@@ -180,7 +191,8 @@ module Twinfield
         # @param dim2 [String] The second dimension code.
         # @param key [String] The key associated with the transaction.
         # @param code [String] The transaction code.
-        def initialize(number: nil, yearperiod: nil, currency: "EUR", value: nil, status: nil, dim1: nil, dim2: nil, key: nil, code: nil)
+        # @param office [String] The office code.
+        def initialize(number: nil, yearperiod: nil, currency: "EUR", value: nil, status: nil, dim1: nil, dim2: nil, key: nil, code: nil, office: nil)
           self.number = number
           self.yearperiod = yearperiod
           self.currency = currency
@@ -190,6 +202,7 @@ module Twinfield
           self.dim2 = dim2
           self.key = key
           self.code = code
+          self.office = office
         end
       end
     end
