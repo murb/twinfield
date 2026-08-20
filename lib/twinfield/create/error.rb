@@ -3,28 +3,16 @@ module Twinfield
     class Error < StandardError
       attr_accessor :object
 
-      def initialize message, object:
+      def initialize message, object: nil
         super(message)
         self.object = object
       end
     end
 
     class Finalized < Error
-      attr_accessor :object
-
-      def initialize message, object:
-        super
-        self.object = object
-      end
     end
 
     class EmptyInvoice < Error
-      attr_accessor :object
-
-      def initialize message, object:
-        super
-        self.object = object
-      end
     end
   end
 end

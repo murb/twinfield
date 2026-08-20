@@ -32,13 +32,15 @@ module Twinfield
         end
 
         def cluster
-          session.cluster
+          rv = session.cluster
+          raise Twinfield::Error.new("No cluster returned in session") unless rv
+          rv
         end
 
         def cluster_short_name
-          if cluster&.match?("accounting2.")
+          if cluster.match?("accounting2.")
             "accounting2"
-          elsif cluster&.match?("api.accounting")
+          elsif cluster.match?("api.accounting")
             "api.accounting"
           else
             "accounting"
